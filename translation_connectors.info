@@ -1,0 +1,12 @@
+name = Translation Connectors
+description = Translation Connectors offers the easiest way to translate your Drupal entyties and posts into any language in a few clicks.
+core = 7.x
+package = Multilingual - Entity Translation
+php = 7.0
+version = 7.x-0.1
+
+dependencies[] = entity_translation
+
+files[] = translation_connectors.module
+files[] = translation_connectors.install
+files[] = inc/autoload.php

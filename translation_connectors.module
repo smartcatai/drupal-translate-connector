@@ -1,0 +1,59 @@
+<?php
+
+require_once __DIR__ . '/inc/autoload.php';
+
+/**
+ * Implements hook_init().
+ */
+function translation_connectors_init() {
+  $connector = new SmartCAT\Drupal\Connector();
+  $connector->plugin_init();
+}
+
+function translation_connectors_menu() {
+  $items = [];
+
+  $items['admin/config/regional/translation_connectors'] = [
+    'title' => 'Translation connectors',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['translation_connectors_config_form'],
+    'access arguments' => ['administer entity translation'],
+    'file' => 'inc/admin/forms/config_form.inc',
+    'module' => 'translation_connectors',
+    'type' => MENU_NORMAL_ITEM,
+  ];
+
+  $items['admin/config/regional/translation_connectors/default'] = [
+    'title' => 'Required settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'access arguments' => ['administer entity translation'],
+    'weight' => 1,
+  ];
+
+  if (\SmartCAT\Drupal\Helpers\SmartCAT::is_active()) {
+    $items["admin/config/regional/translation_connectors/additional"] = [
+      'title' => 'Additional settings',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => ['translation_connectors_additional_form'],
+      'access arguments' => ['administer entity translation'],
+      'file' => 'inc/admin/forms/additional_form.inc',
+      'module' => 'translation_connectors',
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 2,
+    ];
+  }
+
+  return $items;
+}
+
+function translation_connectors_doit() {
+  $entities = node_load_multiple([7]);
+  //return "<pre>" . print_r($entities[7], true) . "</pre>";
+  //$lanuages = entity_translation_languages();
+  //return "<pre>" . print_r($lanuages, true) . "</pre>";
+  //return drupal_get_hash_salt();
+  //return drupal_get_private_key();
+  $notice = new \SmartCAT\Drupal\Drupal\Notice();
+  $notice->add_error(t('You must enter API login and password', [], ['context' => 'translation_connectors']));
+  return '';
+}
