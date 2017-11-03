@@ -23,7 +23,7 @@ class SmartCAT extends \SmartCAT\API\SmartCAT {
     $password = $container->getParameter('smartcat.api.password');
     $server = $container->getParameter('smartcat.api.server');
 
-    return $login && $password && $server;
+    return !empty($login) && !empty($password) && !empty($server);
   }
 
   public static function filter_chars($s) {

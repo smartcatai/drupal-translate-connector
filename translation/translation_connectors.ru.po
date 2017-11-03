@@ -181,6 +181,11 @@ msgctxt "translation_connectors"
 msgid "Languages are not supported"
 msgstr "Языки не поддерживаются"
 
+#: inc/smartcat/Admin/Frontend.php:43
+msgctxt "translation_connectors"
+msgid "Language are not supported"
+msgstr "Язык не поддерживаются"
+
 #: inc/smartcat/Admin/Frontend.php:50
 msgctxt "translation_connectors"
 msgid "Choose language"
@@ -263,6 +268,11 @@ msgctxt "translation_connectors"
 msgid "Task was not created"
 msgstr "Задача не создана"
 
+#: inc/smartcat/Admin/Ajax.php:194
+msgctxt "translation_connectors"
+msgid "Task was created"
+msgstr "Задача создана"
+
 #: inc/smartcat/Handler/SmartCATCallbackHandler.php:77
 msgctxt "translation_connectors"
 msgid "Sorry, you are not allowed to do that."
@@ -272,6 +282,101 @@ msgstr "Это запрещено."
 msgctxt "translation_connectors"
 msgid "Afrikaans"
 msgstr "Африкаанс"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Abkhazian"
+msgstr "Абхазский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Wolof"
+msgstr "Волоф"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Haitian Creole"
+msgstr "Гаитянский креольский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Komi"
+msgstr "Коми"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Chechen"
+msgstr "Чеченский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Setswana"
+msgstr "Сетсвана"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Chuvash"
+msgstr "Чувашский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Tonga"
+msgstr "Тонга"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Cornish"
+msgstr "Корнский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Sango"
+msgstr "Санго"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Filipino"
+msgstr "Филипино"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Latina"
+msgstr "Латинский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Samoan"
+msgstr "Самоанский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Avar"
+msgstr "Аварский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Zulu"
+msgstr "Зулусский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Yiddish"
+msgstr "Идиш"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Afar"
+msgstr "Афарский"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Bamanankan"
+msgstr "Бамбара"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:25
+msgctxt "translation_connectors"
+msgid "Bihari"
+msgstr "Бихари"
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:26
 msgctxt "translation_connectors"
@@ -412,6 +517,11 @@ msgstr "Английский"
 msgctxt "translation_connectors"
 msgid "Esperanto"
 msgstr "Эсперанто"
+
+#: inc/smartcat/Helpers/Language/LanguageConverter.php:54
+msgctxt "translation_connectors"
+msgid "Spanish"
+msgstr "Испанский"
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:54
 msgctxt "translation_connectors"
@@ -970,14 +1080,14 @@ msgstr "Йоруба"
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:179
 msgctxt "translation_connectors"
-msgid "Not found sc lang by wp_code = "
-msgstr "Не найден язык sc по wp_code = "
+msgid "Not found sc lang by drupal_code = "
+msgstr "Не найден язык sc по drupal_code = "
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:193
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:201
 msgctxt "translation_connectors"
-msgid "Not found wp lang by sc_code = "
-msgstr "Не найден язык wp по sc_code = "
+msgid "Not found drupal lang by sc_code = "
+msgstr "Не найден язык drupal по sc_code = "
 
 #: inc/smartcat/Cron/ClearDeletedProject.php:18
 msgctxt "translation_connectors"

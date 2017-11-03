@@ -1,6 +1,6 @@
 services:
 #  core.db:
-#    class: SmartCAT\WP\DB\DB
+#    class: SmartCAT\Drupal\DB\DB
 #    tags: [installable]
 
   core.options:
@@ -10,79 +10,73 @@ services:
     tags: [installable]
 
 #  core.cron.send:
-#    class: SmartCAT\WP\Cron\SendToSmartCAT
+#    class: SmartCAT\Drupal\Cron\SendToSmartCAT
 #    tags: [installable, cron]
 #
 #  core.cron.clear:
-#    class: SmartCAT\WP\Cron\ClearDeletedProject
+#    class: SmartCAT\Drupal\Cron\ClearDeletedProject
 #    tags: [installable, cron]
 #
-#  core.queue.callback:
-#    class: SmartCAT\WP\Queue\Callback
-#    tags: [queue]
-#
-#  core.queue.statistic:
-#    class: SmartCAT\WP\Queue\Statistic
-#    tags: [queue]
-#
-#  core.queue.publication:
-#    class: SmartCAT\WP\Queue\Publication
-#    tags: [queue]
-#
-#  core.queue.post:
-#    class: SmartCAT\WP\Queue\CreatePost
-#    tags: [queue]
-#
+  core.queue.callback:
+    class: SmartCAT\Drupal\Queue\Callback
+    tags: [callback_queue, queue]
+
+  core.queue.statistic:
+    class: SmartCAT\Drupal\Queue\Statistic
+    tags: [queue]
+
+  core.queue.publication:
+    class: SmartCAT\Drupal\Queue\Publication
+    tags: [queue]
+
+  core.queue.post:
+    class: SmartCAT\Drupal\Queue\CreatePost
+    tags: [queue]
+
 #  core.admin.columns:
-#    class: SmartCAT\WP\Admin\Columns
+#    class: SmartCAT\Drupal\Admin\Columns
 #    tags: [hook]
 #
 #  core.admin.settings:
-#    class: SmartCAT\WP\Admin\Settings
+#    class: SmartCAT\Drupal\Admin\Settings
 #    tags: [initable]
 #
 #  core.admin.statistics:
-#    class: SmartCAT\WP\Admin\Statistics
+#    class: SmartCAT\Drupal\Admin\Statistics
 #    tags: [initable]
 #
 #  core.admin.frontend:
-#    class: SmartCAT\WP\Admin\Frontend
+#    class: SmartCAT\Drupal\Admin\Frontend
 #    tags: [hook]
 #
 #  core.admin.ajax:
-#    class: SmartCAT\WP\Admin\Ajax
+#    class: SmartCAT\Drupal\Admin\Ajax
 #    tags: [hook]
 #
 #  core.admin.statistics_ajax:
-#    class: SmartCAT\WP\Admin\StatisticsAjax
+#    class: SmartCAT\Drupal\Admin\StatisticsAjax
 #    arguments:
 #      - "%plugin.table.prefix%"
 #    tags: [hook]
 #
   core.notice:
     class: SmartCAT\Drupal\Drupal\Notice
-#
-#  callback.handler.smartcat:
-#    class: SmartCAT\WP\Handler\SmartCATCallbackHandler
-#    tags: [installable, hook]
-#
-#  entity.repository.task:
-#    class: SmartCAT\WP\DB\Repository\TaskRepository
-#    arguments:
-#      - "%plugin.table.prefix%"
-#    tags: [repositories]
-#
-#  entity.repository.statistic:
-#    class: SmartCAT\WP\DB\Repository\StatisticRepository
-#    arguments:
-#      - "%plugin.table.prefix%"
-#    tags: [repositories]
-#
-#  entity.repository.error:
-#    class: SmartCAT\WP\DB\Repository\ErrorRepository
-#    arguments:
-#      - "%plugin.table.prefix%"
-#    tags: [repositories]
+
+  callback.handler.smartcat:
+    class: SmartCAT\Drupal\Handler\SmartCATCallbackHandler
+    tags: [installable]
+
+  entity.repository.task:
+    class: SmartCAT\Drupal\DB\Repository\TaskRepository
+    arguments:
+      - "%plugin.table.prefix%"
+    tags: [repositories]
+
+  entity.repository.statistic:
+    class: SmartCAT\Drupal\DB\Repository\StatisticRepository
+    arguments:
+      - "%plugin.table.prefix%"
+    tags: [repositories]
 
   smartcat:
     class: SmartCAT\Drupal\Helpers\SmartCAT
@@ -94,8 +88,8 @@ services:
   cryptographer:
       class: \SmartCAT\Drupal\Helpers\Cryptographer
 
-#  language.converter:
-#      class: \SmartCAT\WP\Helpers\Language\LanguageConverter
-#
+  language.converter:
+      class: \SmartCAT\Drupal\Helpers\Language\LanguageConverter
+
 #  utils:
-#      class: \SmartCAT\WP\Helpers\Utils
+#      class: \SmartCAT\Drupal\Helpers\Utils

@@ -9,11 +9,16 @@ function translation_connectors_uninstall() {
 }
 
 function translation_connectors_enable() {
-  $connector   = new \SmartCAT\Drupal\Connector();
+  $connector = new \SmartCAT\Drupal\Connector();
   $connector->plugin_activate();
 }
 
 function translation_connectors_disable() {
-  $connector   = new \SmartCAT\Drupal\Connector();
+  $connector = new \SmartCAT\Drupal\Connector();
   $connector->plugin_deactivate();
 }
+
+function translation_connectors_schema() {
+  return \SmartCAT\Drupal\Connector::get_schemas();
+}
+

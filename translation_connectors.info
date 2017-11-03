@@ -8,5 +8,7 @@ version = 7.x-0.1
 dependencies[] = entity_translation
 
 files[] = translation_connectors.module
-files[] = translation_connectors.install
+files[] = translation_connectors.get_schema
 files[] = inc/autoload.php
+files[] = inc/admin/forms/additional_form.inc
+files[] = inc/admin/forms/config_form.inc

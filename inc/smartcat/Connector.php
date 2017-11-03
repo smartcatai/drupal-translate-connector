@@ -5,6 +5,7 @@ namespace SmartCAT\Drupal;
 
 //use SmartCAT\Drupal\Cron\CronInterface;
 //use SmartCAT\Drupal\DB\Repository\TaskRepository;
+use SmartCAT\Drupal\DB\Repository\RepositoryInterface;
 use SmartCAT\Drupal\Drupal\HookInterface;
 use SmartCAT\Drupal\Drupal\InitInterface;
 use SmartCAT\Drupal\Drupal\PluginInterface;
@@ -61,6 +62,7 @@ class Connector {
   }
 
   public function plugin_activate() {
+    self::set_core_parameters();
     $hooks = self::get_container()->findTaggedServiceIds('installable');
     foreach ($hooks as $hook => $tags) {
       $object = $this->from_container($hook);
@@ -98,14 +100,21 @@ class Connector {
         $object->plugin_uninstall();
       }
     }
+//    $schemas = self::get_schemas();
+//    foreach ($schemas as $key => $value)
+//    {
+//
+//    }
+    menu_rebuild();
   }
 
   public function plugin_init() {
-    $this->set_core_parameters();
+    self::set_core_parameters();
     if (!SmartCAT::is_active() && user_access('administer entity translation')) {
       $notice = $this->from_container('core.notice');
       $notice->add_error(t('You must <a href="/admin/config/regional/translation_connectors">enter</a> API login and password', [], ['context' => 'translation_connectors']), FALSE);
     }
+    stream_wrapper_register("smartcat", "SmartCAT\Drupal\VariableStream");
 
     $hooks = self::get_container()->findTaggedServiceIds('initable');
     foreach ($hooks as $hook => $tags) {
@@ -116,13 +125,28 @@ class Connector {
     }
   }
 
-  private function set_core_parameters() {
-    $options = $this->from_container('core.options');
+  public static function set_core_parameters() {
     /** @var  ContainerInterface */
     $container = self::get_container();
+    $options = $container->get('core.options');
     $container->setParameter('smartcat.api.login', $options->get_and_decrypt('smartcat_api_login'));
     $container->setParameter('smartcat.api.password', $options->get_and_decrypt('smartcat_api_password'));
     $container->setParameter('smartcat.api.server', $options->get('smartcat_api_server'));
+  }
+
+  /**
+   * @return string[]
+   */
+  public static function get_schemas(){
+    $schemas = [];
+    $repositories = self::get_container()->findTaggedServiceIds( 'repositories' );
+    foreach ( $repositories as $repository => $tag ) {
+      $object = self::get_container()->get( $repository );
+      if ( $object instanceof RepositoryInterface ) {
+        $schemas = array_merge($object->get_schema(), $schemas);
+      }
+    }
+    return $schemas;
   }
 }
 
