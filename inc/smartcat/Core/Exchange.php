@@ -34,12 +34,16 @@ class Exchange {
     $notice = $container->get('core.notice');
 
     $is_new_task_created = FALSE;
-
+    foreach ($to_languages as $key => $value) {
+      if (!$to_languages[$key]) {
+        unset($to_languages[$key]);
+      }
+    }
     $task = new Task();
     $task->set_entity_id($entity->nid)
       ->set_entity_type($entity_type)
       ->set_source_language($from_language)
-      ->set_target_languages($to_languages)
+      ->set_target_languages(array_values($to_languages))
       ->set_status('new')
       ->set_project_id(NULL);
 
@@ -55,7 +59,7 @@ class Exchange {
         ->set_source_language($from_language)
         ->set_progress(0)
         ->set_words_count(NULL)
-        ->set_target_entityid(NULL)
+        ->set_target_entity_id(NULL)
         ->set_document_id(NULL)
         ->set_status('new');
 
@@ -115,8 +119,9 @@ class Exchange {
       $entities = entity_load($task->get_entity_type(), [$task->get_entity_id()]);
       $entity = $entities[$task->get_entity_id()];
       $post_title = _entity_translation_label($task->get_entity_type(), $entity, $task->get_source_language());
+      $post_summary = $entity->body[$task->get_source_language()][0]['safe_summary'] ?? '';
       $post_content = $entity->body[$task->get_source_language()][0]['safe_value'];
-      $file_body = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>{$post_title}</title></head><body>{$post_content}</body></html>";
+      $file_body = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>{$post_title}</title></head><body><div id='summary-drupal-translation-connectors'>$post_summary</div><div id='body-drupal-translation-connectors'>{$post_content}</divdiv></body></html>";
       $file_name = "{$post_title}.html";
       $file = fopen("smartcat://id_{$task->get_entity_id()}", "r+");
       fwrite($file, $file_body);

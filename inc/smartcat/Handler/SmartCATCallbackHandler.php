@@ -56,7 +56,7 @@ class SmartCATCallbackHandler implements PluginInterface {
               $document->set_error_count( 0 );
               $statistic_repository->persist( $document );
             }
-            $queue->createItem($document);
+            $queue->createItem($document->get_document_id());
           }
 
           // Запускаем выполнение очереди в фоне

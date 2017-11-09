@@ -8,7 +8,7 @@
 
 namespace SmartCAT\Drupal\DB\Entity;
 
-class Statistics {
+class Statistics implements \Serializable {
 
   /**
    * @return int
@@ -156,7 +156,7 @@ class Statistics {
   /**
    * @return int
    */
-  public function get_target_entityid() {
+  public function get_target_entity_id() {
     return $this->target_entity_id;
   }
 
@@ -165,7 +165,7 @@ class Statistics {
    *
    * @return Statistics
    */
-  public function set_target_entityid($target_entity_id) {
+  public function set_target_entity_id($target_entity_id) {
     $this->target_entity_id = $target_entity_id;
 
     return $this;
@@ -272,4 +272,79 @@ class Statistics {
     return $this;
   }
 
+  /**
+   * String representation of object
+   *
+   * @link http://php.net/manual/en/serializable.serialize.php
+   * @return string the string representation of the object or null
+   * @since 5.1.0
+   */
+  public function serialize() {
+    return serialize([
+      'document_id' => $this->get_document_id(),
+      'entity_id' => $this->get_entity_id(),
+      'entity_type' => $this->get_entity_type(),
+      'error_count' => $this->get_error_count(),
+      'id' => $this->get_id(),
+      'progress' => $this->get_progress(),
+      'source_language' => $this->get_source_language(),
+      'status' => $this->get_status(),
+      'target_entity_id' => $this->get_target_entity_id(),
+      'target_language' => $this->get_target_language(),
+      'task_id' => $this->get_task_id(),
+      'words_count' => $this->get_words_count(),
+    ]);
+  }
+
+  /**
+   * Constructs the object
+   *
+   * @link http://php.net/manual/en/serializable.unserialize.php
+   *
+   * @param string $serialized <p>
+   * The string representation of the object.
+   * </p>
+   *
+   * @return void
+   * @since 5.1.0
+   */
+  public function unserialize($serialized) {
+    $data = unserialize($serialized);
+    if (isset($data['document_id'])) {
+      $this->set_document_id($data['document_id']);
+    }
+    if (isset($data['entity_id'])) {
+      $this->set_entity_id($data['entity_id']);
+    }
+    if (isset($data['entity_type'])) {
+      $this->set_entity_type($data['entity_type']);
+    }
+    if (isset($data['error_count'])) {
+      $this->set_error_count($data['error_count']);
+    }
+    if (isset($data['id'])) {
+      $this->set_id($data['id']);
+    }
+    if (isset($data['progress'])) {
+      $this->set_progress($data['progress']);
+    }
+    if (isset($data['source_language'])) {
+      $this->set_source_language($data['source_language']);
+    }
+    if (isset($data['status'])) {
+      $this->set_status($data['status']);
+    }
+    if (isset($data['target_entity_id'])) {
+      $this->set_target_entity_id($data['target_entity_id']);
+    }
+    if (isset($data['target_language'])) {
+      $this->set_target_language($data['target_language']);
+    }
+    if (isset($data['task_id'])) {
+      $this->set_task_id($data['task_id']);
+    }
+    if (isset($data['words_count'])) {
+      $this->set_words_count($data['words_count']);
+    }
+  }
 }

@@ -27,11 +27,11 @@ services:
 
   core.queue.publication:
     class: SmartCAT\Drupal\Queue\Publication
-    tags: [queue]
+    tags: [publication_queue, queue]
 
   core.queue.post:
     class: SmartCAT\Drupal\Queue\CreatePost
-    tags: [queue]
+    tags: [create_post_queue, queue]
 
 #  core.admin.columns:
 #    class: SmartCAT\Drupal\Admin\Columns

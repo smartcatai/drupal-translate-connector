@@ -9,14 +9,7 @@
 namespace SmartCAT\Drupal\Queue;
 
 
-use Http\Client\Common\Plugin\ContentLengthPlugin;
-use Http\Client\Common\Plugin\DecoderPlugin;
-use Http\Client\Common\Plugin\ErrorPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Client\Socket\Client;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
 use SmartCAT\Drupal\Connector;
-use SmartCAT\Drupal\Queue\QueueWorker;
 
 class QueueEngine {
 
@@ -26,8 +19,8 @@ class QueueEngine {
    * @param $queue_name
    */
   public static function process_callback($queue_name) {
-//    $queues = module_invoke_all('queue_engine_info');
-//    drupal_alter('queue_engine_info', $queues);
+    //    $queues = module_invoke_all('queue_engine_info');
+    //    drupal_alter('queue_engine_info', $queues);
     $container = Connector::get_container();
     $queues = $container->findTaggedServiceIds($queue_name);
     if (count($queues) == 0) {
@@ -43,18 +36,22 @@ class QueueEngine {
 
     while (time() < $queue_end && ($item = $queue->claimItem())) {
       try {
-        //require_once  drupal_get_path('module', $queue_info['module']) .'/'.$queue_info['file'];
-        //call_user_func($queue_info['worker callback'], $item->data);
-        $worker->task($item->data);
-        $queue->deleteItem($item);
+        if ($worker->task($item->data)) {
+          $queue->deleteItem($item);
+        }
+        else {
+          $queue->releaseItem($item);
+        }
       } catch (\Exception $e) {
+        $queue->deleteItem($item);
         watchdog_exception('queue_engine', $e);
       }
     }
 
     if ($queue->numberOfItems() > 0) {
       self::run($queue_name);
-    } else {
+    }
+    else {
       $worker->complete();
     }
   }

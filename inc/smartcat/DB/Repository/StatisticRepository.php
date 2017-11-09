@@ -164,7 +164,7 @@ class StatisticRepository extends RepositoryAbstract {
       'targetLanguage' => $stat->get_target_language(),
       'progress' => $stat->get_progress(),
       'wordsCount' => $stat->get_words_count(),
-      'targetEntityID' => $stat->get_target_entityid(),
+      'targetEntityID' => $stat->get_target_entity_id(),
       'documentID' => $stat->get_document_id(),
       'status' => $stat->get_status(),
       'errorCount' => $stat->get_error_count(),
@@ -196,7 +196,7 @@ class StatisticRepository extends RepositoryAbstract {
       'targetLanguage' => $stat->get_target_language(),
       'progress' => $stat->get_progress(),
       'wordsCount' => $stat->get_words_count(),
-      'targetEntityID' => $stat->get_target_entityid(),
+      'targetEntityID' => $stat->get_target_entity_id(),
       'documentID' => $stat->get_document_id(),
       'status' => $stat->get_status(),
       'errorCount' => $stat->get_error_count(),
@@ -271,7 +271,7 @@ class StatisticRepository extends RepositoryAbstract {
     }
 
     if (isset($row->targetEntityID)) {
-      $result->set_target_entityid($row->targetEntityID);
+      $result->set_target_entity_id($row->targetEntityID);
     }
 
     if (isset($row->documentID)) {
@@ -350,4 +350,21 @@ class StatisticRepository extends RepositoryAbstract {
     return $row ? $this->to_entity($row) : NULL;
   }
 
+  /**
+   * @param array $criterias
+   *
+   * @return Statistics[]|null
+   */
+  public function get_by(array $criterias) {
+    $table_name = $this->get_table_name();
+    $query = db_select($table_name, 's')
+      ->fields('s');
+
+    foreach ($criterias as $key => $value) {
+      $query->condition($key, $value);
+    }
+
+    $result = $query->execute()->fetchAll();
+    return $result ? $this->prepare_result($result) : NULL;
+  }
 }

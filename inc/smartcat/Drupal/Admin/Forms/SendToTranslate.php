@@ -10,6 +10,7 @@ namespace SmartCAT\Drupal\Drupal\Admin\Forms;
 
 use SmartCAT\Drupal\Connector;
 use SmartCAT\Drupal\Core\Exchange;
+use SmartCAT\Drupal\DB\Repository\StatisticRepository;
 use SmartCAT\Drupal\Helpers\Language\Exceptions\LanguageNotFoundException;
 use SmartCAT\Drupal\Helpers\Language\LanguageConverter;
 
@@ -44,8 +45,18 @@ class SendToTranslate implements DrupalForm {
     if (drupal_multilingual()) {
       // If we have a view path defined for the current entity get the switch
       // links based on it.
+      $container = Connector::get_container();
       /** @var LanguageConverter $converter */
-      $converter = Connector::get_container()->get('language.converter');
+      $converter = $container->get('language.converter');
+      /** @var StatisticRepository $statistic_repository */
+      $statistic_repository = $container->get('entity.repository.statistic');
+      $statistics = $statistic_repository->get_by(['entityID' => $entity->nid]);
+      $statuses =[];
+      if (is_array($statistics)) {
+        foreach ($statistics as $statistic) {
+          $statuses[$statistic->get_target_language()] = $statistic->get_status();
+        }
+      }
       foreach ($languages as $language) {
         $language_name = t($language->name);
         $langcode = $language->language;
@@ -70,6 +81,23 @@ class SendToTranslate implements DrupalForm {
           }
           else {
             $source_name = $languages[$translation['source']]->name;
+          }
+        }
+        if (isset($statuses[$langcode])) {
+          $disabled[$langcode] = ['#disabled' => TRUE];
+          switch ($statuses[$langcode]){
+            case 'new':
+              $status = t('Submitted', [], ['context' => 'translation_connectors']);
+              break;
+            case 'sended':
+            case 'export':
+              $status = t('In progress', [], ['context' => 'translation_connectors']);
+              break;
+            case 'completed':
+              $status = t('Completed', [], ['context' => 'translation_connectors']);
+              break;
+            default:
+              return $statuses[$langcode];
           }
         }
 
