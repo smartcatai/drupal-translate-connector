@@ -67,7 +67,57 @@ class CreatePost implements QueueWorker {
           }
         }
 
-        file_put_contents(__DIR__ . '/create.log', "$title\n\n$summary\n\n$body\n\n\n\n");
+        $entities = entity_load($statistics->get_entity_type(), [$statistics->get_entity_id()]);
+        $entity = $entities[$statistics->get_entity_id()];
+
+        //file_put_contents(__DIR__ . '/create.log', "$title\n\n$summary\n\n$body\n\n\n\n");
+        /** @var \EntityTranslationHandlerInterface $handler */
+        $handler = entity_translation_get_handler($statistics->get_entity_type(), $entity);
+        // Ensure $entity holds an entity object and not an id.
+        $entity = $handler->getEntity();
+        $handler->initPathScheme();
+        $translations = $handler->getTranslations();
+        if (!isset($translations->data[$statistics->get_target_language()])) {
+          // If we have a new translation the language is the original entity
+          // language.
+          $translation = [
+            'language' => $statistics->get_target_language(),
+            'source' => $statistics->get_source_language(),
+            'translate' => 0,
+          ];
+        }
+        else {
+          $translation = $translations->data[$statistics->get_target_language()];
+        }
+        $translation['status'] = 1;
+        $translation['uid'] = (empty($entity->uid)) ? 0 : $entity->uid;
+        $translation['created'] = REQUEST_TIME;
+        $values = [];
+        if (isset($entity->title_field)) {
+          $values['title_field'] = [
+            $statistics->get_target_language() => [
+              $translation['translate'] => [
+                'value' => strip_tags($title),
+                'format' => $entity->title_field[$statistics->get_source_language()][0]['format'] ?? NULL,
+                'safe_value' => $title,
+              ],
+            ],
+          ];
+        }
+        $values['body'] = [
+          $statistics->get_target_language() => [
+            $translation['translate'] => [
+              'value' => strip_tags($body),
+              'summary' => strip_tags($summary),
+              'format' => $entity->body[$statistics->get_source_language()][0]['format'] ?? NULL,
+              'safe_value' => $body,
+              'safe_summary' => $summary,
+            ],
+          ],
+        ];
+        $handler->setTranslation($translation, $values);
+        $handler->saveTranslations();
+        entity_translation_entity_save($statistics->get_entity_type(), $entity);
 
         $statistics->set_status('completed');
         $statistic_repository->update($statistics);

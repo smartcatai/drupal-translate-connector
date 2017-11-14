@@ -10,6 +10,7 @@ namespace SmartCAT\Drupal\Helpers;
 
 
 use SmartCAT\Drupal\Connector;
+use SmartCAT\Drupal\Drupal\Options;
 
 class SmartCAT extends \SmartCAT\API\SmartCAT {
 
@@ -28,5 +29,13 @@ class SmartCAT extends \SmartCAT\API\SmartCAT {
 
   public static function filter_chars($s) {
     return str_replace(['*', '|', '\\', ':', '"', '<', '>', '?', '/'], '_', $s);
+  }
+
+  public static function get_document_edit_path($document_id){
+    $container = Connector::get_container();
+    $ids = explode('_',$document_id);
+    /** @var Options $options */
+    $options = $container->get('core.options');
+    return "https://{$options->get('smartcat_api_server')}/editor?DocumentId={$ids[0]}&LanguageId={$ids[1]}";
   }
 }

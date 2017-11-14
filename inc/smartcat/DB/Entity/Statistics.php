@@ -347,4 +347,28 @@ class Statistics implements \Serializable {
       $this->set_words_count($data['words_count']);
     }
   }
+
+  /**
+   * @return null|string
+   */
+  public function get_localized_status_name() {
+    if (!empty($this->status)) {
+      switch ($this->status) {
+        case 'new':
+          $status = t('Submitted', [], ['context' => 'translation_connectors']);
+          break;
+        case 'sended':
+        case 'export':
+          $status = t('In progress', [], ['context' => 'translation_connectors']);
+          break;
+        case 'completed':
+          $status = t('Completed', [], ['context' => 'translation_connectors']);
+          break;
+        default:
+          $status = $this->status;
+      }
+      return $status;
+    }
+    return NULL;
+  }
 }

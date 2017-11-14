@@ -54,7 +54,7 @@ class SendToTranslate implements DrupalForm {
       $statuses =[];
       if (is_array($statistics)) {
         foreach ($statistics as $statistic) {
-          $statuses[$statistic->get_target_language()] = $statistic->get_status();
+          $statuses[$statistic->get_target_language()] = $statistic->get_localized_status_name();
         }
       }
       foreach ($languages as $language) {
@@ -84,21 +84,8 @@ class SendToTranslate implements DrupalForm {
           }
         }
         if (isset($statuses[$langcode])) {
+          $status = $statuses[$langcode];
           $disabled[$langcode] = ['#disabled' => TRUE];
-          switch ($statuses[$langcode]){
-            case 'new':
-              $status = t('Submitted', [], ['context' => 'translation_connectors']);
-              break;
-            case 'sended':
-            case 'export':
-              $status = t('In progress', [], ['context' => 'translation_connectors']);
-              break;
-            case 'completed':
-              $status = t('Completed', [], ['context' => 'translation_connectors']);
-              break;
-            default:
-              return $statuses[$langcode];
-          }
         }
 
         $rows[$langcode] = [

@@ -104,8 +104,8 @@ class StatisticRepository extends RepositoryAbstract {
         ],
         'primary key' => ['id'],
         'indexes' => [
-          'status' => ['status'],
           'documentID' => ['documentID'],
+          'filter' => ['sourceLanguage', 'targetLanguage', 'status'],
         ],
       ],
     ];
@@ -113,19 +113,57 @@ class StatisticRepository extends RepositoryAbstract {
   }
 
   /**
+   * @param $status
+   *
+   * @return array
+   */
+  private function convert_localized_status($status){
+    switch ($status){
+      case t('Submitted', [], ['context' => 'translation_connectors']):
+        return ['new'];
+        break;
+      case t('In progress', [], ['context' => 'translation_connectors']):
+        return ['sended', 'export'];
+        break;
+      case t('Completed', [], ['context' => 'translation_connectors']):
+        return ['completed'];
+        break;
+      default:
+        return [$status];
+    }
+  }
+  /**
    * @param int $from
    * @param int $limit
    *
    * @return Statistics[]
    */
-  public function get_statistics($from = 0, $limit = 100) {
-    $from = intval($from);
-    $from >= 0 || $from = 0;
-    $limit = intval($limit);
+  public function get_statistics($header, $filters = []) {
+    //    $from = intval($from);
+    //    $from >= 0 || $from = 0;
+    //    $limit = intval($limit);
 
     $query = db_select("{$this->get_table_name()}", "s")
-      ->fields('s')
-      ->range($from, $limit);
+      ->fields('s');
+    if (count($filters) > 0) {
+      foreach ($filters as $key => $value) {
+        if ($key != 'status') {
+          $query->condition($key, $value);
+        } else {
+          $statuses = $this->convert_localized_status($value);
+          $condition = db_or();
+          foreach ($statuses as $status) {
+            $condition->condition('status', $status);
+          }
+          $query->condition($condition);
+        }
+      }
+    }
+    $query->extend('PagerDefault')
+      ->limit(100)
+      ->extend('TableSort')
+      ->orderByHeader($header);
+    //      ->range($from, $limit);
 
     $results = $query->execute()->fetchAll();
 
@@ -180,7 +218,7 @@ class StatisticRepository extends RepositoryAbstract {
         $stat->set_id($id);
         return $id;
       }
-    } catch(\Exception $e){
+    } catch (\Exception $e) {
 
     }
 
@@ -335,24 +373,6 @@ class StatisticRepository extends RepositoryAbstract {
   /**
    * @param array $criterias
    *
-   * @return Statistics|null
-   */
-  public function get_one_by(array $criterias) {
-    $table_name = $this->get_table_name();
-    $query = db_select($table_name, 's')
-      ->fields('s');
-
-    foreach ($criterias as $key => $value) {
-      $query->condition($key, $value);
-    }
-
-    $row = $query->execute()->fetchObject();
-    return $row ? $this->to_entity($row) : NULL;
-  }
-
-  /**
-   * @param array $criterias
-   *
    * @return Statistics[]|null
    */
   public function get_by(array $criterias) {
@@ -366,5 +386,26 @@ class StatisticRepository extends RepositoryAbstract {
 
     $result = $query->execute()->fetchAll();
     return $result ? $this->prepare_result($result) : NULL;
+  }
+
+  public function get_statuses_list() {
+    $table_name = $this->get_table_name();
+    $query = db_select($table_name, 's')
+      ->fields('s', ['status'])
+      ->groupBy('status');
+    $result = $query->execute()->fetchCol();
+    return $result;
+  }
+
+  public function get_localized_statuses_list() {
+    $results = $this->get_statuses_list();
+    $res = [NULL => NULL];
+    $s = new Statistics();
+    foreach ($results as $result) {
+      $s->set_status($result);
+      $val = $s->get_localized_status_name();
+      $res[$val] = $val;
+    }
+    return $res;
   }
 }

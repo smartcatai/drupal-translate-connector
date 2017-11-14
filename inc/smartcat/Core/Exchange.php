@@ -7,7 +7,7 @@
  */
 
 namespace SmartCAT\Drupal\Core;
-
+require_once DRUPAL_ROOT . '/sites/all/modules/entity_translation/entity_translation.admin.inc';
 
 use Http\Client\Common\Exception\ClientErrorException;
 use SmartCAT\API\Model\CreateProjectWithFilesModel;
@@ -118,9 +118,11 @@ class Exchange {
     try {
       $entities = entity_load($task->get_entity_type(), [$task->get_entity_id()]);
       $entity = $entities[$task->get_entity_id()];
-      $post_title = _entity_translation_label($task->get_entity_type(), $entity, $task->get_source_language());
-      $post_summary = $entity->body[$task->get_source_language()][0]['safe_summary'] ?? '';
-      $post_content = $entity->body[$task->get_source_language()][0]['safe_value'];
+      $post_title = \_entity_translation_label($task->get_entity_type(), $entity, $task->get_source_language());
+      //Если нет форматированного анонса,то шлем обычный текст
+      $post_summary = $entity->body[$task->get_source_language()][0]['safe_summary'] ?? ($entity->body[$task->get_source_language()][0]['summary'] ?? '');
+      //Если нет форматированного тела,то шлем обычный текст
+      $post_content = $entity->body[$task->get_source_language()][0]['safe_value'] ?? ($entity->body[$task->get_source_language()][0]['value'] ?? '');
       $file_body = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>{$post_title}</title></head><body><div id='summary-drupal-translation-connectors'>$post_summary</div><div id='body-drupal-translation-connectors'>{$post_content}</divdiv></body></html>";
       $file_name = "{$post_title}.html";
       $file = fopen("smartcat://id_{$task->get_entity_id()}", "r+");

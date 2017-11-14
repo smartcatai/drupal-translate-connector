@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/inc/autoload.php';
-
+require_once __DIR__ . '/inc/wrappers/admin/forms/statistic_filter.inc.php';
 /**
  * Implements hook_init().
  */
@@ -45,6 +45,34 @@ function translation_connectors_menu() {
       'weight' => 2,
     ];
   }
+
+  $items["admin/config/regional/translation_connectors/statistics/start"] = [
+    'page callback' => '\SmartCAT\Drupal\Ajax\Statistics::start',
+    'access arguments' => ['administer entity translation'],
+    'file' => 'inc/smartcat/Ajax/Statistics.php',
+    'module' => 'translation_connectors',
+    'type' => MENU_CALLBACK,
+    'delivery callback' => 'ajax_deliver',
+  ];
+
+  $items["admin/config/regional/translation_connectors/statistics/check"] = [
+    'page callback' => '\SmartCAT\Drupal\Ajax\Statistics::check',
+    'access arguments' => ['administer entity translation'],
+    'file' => 'inc/smartcat/Ajax/Statistics.php',
+    'module' => 'translation_connectors',
+    'type' => MENU_CALLBACK,
+    'delivery callback' => 'ajax_deliver',
+  ];
+
+  $items["admin/config/regional/translation_connectors/statistics"] = [
+    'title' => 'Translation progress',
+    'page callback' => '\SmartCAT\Drupal\Drupal\Admin\Pages\Statistics::get',
+    'access arguments' => ['administer entity translation'],
+    'file' => 'inc/smartcat/Drupal/Admin/Pages/Statistics.php',
+    'module' => 'translation_connectors',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  ];
 
   //Обработчик колбэков от SmartCAT
   $items[\SmartCAT\Drupal\Handler\SmartCATCallbackHandler::ROUTE_PREFIX . '/%/%'] = [

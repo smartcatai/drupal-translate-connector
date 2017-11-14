@@ -49,6 +49,7 @@ class QueueEngine {
     }
 
     if ($queue->numberOfItems() > 0) {
+      sleep(1);
       self::run($queue_name);
     }
     else {

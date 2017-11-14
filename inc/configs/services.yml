@@ -1,8 +1,4 @@
 services:
-#  core.db:
-#    class: SmartCAT\Drupal\DB\DB
-#    tags: [installable]
-
   core.options:
     class: SmartCAT\Drupal\Drupal\Options
     arguments:
@@ -23,7 +19,7 @@ services:
 
   core.queue.statistic:
     class: SmartCAT\Drupal\Queue\Statistic
-    tags: [queue]
+    tags: [statistic_queue, queue]
 
   core.queue.publication:
     class: SmartCAT\Drupal\Queue\Publication
@@ -33,32 +29,10 @@ services:
     class: SmartCAT\Drupal\Queue\CreatePost
     tags: [create_post_queue, queue]
 
-#  core.admin.columns:
-#    class: SmartCAT\Drupal\Admin\Columns
-#    tags: [hook]
-#
-#  core.admin.settings:
-#    class: SmartCAT\Drupal\Admin\Settings
-#    tags: [initable]
-#
-#  core.admin.statistics:
-#    class: SmartCAT\Drupal\Admin\Statistics
-#    tags: [initable]
-#
-#  core.admin.frontend:
-#    class: SmartCAT\Drupal\Admin\Frontend
-#    tags: [hook]
-#
-#  core.admin.ajax:
-#    class: SmartCAT\Drupal\Admin\Ajax
-#    tags: [hook]
-#
-#  core.admin.statistics_ajax:
-#    class: SmartCAT\Drupal\Admin\StatisticsAjax
-#    arguments:
-#      - "%plugin.table.prefix%"
-#    tags: [hook]
-#
+  core.queue.send:
+    class: SmartCAT\Drupal\Queue\SendToSmartcat
+    tags: [send_new_queue, queue]
+
   core.notice:
     class: SmartCAT\Drupal\Drupal\Notice
 
@@ -85,11 +59,11 @@ services:
       - "%smartcat.api.password%"
       - "%smartcat.api.server%"
 
+  smartcat.exchange:
+    class: SmartCAT\Drupal\Core\Exchange
+
   cryptographer:
       class: \SmartCAT\Drupal\Helpers\Cryptographer
 
   language.converter:
       class: \SmartCAT\Drupal\Helpers\Language\LanguageConverter
-
-#  utils:
-#      class: \SmartCAT\Drupal\Helpers\Utils

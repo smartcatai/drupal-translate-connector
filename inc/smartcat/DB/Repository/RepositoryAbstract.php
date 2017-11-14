@@ -48,4 +48,22 @@ abstract class RepositoryAbstract implements RepositoryInterface {
     return $result;
   }
 
+  /**
+   * @param array $criterias
+   *
+   * @return $this|null
+   */
+  public function get_one_by(array $criterias) {
+    $table_name = $this->get_table_name();
+    $query = db_select($table_name, 's')
+      ->fields('s');
+
+    foreach ($criterias as $key => $value) {
+      $query->condition($key, $value);
+    }
+
+    $row = $query->execute()->fetchObject();
+    return $row ? $this->to_entity($row) : NULL;
+  }
+
 }

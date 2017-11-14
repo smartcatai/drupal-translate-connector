@@ -172,7 +172,7 @@ class TaskRepository extends RepositoryAbstract {
     }
 
     if (isset($row->entityType)) {
-      $result->set_entity_type(intval($row->entityType));
+      $result->set_entity_type($row->entityType);
     }
 
     if (isset($row->status)) {
