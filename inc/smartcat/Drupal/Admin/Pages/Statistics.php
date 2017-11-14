@@ -57,7 +57,7 @@ class Statistics {
   public static function get() {
     $header = [
       [
-        'data' => t('Title', [], ['context' => 'translation_connectors']),
+        'data' => t('Title',[],['context'=>'translation_connectors']),
         'field' => 'entityID',
       ],
       [
@@ -70,10 +70,10 @@ class Statistics {
       ],
       t('Words count', [], ['context' => 'translation_connectors']),
       [
-        'data' => t('Status', [], ['context' => 'translation_connectors']),
+        'data' => t('Status',[],['context'=>'translation_connectors']),
         'field' => 'status',
       ],
-      t('Edit post', [], ['context' => 'translation_connectors']),
+      t('Operations',[],['context'=>'translation_connectors']),
     ];
 
     $enity_paths = self::get_enity_paths();
@@ -111,7 +111,7 @@ class Statistics {
           $document_url = $statistic->get_localized_status_name();
         }
         if ($statistic->get_status() == 'completed') {
-          $edit_translate = l(t('edit'), self::get_edit_path($enity_paths, $statistic->get_entity_type(), $entity, 'edit') . "/{$statistic->get_target_language()}");
+          $edit_translate = l(t('edit',[],['context'=>'translation_connectors']), self::get_edit_path($enity_paths, $statistic->get_entity_type(), $entity, 'edit') . "/{$statistic->get_target_language()}");
         }
         else {
           $edit_translate = '';

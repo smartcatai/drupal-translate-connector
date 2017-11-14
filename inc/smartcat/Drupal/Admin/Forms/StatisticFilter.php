@@ -45,7 +45,7 @@ class StatisticFilter implements DrupalForm {
 
     $statuses = $statistics_repository->get_localized_statuses_list();
     $form['status'] = [
-      '#title' => t('Status', [], ['context' => 'translation_connectors']),
+      '#title' => t('Status',[],['context'=>'translation_connectors']),
       '#type' => 'select',
       '#options' => $statuses,
       '#required' => FALSE,
@@ -56,7 +56,7 @@ class StatisticFilter implements DrupalForm {
 
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => 'Фильтр',
+      '#value' => t('Filter',[],['context'=>'translation_connectors']),
       '#prefix' => '<div class="container-inline" style="display: inline">',
       '#suffix' => '</div>',
     ];

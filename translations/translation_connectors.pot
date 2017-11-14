@@ -1,38 +1,36 @@
 # $Id$
 #
-# Russian translation of Drupal (general)
+# LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-# translation_connectors.module: n/a
-# inc/smartcat/Drupal/Admin/Forms/Config.php: n/a
-# inc/smartcat/Drupal/Admin/Forms/Additional.php: n/a
-# inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php: n/a
-# translation_connectors.info: n/a
-# inc/smartcat/Connector.php: n/a
-# inc/smartcat/Core/Exchange.php: n/a
-# inc/smartcat/DB/Entity/Statistics.php: n/a
-# inc/smartcat/DB/Repository/StatisticRepository.php: n/a
-# inc/smartcat/Drupal/Admin/Forms/StatisticFilter.php: n/a
-# inc/smartcat/Drupal/Admin/Pages/Statistics.php: n/a
-# inc/smartcat/Helpers/Language/LanguageConverter.php: n/a
-# inc/smartcat/Queue/QueueEngine.php: n/a
+#  translation_connectors.module: n/a
+#  inc/smartcat/Drupal/Admin/Forms/Config.php: n/a
+#  inc/smartcat/Drupal/Admin/Forms/Additional.php: n/a
+#  inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php: n/a
+#  translation_connectors.info: n/a
+#  inc/smartcat/Connector.php: n/a
+#  inc/smartcat/Core/Exchange.php: n/a
+#  inc/smartcat/DB/Entity/Statistics.php: n/a
+#  inc/smartcat/DB/Repository/StatisticRepository.php: n/a
+#  inc/smartcat/Drupal/Admin/Forms/StatisticFilter.php: n/a
+#  inc/smartcat/Drupal/Admin/Pages/Statistics.php: n/a
+#  inc/smartcat/Helpers/Language/LanguageConverter.php: n/a
+#  inc/smartcat/Queue/QueueEngine.php: n/a
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2017-11-14 17:16+0300\n"
-"PO-Revision-Date: 2017-11-14 17:16+0300\n"
+"POT-Creation-Date: 2017-11-14 17:14+0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"X-Generator: smartCAT.ai\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: translation_connectors.module:18
-#, fuzzy
 msgctxt "translation_connectors"
 msgid "Translation connectors"
 msgstr ""
@@ -40,980 +38,972 @@ msgstr ""
 #: translation_connectors.module:29 inc/smartcat/Drupal/Admin/Forms/Config.php:51
 msgctxt "translation_connectors"
 msgid "Required settings"
-msgstr "Обязательные настройки"
+msgstr ""
 
 #: translation_connectors.module:38 inc/smartcat/Drupal/Admin/Forms/Additional.php:56
 msgctxt "translation_connectors"
 msgid "Additional settings"
-msgstr "Дополнительные настройки"
+msgstr ""
 
 #: translation_connectors.module:68
 msgctxt "translation_connectors"
 msgid "Translation progress"
-msgstr "Процесс перевода"
+msgstr ""
 
 #: translation_connectors.module:126 inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:241
 msgctxt "translation_connectors"
 msgid "Submit for translation"
-msgstr "Отправить на перевод"
+msgstr ""
 
 #: translation_connectors.module:190
 msgctxt "translation_connectors"
 msgid "You must enter API login and password"
-msgstr "Необходимо ввести имя пользователя и пароль API"
+msgstr ""
 
 #: translation_connectors.module:163
-#, fuzzy
 msgid "translation_connectors"
 msgstr ""
 
 #: translation_connectors.module:163
-#, fuzzy
 msgid "The entities of type %entity_type do not define a valid path scheme: it will not be possible to translate them."
 msgstr ""
 
 #: translation_connectors.info:0
-#, fuzzy
 msgid "Translation Connectors"
 msgstr ""
 
 #: translation_connectors.info:0
-#, fuzzy
 msgid "Translation Connectors offers the easiest way to translate your Drupal entyties and posts into any language in a few clicks."
 msgstr ""
 
 #: translation_connectors.info:0
-#, fuzzy
 msgid "Multilingual - Entity Translation"
 msgstr ""
 
 #: inc/smartcat/Connector.php:115
 msgctxt "translation_connectors"
 msgid "You must <a href=\"/admin/config/regional/translation_connectors\">enter</a> API login and password"
-msgstr "Необходимо <a href=\"/admin/config/regional/translation_connectors\">ввести</a> имя пользователя и пароль API"
+msgstr ""
 
 #: inc/smartcat/Core/Exchange.php:81
 msgctxt "translation_connectors"
 msgid "Not all stats was created"
-msgstr "Создана не вся статистика"
+msgstr ""
 
 #: inc/smartcat/Core/Exchange.php:90
 msgctxt "translation_connectors"
 msgid "Task was created"
-msgstr "Задача создана"
+msgstr ""
 
 #: inc/smartcat/Core/Exchange.php:93
 msgctxt "translation_connectors"
 msgid "Task was not created"
-msgstr "Задача не создана"
+msgstr ""
 
 #: inc/smartcat/DB/Entity/Statistics.php:358 inc/smartcat/DB/Repository/StatisticRepository.php:122
 msgctxt "translation_connectors"
 msgid "Submitted"
-msgstr "Отправлено"
+msgstr ""
 
 #: inc/smartcat/DB/Entity/Statistics.php:362 inc/smartcat/DB/Repository/StatisticRepository.php:125
 msgctxt "translation_connectors"
 msgid "In progress"
-msgstr "Выполняется"
+msgstr ""
 
 #: inc/smartcat/DB/Entity/Statistics.php:365 inc/smartcat/DB/Repository/StatisticRepository.php:128
 msgctxt "translation_connectors"
 msgid "Completed"
-msgstr "Завершено"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:21
 msgctxt "translation_connectors"
 msgid "Workflow stages"
-msgstr "Этапы рабочего процесса"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:26
 msgctxt "translation_connectors"
 msgid "Translation"
-msgstr "Перевод"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:27
 msgctxt "translation_connectors"
 msgid "Editing"
-msgstr "Редактирование"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:28
 msgctxt "translation_connectors"
 msgid "Proofreading"
-msgstr "Корректура"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:29
 msgctxt "translation_connectors"
 msgid "Postediting"
-msgstr "Постредактирование"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:44
 msgctxt "translation_connectors"
 msgid "Please, choose your vendor"
-msgstr "Выберите поставщика"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:48
 msgctxt "translation_connectors"
 msgid "Vendor ID"
-msgstr "ИД поставщика"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:56 inc/smartcat/Drupal/Admin/Forms/Config.php:51
 msgctxt "translation_connectors"
 msgid "Save"
-msgstr "Сохранить"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:56 inc/smartcat/Drupal/Admin/Forms/Config.php:51
 msgctxt "translation_connectors"
 msgid "Cancel"
-msgstr "Отмена"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Additional.php:80 inc/smartcat/Drupal/Admin/Forms/Config.php:136
 msgctxt "translation_connectors"
 msgid "The configuration options have been saved."
-msgstr "Настройки конфигурации были успешно сохранены."
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:26
 msgctxt "translation_connectors"
 msgid "API server"
-msgstr "Сервер API"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:29
 msgctxt "translation_connectors"
 msgid "Europe"
-msgstr "Европа"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:30
 msgctxt "translation_connectors"
 msgid "USA"
-msgstr "США"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:31
 msgctxt "translation_connectors"
 msgid "Asia"
-msgstr "Азия"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:36
 msgctxt "translation_connectors"
 msgid "API login"
-msgstr "Имя пользователя API"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:43
 msgctxt "translation_connectors"
 msgid "API Password"
-msgstr "Пароль API"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:66
 msgctxt "translation_connectors"
 msgid "Invalid username or password"
-msgstr "Недопустимое имя пользователя или пароль"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:94
 msgctxt "translation_connectors"
 msgid "Problem with deleting of previous callback"
-msgstr "Не удалось удалить предыдущий обратный вызов"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/Config.php:122
 msgctxt "translation_connectors"
 msgid "Problem with setting of new callback"
-msgstr "Не удалось задать новый обратный вызов"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:36;122
 msgctxt "translation_connectors"
 msgid "Language"
-msgstr "Язык"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:37;197 inc/smartcat/Drupal/Admin/Forms/StatisticFilter.php:27 inc/smartcat/Drupal/Admin/Pages/Statistics.php:64
 msgctxt "translation_connectors"
 msgid "Source language"
-msgstr "Исходный язык"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:38 inc/smartcat/Drupal/Admin/Forms/StatisticFilter.php:48 inc/smartcat/Drupal/Admin/Pages/Statistics.php:73
 msgctxt "translation_connectors"
 msgid "Status"
-msgstr "Статус"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:65
 msgctxt "translation_connectors"
 msgid "n/a"
-msgstr "н/д"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:66
 msgctxt "translation_connectors"
 msgid "Published"
-msgstr "Опубликовано"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:66
 msgctxt "translation_connectors"
 msgid "Not published"
-msgstr "Не опубликовано"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:73
 msgctxt "translation_connectors"
 msgid "Language are not supported"
-msgstr "Язык не поддерживаются"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:79
-#, fuzzy
 msgid "<strong>@language_name</strong>"
 msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:80
 msgctxt "translation_connectors"
 msgid "(original content)"
-msgstr "(оригинальный контент)"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:99
 msgctxt "translation_connectors"
 msgid "Translations of %label"
-msgstr "Переводы для %label"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:170 inc/smartcat/Drupal/Admin/Forms/StatisticFilter.php:37 inc/smartcat/Drupal/Admin/Pages/Statistics.php:68
 msgctxt "translation_connectors"
 msgid "Target language"
-msgstr "Язык перевода"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:213
 msgctxt "translation_connectors"
 msgid "Next"
-msgstr "Вперёд"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:226
 msgctxt "translation_connectors"
 msgid "Prev"
-msgstr "Назад"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/SendToTranslate.php:255
 msgctxt "translation_connectors"
 msgid "Target languages are empty"
-msgstr "Не выбраны языки перевода"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Forms/StatisticFilter.php:59
 msgctxt "translation_connectors"
 msgid "Filter"
-msgstr "Фильтр"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Pages/Statistics.php:60
 msgctxt "translation_connectors"
 msgid "Title"
-msgstr "Заголовок"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Pages/Statistics.php:71
 msgctxt "translation_connectors"
 msgid "Words count"
-msgstr "Количество слов"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Pages/Statistics.php:76
 msgctxt "translation_connectors"
 msgid "Operations"
-msgstr "Операции"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Pages/Statistics.php:114
 msgctxt "translation_connectors"
 msgid "edit"
-msgstr "изменить"
+msgstr ""
 
 #: inc/smartcat/Drupal/Admin/Pages/Statistics.php:132
 msgctxt "translation_connectors"
 msgid "Refresh statistics"
-msgstr "Обновить статистику"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:24
 msgctxt "translation_connectors"
 msgid "Abkhazian"
-msgstr "Абхазский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:25
 msgctxt "translation_connectors"
 msgid "Afar"
-msgstr "Афарский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:26
 msgctxt "translation_connectors"
 msgid "Afrikaans"
-msgstr "Африкаанс"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:27
 msgctxt "translation_connectors"
 msgid "Amharic"
-msgstr "Амхарский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:28
 msgctxt "translation_connectors"
 msgid "Arabic"
-msgstr "Арабский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:29
 msgctxt "translation_connectors"
 msgid "Assamese"
-msgstr "Ассамский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:30
 msgctxt "translation_connectors"
 msgid "Avar"
-msgstr "Аварский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:31
 msgctxt "translation_connectors"
 msgid "Azerbaijani"
-msgstr "Азербайджанский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:32
 msgctxt "translation_connectors"
 msgid "Bamanankan"
-msgstr "Бамбара"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:33
 msgctxt "translation_connectors"
 msgid "Bashkir"
-msgstr "Башкирский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:34
 msgctxt "translation_connectors"
 msgid "Belarusian"
-msgstr "Белорусский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:35
 msgctxt "translation_connectors"
 msgid "Bengali"
-msgstr "Бенгальский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:36
 msgctxt "translation_connectors"
 msgid "Bihari"
-msgstr "Бихари"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:37
 msgctxt "translation_connectors"
 msgid "Bulgarian"
-msgstr "Болгарский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:38
 msgctxt "translation_connectors"
 msgid "Tibetan"
-msgstr "Тибетский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:39
 msgctxt "translation_connectors"
 msgid "Bosnian"
-msgstr "Боснийский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:40
 msgctxt "translation_connectors"
 msgid "Catalan"
-msgstr "Каталанский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:41
 msgctxt "translation_connectors"
 msgid "Czech"
-msgstr "Чешский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:42
 msgctxt "translation_connectors"
 msgid "Danish"
-msgstr "Датский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:43
 msgctxt "translation_connectors"
 msgid "German (Switzerland)"
-msgstr "Немецкий (Швейцария)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:44
 msgctxt "translation_connectors"
 msgid "German"
-msgstr "Немецкий"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:45
 msgctxt "translation_connectors"
 msgid "Greek"
-msgstr "Греческий"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:46
 msgctxt "translation_connectors"
 msgid "English (UK)"
-msgstr "Английский (Великобритания)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:47
 msgctxt "translation_connectors"
 msgid "English"
-msgstr "Английский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:48
 msgctxt "translation_connectors"
 msgid "Esperanto"
-msgstr "Эсперанто"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:49
 msgctxt "translation_connectors"
 msgid "Spanish"
-msgstr "Испанский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:50
 msgctxt "translation_connectors"
 msgid "Estonian"
-msgstr "Эстонский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:51
 msgctxt "translation_connectors"
 msgid "Basque"
-msgstr "Баскский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:52
 msgctxt "translation_connectors"
 msgid "Finnish"
-msgstr "Финский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:53
 msgctxt "translation_connectors"
 msgid "French (France)"
-msgstr "Французский (Франция)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:54
 msgctxt "translation_connectors"
 msgid "Irish"
-msgstr "Ирландский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:55
 msgctxt "translation_connectors"
 msgid "Galician"
-msgstr "Галисийский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:56
 msgctxt "translation_connectors"
 msgid "Guaraní"
-msgstr "Гуарани"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:57
 msgctxt "translation_connectors"
 msgid "Gujarati"
-msgstr "Гуджарати"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:58
 msgctxt "translation_connectors"
 msgid "Hebrew"
-msgstr "Иврит"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:59
 msgctxt "translation_connectors"
 msgid "Hindi"
-msgstr "Хинди"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:60
 msgctxt "translation_connectors"
 msgid "Croatian"
-msgstr "Хорватский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:61
 msgctxt "translation_connectors"
 msgid "Hungarian"
-msgstr "Венгерский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:62
 msgctxt "translation_connectors"
 msgid "Armenian"
-msgstr "Армянский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:63
 msgctxt "translation_connectors"
 msgid "Indonesian"
-msgstr "Индонезийский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:64
 msgctxt "translation_connectors"
 msgid "Icelandic"
-msgstr "Исландский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:65
 msgctxt "translation_connectors"
 msgid "Italian"
-msgstr "Итальянский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:66
 msgctxt "translation_connectors"
 msgid "Japanese"
-msgstr "Японский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:67
 msgctxt "translation_connectors"
 msgid "Javanese"
-msgstr "Яванский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:68
 msgctxt "translation_connectors"
 msgid "Georgian"
-msgstr "Грузинский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:69
 msgctxt "translation_connectors"
 msgid "Kazakh"
-msgstr "Казахский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:70
 msgctxt "translation_connectors"
 msgid "Khmer"
-msgstr "Кхмерский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:71
 msgctxt "translation_connectors"
 msgid "Kannada"
-msgstr "Каннада"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:72
 msgctxt "translation_connectors"
 msgid "Korean"
-msgstr "Корейский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:73
 msgctxt "translation_connectors"
 msgid "Kurdish (Sorani)"
-msgstr "Курдский (сорани)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:74
 msgctxt "translation_connectors"
 msgid "Kirghiz"
-msgstr "Киргизский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:75
 msgctxt "translation_connectors"
 msgid "Luxembourgish"
-msgstr "Люксембургский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:76
 msgctxt "translation_connectors"
 msgid "Lao"
-msgstr "Лаосский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:77
 msgctxt "translation_connectors"
 msgid "Lithuanian"
-msgstr "Литовский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:78
 msgctxt "translation_connectors"
 msgid "Latvian"
-msgstr "Латышский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:79
 msgctxt "translation_connectors"
 msgid "Malagasy"
-msgstr "Малагасийский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:80
 msgctxt "translation_connectors"
 msgid "Macedonian"
-msgstr "Македонский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:81
 msgctxt "translation_connectors"
 msgid "Malayalam"
-msgstr "Малаялам"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:82
 msgctxt "translation_connectors"
 msgid "Mongolian"
-msgstr "Монгольский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:83
 msgctxt "translation_connectors"
 msgid "Marathi"
-msgstr "Маратхи"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:84
 msgctxt "translation_connectors"
 msgid "Malay"
-msgstr "Малайский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:85
 msgctxt "translation_connectors"
 msgid "Myanmar (Burmese)"
-msgstr "Мьянманский (бирманский)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:86
 msgctxt "translation_connectors"
 msgid "Norwegian (Bokmål)"
-msgstr "Норвежский (букмол)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:87
 msgctxt "translation_connectors"
 msgid "Nepali"
-msgstr "Непальский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:88
 msgctxt "translation_connectors"
 msgid "Dutch"
-msgstr "Голландский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:89
 msgctxt "translation_connectors"
 msgid "Norwegian (Nynorsk)"
-msgstr "Норвежский (нюнорск)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:90
 msgctxt "translation_connectors"
 msgid "Ossetic"
-msgstr "Осетинский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:91
 msgctxt "translation_connectors"
 msgid "Punjabi"
-msgstr "Панджаби"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:92
 msgctxt "translation_connectors"
 msgid "Polish"
-msgstr "Польский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:93
 msgctxt "translation_connectors"
 msgid "Pashto"
-msgstr "Пушту"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:94
 msgctxt "translation_connectors"
 msgid "Portuguese (Brazil)"
-msgstr "Португальский (Бразилия)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:95;96
 msgctxt "translation_connectors"
 msgid "Portuguese (Portugal)"
-msgstr "Португальский (Португалия)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:97
 msgctxt "translation_connectors"
 msgid "Romanian"
-msgstr "Румынский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:98
 msgctxt "translation_connectors"
 msgid "Russian"
-msgstr "Русский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:99
 msgctxt "translation_connectors"
 msgid "Sanskrit"
-msgstr "Санскрит"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:100
 msgctxt "translation_connectors"
 msgid "Sakha"
-msgstr "Якутский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:101
 msgctxt "translation_connectors"
 msgid "Sinhala"
-msgstr "Сингальский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:102
 msgctxt "translation_connectors"
 msgid "Slovak"
-msgstr "Словацкий"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:103
 msgctxt "translation_connectors"
 msgid "Slovenian"
-msgstr "Словенский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:104
 msgctxt "translation_connectors"
 msgid "Somali"
-msgstr "Сомали"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:105
 msgctxt "translation_connectors"
 msgid "Albanian"
-msgstr "Албанский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:106
 msgctxt "translation_connectors"
 msgid "Serbian"
-msgstr "Сербский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:107
 msgctxt "translation_connectors"
 msgid "Swedish"
-msgstr "Шведский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:108
 msgctxt "translation_connectors"
 msgid "Swahili"
-msgstr "Суахили"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:109
 msgctxt "translation_connectors"
 msgid "Tamil"
-msgstr "Тамильский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:110
 msgctxt "translation_connectors"
 msgid "Telugu"
-msgstr "Телугу"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:111
 msgctxt "translation_connectors"
 msgid "Tajik"
-msgstr "Таджикский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:112
 msgctxt "translation_connectors"
 msgid "Thai"
-msgstr "Тайский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:113
 msgctxt "translation_connectors"
 msgid "Tigrinya"
-msgstr "Тигринья"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:114
 msgctxt "translation_connectors"
 msgid "Turkmen"
-msgstr "Туркменский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:115
 msgctxt "translation_connectors"
 msgid "Tagalog"
-msgstr "Тагальский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:116
 msgctxt "translation_connectors"
 msgid "Turkish"
-msgstr "Турецкий"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:117
 msgctxt "translation_connectors"
 msgid "Tatar"
-msgstr "Татарский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:118
 msgctxt "translation_connectors"
 msgid "Uighur"
-msgstr "Уйгурский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:119
 msgctxt "translation_connectors"
 msgid "Ukrainian"
-msgstr "Украинский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:120
 msgctxt "translation_connectors"
 msgid "Urdu"
-msgstr "Урду"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:121
 msgctxt "translation_connectors"
 msgid "Uzbek"
-msgstr "Узбекский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:122
 msgctxt "translation_connectors"
 msgid "Vietnamese"
-msgstr "Вьетнамский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:123
 msgctxt "translation_connectors"
 msgid "Chinese (China)"
-msgstr "Китайский (КНР)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:124
 msgctxt "translation_connectors"
 msgid "Chinese (Hong Kong)"
-msgstr "Китайский (Гонконг)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:125
 msgctxt "translation_connectors"
 msgid "Akan"
-msgstr "Акан"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:126
 msgctxt "translation_connectors"
 msgid "Balochi Southern"
-msgstr "Белуджский (южный)"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:127
 msgctxt "translation_connectors"
 msgid "Cebuano"
-msgstr "Себуанский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:128
 msgctxt "translation_connectors"
 msgid "Corsican"
-msgstr "Корсиканский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:129
 msgctxt "translation_connectors"
 msgid "Persian"
-msgstr "Персидский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:130
 msgctxt "translation_connectors"
 msgid "Fulah"
-msgstr "Фула"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:131
 msgctxt "translation_connectors"
 msgid "Swiss German"
-msgstr "Швейцарский диалект"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:132
 msgctxt "translation_connectors"
 msgid "Hazaragi"
-msgstr "Хазара"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:133
 msgctxt "translation_connectors"
 msgid "Kabyle"
-msgstr "Кабильский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:134
 msgctxt "translation_connectors"
 msgid "Kinyarwanda"
-msgstr "Киньяруанда"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:135
 msgctxt "translation_connectors"
 msgid "Limburgish"
-msgstr "Лимбургский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:136
 msgctxt "translation_connectors"
 msgid "Lingala"
-msgstr "Лингала"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:137
 msgctxt "translation_connectors"
 msgid "Montenegrin"
-msgstr "Черногорский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:138
 msgctxt "translation_connectors"
 msgid "Occitan"
-msgstr "Окситанский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:139
 msgctxt "translation_connectors"
 msgid "Oriya"
-msgstr "Ория"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:140
 msgctxt "translation_connectors"
 msgid "Rohingya"
-msgstr "Рохинджа"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:141
 msgctxt "translation_connectors"
 msgid "Rusyn"
-msgstr "Русинский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:142
 msgctxt "translation_connectors"
 msgid "Sindhi"
-msgstr "Синдхи"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:143
 msgctxt "translation_connectors"
 msgid "Sardinian"
-msgstr "Сардинский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:144
 msgctxt "translation_connectors"
 msgid "Sundanese"
-msgstr "Суданский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:145
 msgctxt "translation_connectors"
 msgid "Silesian"
-msgstr "Силезский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:146
 msgctxt "translation_connectors"
 msgid "Yoruba"
-msgstr "Йоруба"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:147
 msgctxt "translation_connectors"
 msgid "Wolof"
-msgstr "Волоф"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:148
 msgctxt "translation_connectors"
 msgid "Haitian Creole"
-msgstr "Гаитянский креольский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:149
 msgctxt "translation_connectors"
 msgid "Zulu"
-msgstr "Зулусский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:150
 msgctxt "translation_connectors"
 msgid "Yiddish"
-msgstr "Идиш"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:151
 msgctxt "translation_connectors"
 msgid "Kirundi"
-msgstr "Кирунди"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:152
 msgctxt "translation_connectors"
 msgid "Komi"
-msgstr "Коми"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:153
 msgctxt "translation_connectors"
 msgid "Cornish"
-msgstr "Корнский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:154
 msgctxt "translation_connectors"
 msgid "Latina"
-msgstr "Латинский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:155
 msgctxt "translation_connectors"
 msgid "Samoan"
-msgstr "Самоанский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:156
 msgctxt "translation_connectors"
 msgid "Sango"
-msgstr "Санго"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:157
 msgctxt "translation_connectors"
 msgid "Setswana"
-msgstr "Сетсвана"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:158
 msgctxt "translation_connectors"
 msgid "Tonga"
-msgstr "Тонга"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:159
 msgctxt "translation_connectors"
 msgid "Filipino"
-msgstr "Филипино"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:160
 msgctxt "translation_connectors"
 msgid "Chechen"
-msgstr "Чеченский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:161
 msgctxt "translation_connectors"
 msgid "Chuvash"
-msgstr "Чувашский"
+msgstr ""
 
 #: inc/smartcat/Helpers/Language/LanguageConverter.php:162
 msgctxt "translation_connectors"
 msgid "Shona"
-msgstr "Шона"
+msgstr ""
 
 #: inc/smartcat/Queue/QueueEngine.php:74
-#, fuzzy
 msgid "background_queue"
 msgstr ""
 
 #: inc/smartcat/Queue/QueueEngine.php:74
-#, fuzzy
 msgid "Socket open error."
 msgstr ""
 

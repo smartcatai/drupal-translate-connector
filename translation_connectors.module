@@ -15,7 +15,7 @@ function translation_connectors_menu() {
 
   //Настройки кредов к АПИ
   $items['admin/config/regional/translation_connectors'] = [
-    'title' => 'Translation connectors',
+    'title' => t('Translation connectors',[],['context'=>'translation_connectors']),
     'page callback' => 'drupal_get_form',
     'page arguments' => ['translation_connectors_config_form'],
     'access arguments' => ['administer entity translation'],
@@ -26,7 +26,7 @@ function translation_connectors_menu() {
 
   //Настройки кредов к АПИ
   $items['admin/config/regional/translation_connectors/default'] = [
-    'title' => 'Required settings',
+    'title' => t('Required settings',[],['context'=>'translation_connectors']),
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'access arguments' => ['administer entity translation'],
     'weight' => 1,
@@ -35,7 +35,7 @@ function translation_connectors_menu() {
   //Дополнительные настройки, доступны если введены верные креды от АПИ
   if (\SmartCAT\Drupal\Helpers\SmartCAT::is_active()) {
     $items["admin/config/regional/translation_connectors/additional"] = [
-      'title' => 'Additional settings',
+      'title' => t('Additional settings',[],['context'=>'translation_connectors']),
       'page callback' => 'drupal_get_form',
       'page arguments' => ['translation_connectors_additional_form'],
       'access arguments' => ['administer entity translation'],
@@ -65,7 +65,7 @@ function translation_connectors_menu() {
   ];
 
   $items["admin/config/regional/translation_connectors/statistics"] = [
-    'title' => 'Translation progress',
+    'title' => t('Translation progress',[],['context'=>'translation_connectors']),
     'page callback' => '\SmartCAT\Drupal\Drupal\Admin\Pages\Statistics::get',
     'access arguments' => ['administer entity translation'],
     'file' => 'inc/smartcat/Drupal/Admin/Pages/Statistics.php',
@@ -123,7 +123,7 @@ function translation_connectors_menu_alter(&$items) {
           $entity_position = array_search($scheme['path wildcard'], $scheme['base path parts']);
 
           $items[$translate_path] = [
-            'title' => 'Submit for translation',
+            'title' => t('Submit for translation',[],['context'=>'translation_connectors']),
             'page callback' => 'drupal_get_form',
             'page arguments' => ['translation_connectors_send_to_translate_form', $entity_type, $entity_position],
             'type' => MENU_LOCAL_TASK,

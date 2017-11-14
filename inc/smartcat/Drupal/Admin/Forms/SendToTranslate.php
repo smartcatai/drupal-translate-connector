@@ -33,9 +33,9 @@ class SendToTranslate implements DrupalForm {
     }
 
     $header = [
-      t('Language'),
-      t('Source language'),
-      t('Status'),
+      t('Language',[],['context'=>'translation_connectors']),
+      t('Source language',[],['context'=>'translation_connectors']),
+      t('Status',[],['context'=>'translation_connectors']),
     ];
     $languages = entity_translation_languages();
     $source = $translations->original;
@@ -62,8 +62,8 @@ class SendToTranslate implements DrupalForm {
         $langcode = $language->language;
         $is_original = $langcode == $translations->original;
         $translation = $translations->data[$langcode] ?? NULL;
-        $source_name = t('n/a');
-        $status = ($translation['status'] ?? NULL) ? t('Published') : t('Not published');
+        $source_name = t('n/a',[],['context'=>'translation_connectors']);
+        $status = ($translation['status'] ?? NULL) ? t('Published',[],['context'=>'translation_connectors']) : t('Not published',[],['context'=>'translation_connectors']);
         //Проверям поддерживает ли SC выбранный язык
         try {
           $sc_langcode = $converter->get_sc_code_by_drupal($langcode);
@@ -77,7 +77,7 @@ class SendToTranslate implements DrupalForm {
           $disabled[$langcode] = ['#disabled' => TRUE];
           if ($is_original) {
             $language_name = t('<strong>@language_name</strong>', ['@language_name' => $language_name]);
-            $source_name = t('(original content)');
+            $source_name = t('(original content)',[],['context'=>'translation_connectors']);
           }
           else {
             $source_name = $languages[$translation['source']]->name;
@@ -96,7 +96,7 @@ class SendToTranslate implements DrupalForm {
       }
     }
 
-    drupal_set_title(t('Translations of %label', ['%label' => $handler->getLabel()]), PASS_THROUGH);
+    drupal_set_title(t('Translations of %label', ['%label' => $handler->getLabel()],['context'=>'translation_connectors']), PASS_THROUGH);
 
     return [
       'header' => $header,
@@ -119,7 +119,7 @@ class SendToTranslate implements DrupalForm {
     }
 
     $header = [
-      t('Language'),
+      t('Language',[],['context'=>'translation_connectors']),
     ];
     $languages = entity_translation_languages();
     $rows = [];
@@ -141,9 +141,6 @@ class SendToTranslate implements DrupalForm {
           } catch (LanguageNotFoundException $e) {
           }
         }
-
-        $status = ($translation['status'] ?? NULL) ? t('Published') : t('Not published');;
-        // Show fallback information if required.
       }
     }
 
@@ -197,7 +194,7 @@ class SendToTranslate implements DrupalForm {
         $table = self::get_source_table($entity_type, $entity);
         $form['step2'] = [
           '#type' => 'fieldset',
-          '#title' => t('	Source language', [], ['context' => 'translation_connectors']),
+          '#title' => t('Source language', [], ['context' => 'translation_connectors']),
         ];
         $form['step2']['source'] = [
           '#type' => 'radios',
@@ -213,7 +210,7 @@ class SendToTranslate implements DrupalForm {
     if ($step < 2 && !$disableNext) {
       $form['actions']['next'] = [
         '#type' => 'submit',
-        '#value' => t('Next', [], ['context' => 'translation_connectors']),
+        '#value' => t('Next',[],['context'=>'translation_connectors']),
         '#ajax' => [
           'wrapper' => 'translation-connectors-send-to-translate-form-wrapper',
           'callback' => 'translation_connectors_send_to_translate_form_ajax_callback',
@@ -226,7 +223,7 @@ class SendToTranslate implements DrupalForm {
     if ($step > 1) {
       $form['actions']['prev'] = [
         '#type' => 'submit',
-        '#value' => t('Previous', [], ['context' => 'translation_connectors']),
+        '#value' => t('Prev',[],['context'=>'translation_connectors']),
         '#limit_validation_errors' => [],
         '#submit' => ['translation_connectors_send_to_translate_form_submit'],
         '#ajax' => [

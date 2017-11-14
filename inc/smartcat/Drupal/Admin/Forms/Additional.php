@@ -45,7 +45,7 @@ class Additional implements DrupalForm{
     }
 
     $form['vendor_id'] = [
-      '#title' => t('Vendor ID'),
+      '#title' => t('Vendor ID',[],['context'=>'translation_connectors']),
       '#type' => 'select',
       '#options' => $select_array,
       '#default_value' => $options->get('smartcat_vendor_id'),
@@ -53,7 +53,7 @@ class Additional implements DrupalForm{
 
     $form['#submit'][] = 'translation_connectors_additional_form_submit';
 
-    return confirm_form($form, t('Additional settings', [], ['context' => 'translation_connectors']), 'admin/config/regional/translation_connectors/additional', '', t('Save'), t('Cancel'));
+    return confirm_form($form, t('Additional settings', [], ['context' => 'translation_connectors']), 'admin/config/regional/translation_connectors/additional', '', t('Save', [], ['context' => 'translation_connectors']), t('Cancel', [], ['context' => 'translation_connectors']));
   }
 
   public static function validate_form($form, &$form_state) {
@@ -77,7 +77,7 @@ class Additional implements DrupalForm{
       $options->set('smartcat_vendor_id', $form_state['values']['vendor_id']);
     }
 
-    $notice->add_success(t('The configuration options have been saved.'));
+    $notice->add_success(t('The configuration options have been saved.', [], ['context' => 'translation_connectors']));
     return TRUE;
   }
 }

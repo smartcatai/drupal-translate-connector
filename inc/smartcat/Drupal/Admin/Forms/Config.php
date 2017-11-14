@@ -23,7 +23,7 @@ class Config implements DrupalForm{
     $options = $container->get('core.options');
     $form = [];
     $form['api_server'] = [
-      '#title' => t('API server'),
+      '#title' => t('API server', [], ['context' => 'translation_connectors']),
       '#type' => 'select',
       '#options' => [
         SmartCAT::SC_EUROPE => t('Europe', [], ['context' => 'translation_connectors']),
@@ -45,16 +45,10 @@ class Config implements DrupalForm{
       '#required' => TRUE,
     ];
 
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => t('Add'),
-    ];
-
     $form['#submit'][] = 'translation_connectors_config_form_submit';
     $form['#validate'][] = 'translation_connectors_config_form_validate';
 
-    return confirm_form($form, t('Required settings', [], ['context' => 'translation_connectors']), 'admin/config/regional/translation_connectors', '', t('Save'), t('Cancel'));
+    return confirm_form($form, t('Required settings', [], ['context' => 'translation_connectors']), 'admin/config/regional/translation_connectors', '', t('Save', [], ['context' => 'translation_connectors']), t('Cancel', [], ['context' => 'translation_connectors']));
   }
 
   public static function validate_form($form, &$form_state) {
@@ -139,7 +133,7 @@ class Config implements DrupalForm{
       $options = $container->get('core.options');
       $options->set('smartcat_account_name', $account_info->getName());
     }
-    $notice->add_success(t('The configuration options have been saved.'));
+    $notice->add_success(t('The configuration options have been saved.',[],['context'=>'translation_connectors']));
     if (!$alreadyActivated) {
       menu_rebuild();
     }
