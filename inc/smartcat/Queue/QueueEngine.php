@@ -9,6 +9,13 @@
 namespace SmartCAT\Drupal\Queue;
 
 
+use Http\Client\Common\Plugin\ContentLengthPlugin;
+use Http\Client\Common\Plugin\DecoderPlugin;
+use Http\Client\Common\Plugin\ErrorPlugin;
+use Http\Client\Common\Plugin\RedirectPlugin;
+use Http\Client\Common\PluginClient;
+use Http\Client\Socket\Client as SocketHttpClient;
+use Http\Message\MessageFactory;
 use SmartCAT\Drupal\Connector;
 
 class QueueEngine {
@@ -81,6 +88,35 @@ class QueueEngine {
     fclose($fp);
   }
 
+  public static function async_http_psr_request($url) {
+    $url_info = parse_url($url);
+
+    $is_https = ($url_info['scheme'] == 'https');
+    $port = isset($url_info['port']) ? $url_info['port'] : ($is_https ? 443 : 80);
+    $query = isset($url_info['query']) ? '?' . $url_info['query'] : '';
+
+    $messageFactory = new MessageFactory\GuzzleMessageFactory();
+    $options = [
+      'remote_socket' => "tcp://{$url_info['host']}:$port",
+    ];
+    if ($is_https) {
+      $options['ssl'] = TRUE;
+    }
+    $socketClient = new SocketHttpClient($messageFactory, $options);
+    $lengthPlugin = new ContentLengthPlugin();
+    $decodingPlugin = new DecoderPlugin();
+    $errorPlugin = new ErrorPlugin();
+    $redirectPlugin = new RedirectPlugin();
+    $httpClient = new PluginClient($socketClient, [
+      $errorPlugin,
+      $lengthPlugin,
+      $decodingPlugin,
+      //$redirectPlugin,
+    ]);
+    $headers = ['Host' => $url_info['host'], 'Connection' => 'Close'];
+    $request = $messageFactory->createRequest('GET', "{$url_info['path']}/{$query}", $headers);
+    $promise = $httpClient->sendAsyncRequest($request);
+  }
 
   /**
    * Запуск обработки очереди в фоновом режиме
@@ -94,7 +130,7 @@ class QueueEngine {
         'key' => variable_get('cron_key'),
       ],
     ]);
-    self::async_http_request($url);
+    self::async_http_psr_request($url);
   }
 
   /**

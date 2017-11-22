@@ -135,7 +135,7 @@ class Config implements DrupalForm{
     }
     $notice->add_success(t('The configuration options have been saved.',[],['context'=>'translation_connectors']));
     if (!$alreadyActivated) {
-      menu_rebuild();
+      cache_clear_all();
     }
     return TRUE;
   }}

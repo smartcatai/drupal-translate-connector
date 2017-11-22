@@ -182,4 +182,24 @@ class Exchange {
       self::create_project($task);
     }
   }
+
+  public static function hook_delete_translation($entity_type, $entity, $langcode){
+    $container = Connector::get_container();
+    /** @var StatisticRepository $statistic_repository */
+    $statistic_repository = $container->get('entity.repository.statistic');
+    $statistic = $statistic_repository->get_one_by([
+      'entityID'=>$entity->nid,
+      'entityType'=>$entity_type,
+      'targetLanguage'=>$langcode,
+    ]);
+    if (!empty($statistic)) {
+      $statistic_repository->delete($statistic);
+    }
+  }
+  public static function hook_delete($entity, $type){
+    $container = Connector::get_container();
+    /** @var StatisticRepository $statistic_repository */
+    $statistic_repository = $container->get('entity.repository.statistic');
+    $statistic_repository->delete_by_entity_id($entity->nid);
+  }
 }

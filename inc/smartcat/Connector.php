@@ -112,7 +112,7 @@ class Connector {
     self::set_core_parameters();
     if (!SmartCAT::is_active() && user_access('administer entity translation')) {
       $notice = $this->from_container('core.notice');
-      $notice->add_error(t('You must <a href="/admin/config/regional/translation_connectors">enter</a> API login and password', [], ['context' => 'translation_connectors']), FALSE);
+      $notice->add_error(t('You must <a href="@url">enter</a> API login and password', ['@url' => url('admin/config/regional/translation_connectors')], ['context' => 'translation_connectors']), FALSE);
     }
     stream_wrapper_register("smartcat", "SmartCAT\Drupal\VariableStream");
 

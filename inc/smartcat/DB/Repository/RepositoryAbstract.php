@@ -9,6 +9,8 @@
 namespace SmartCAT\Drupal\DB\Repository;
 
 
+use SmartCAT\Drupal\DB\Entity\Statistics;
+
 abstract class RepositoryAbstract implements RepositoryInterface {
 
   protected $prefix = '';
@@ -51,7 +53,7 @@ abstract class RepositoryAbstract implements RepositoryInterface {
   /**
    * @param array $criterias
    *
-   * @return $this|null
+   * @return Statistics
    */
   public function get_one_by(array $criterias) {
     $table_name = $this->get_table_name();

@@ -92,7 +92,7 @@ class SmartCATCallbackHandler implements PluginInterface {
       /** @var SmartCAT $sc */
       $sc = $this->container->get('smartcat');
       $callback_model = new CallbackPropertyModel();
-      $callback_model->setUrl($GLOBALS['base_url'] . '/' . self::ROUTE_PREFIX);
+      $callback_model->setUrl(url(self::ROUTE_PREFIX,['absolute' => true]));
       $callback_model->setAdditionalHeaders([
         [
           'name' => 'Authorization',

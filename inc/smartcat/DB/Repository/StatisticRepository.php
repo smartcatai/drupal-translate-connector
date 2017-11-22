@@ -252,8 +252,8 @@ class StatisticRepository extends RepositoryAbstract {
     return FALSE;
   }
 
-  public function delete_by_post_id($entity_id) {
-    if (!is_null($entity_id) && !empty($entity_id) && is_int($entity_id)) {
+  public function delete_by_entity_id($entity_id) {
+    if (!is_null($entity_id) && !empty($entity_id)) {
       return db_delete($this->get_table_name())
         ->condition('entityID', $entity_id)
         ->execute();

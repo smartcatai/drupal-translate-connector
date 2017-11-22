@@ -89,8 +89,8 @@ msgstr ""
 
 #: inc/smartcat/Connector.php:115
 msgctxt "translation_connectors"
-msgid "You must <a href=\"/admin/config/regional/translation_connectors\">enter</a> API login and password"
-msgstr "Необходимо <a href=\"/admin/config/regional/translation_connectors\">ввести</a> имя пользователя и пароль API"
+msgid "You must <a href=\"@url\">enter</a> API login and password"
+msgstr "Необходимо <a href=\"@url\">ввести</a> имя пользователя и пароль API"
 
 #: inc/smartcat/Core/Exchange.php:81
 msgctxt "translation_connectors"

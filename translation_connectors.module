@@ -15,7 +15,7 @@ function translation_connectors_menu() {
 
   //Настройки кредов к АПИ
   $items['admin/config/regional/translation_connectors'] = [
-    'title' => t('Translation connectors',[],['context'=>'translation_connectors']),
+    'title' => t('Translation connectors', [], ['context' => 'translation_connectors']),
     'page callback' => 'drupal_get_form',
     'page arguments' => ['translation_connectors_config_form'],
     'access arguments' => ['administer entity translation'],
@@ -26,7 +26,7 @@ function translation_connectors_menu() {
 
   //Настройки кредов к АПИ
   $items['admin/config/regional/translation_connectors/default'] = [
-    'title' => t('Required settings',[],['context'=>'translation_connectors']),
+    'title' => t('Required settings', [], ['context' => 'translation_connectors']),
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'access arguments' => ['administer entity translation'],
     'weight' => 1,
@@ -35,7 +35,7 @@ function translation_connectors_menu() {
   //Дополнительные настройки, доступны если введены верные креды от АПИ
   if (\SmartCAT\Drupal\Helpers\SmartCAT::is_active()) {
     $items["admin/config/regional/translation_connectors/additional"] = [
-      'title' => t('Additional settings',[],['context'=>'translation_connectors']),
+      'title' => t('Additional settings', [], ['context' => 'translation_connectors']),
       'page callback' => 'drupal_get_form',
       'page arguments' => ['translation_connectors_additional_form'],
       'access arguments' => ['administer entity translation'],
@@ -65,7 +65,7 @@ function translation_connectors_menu() {
   ];
 
   $items["admin/config/regional/translation_connectors/statistics"] = [
-    'title' => t('Translation progress',[],['context'=>'translation_connectors']),
+    'title' => t('Translation progress', [], ['context' => 'translation_connectors']),
     'page callback' => '\SmartCAT\Drupal\Drupal\Admin\Pages\Statistics::get',
     'access arguments' => ['administer entity translation'],
     'file' => 'inc/smartcat/Drupal/Admin/Pages/Statistics.php',
@@ -92,6 +92,12 @@ function translation_connectors_menu() {
     'access arguments' => [2],
     'file' => 'inc/smartcat/Queue/QueueEngine.php',
     'module' => 'translation_connectors',
+    'type' => MENU_CALLBACK,
+  ];
+
+  $items['translation_connectors/test'] = [
+    'page callback' => 'translation_connectors_test',
+    'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   ];
 
@@ -123,9 +129,13 @@ function translation_connectors_menu_alter(&$items) {
           $entity_position = array_search($scheme['path wildcard'], $scheme['base path parts']);
 
           $items[$translate_path] = [
-            'title' => t('Submit for translation',[],['context'=>'translation_connectors']),
+            'title' => t('Submit for translation', [], ['context' => 'translation_connectors']),
             'page callback' => 'drupal_get_form',
-            'page arguments' => ['translation_connectors_send_to_translate_form', $entity_type, $entity_position],
+            'page arguments' => [
+              'translation_connectors_send_to_translate_form',
+              $entity_type,
+              $entity_position,
+            ],
             'type' => MENU_LOCAL_TASK,
             'weight' => 2,
             'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
@@ -179,14 +189,17 @@ function translation_connectors_queue_access_callback($queue_name) {
   return isset($_GET['key']) && $_GET['key'] == variable_get('cron_key', 'drupal');
 }
 
-function translation_connectors_doit() {
-  $entities = node_load_multiple([7]);
-  //return "<pre>" . print_r($entities[7], true) . "</pre>";
-  //$lanuages = entity_translation_languages();
-  //return "<pre>" . print_r($lanuages, true) . "</pre>";
-  //return drupal_get_hash_salt();
-  //return drupal_get_private_key();
-  $notice = new \SmartCAT\Drupal\Drupal\Notice();
-  $notice->add_error(t('You must enter API login and password', [], ['context' => 'translation_connectors']));
-  return '';
+function translation_connectors_test() {
+  \SmartCAT\Drupal\Queue\QueueEngine::run('publication_queue');
+}
+
+/**
+ * Implements hook_entity_translation_delete().
+ */
+function translation_connectors_entity_translation_delete($entity_type, $entity, $langcode) {
+  \SmartCAT\Drupal\Core\Exchange::hook_delete_translation($entity_type, $entity, $langcode);
+}
+
+function translation_connectors_entity_delete($entity, $type) {
+  \SmartCAT\Drupal\Core\Exchange::hook_delete($entity, $type);
 }
