@@ -1,0 +1,11 @@
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+define('SMARTCAT_PLUGIN_FILE', __FILE__);
+define('SMARTCAT_PLUGIN_NAME', 'smartcat_translation_manager');
+
+define(
+  'SMARTCAT_PLUGIN_DIR',
+  realpath( pathinfo( __FILE__, PATHINFO_DIRNAME ) ) . DIRECTORY_SEPARATOR
+);

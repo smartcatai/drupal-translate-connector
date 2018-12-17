@@ -1,0 +1,5 @@
+smartcat_translation_manager.settings:
+  title:  'Config form for connection to API'
+  description: 'Enter your API key, token and choose your server'
+  route_name: smartcat_translation_manager.settings
+  parent: system.admin_config'

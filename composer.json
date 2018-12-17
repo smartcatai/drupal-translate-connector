@@ -1,5 +1,5 @@
 {
-  "name": "smartcat/drupal-smartcat-connector",
+  "name": "smartcat/drupal-smartcat-translation-manager",
   "description": "Drupal integration to smartCAT",
   "minimum-stability": "stable",
   "license": "GPLv3",
@@ -10,20 +10,13 @@
       "email": "a.rybnikov@smartcat.pro"
     }
   ],
-  "config": {
-    "vendor-dir": "inc/vendor"
-  },
   "require": {
     "php": ">=7.0",
-    "ext-dom": "*",
-    "ext-openssl": "*",
-    "smartcat/smartcat-api": "^1.7.0",
-    "symfony/config": "^3.3",
-    "symfony/dependency-injection": "^3.3"
+    "smartcat/smartcat-api": "^2.0.3"
   },
   "autoload": {
     "psr-4": {
-      "SmartCAT\\Drupal\\": "inc/smartcat"
+      "Smartcat\\Drupal\\": "src"
     }
   }
 }

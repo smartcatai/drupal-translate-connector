@@ -1,0 +1,19 @@
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+function smartcat_translation_manager_install() {
+}
+
+function smartcat_translation_manager_uninstall() {
+
+}
+
+function smartcat_translation_manager_enable() {
+}
+
+function smartcat_translation_manager_disable() {
+}
+
+function smartcat_translation_manager_schema() {
+}
+
