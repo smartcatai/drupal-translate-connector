@@ -1,7 +1,23 @@
 smartcat_translation_manager.settings:
-  path: '/admin/config/regional/smartcat_translation_manager'
+  path: '/admin/config/smartcat'
   defaults:
     _title: 'Smartcat auth config form'
     _form: 'Smartcat\Drupal\Form\ConfigForm'
+  requirements:
+    _permission: 'administer'
+
+smartcat_translation_manager.profile:
+  path: '/admin/smartcat/profile' 
+  defaults: 
+    _controller: 'Smartcat\Drupal\Controller\ProfileController::content' 
+    _title: 'Profiles'
+  requirements: 
+    _permission: 'administer' 
+
+smartcat_translation_manager.profile.edit:
+  path: '/admin/smartcat/profile/edit'
+  defaults:
+    _title: 'Translation profile'
+    _form: 'Smartcat\Drupal\Form\ProfileForm'
   requirements:
     _permission: 'administer'

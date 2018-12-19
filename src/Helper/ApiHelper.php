@@ -1,6 +1,6 @@
 <?php
 
-namespace Smartcat\Helper;
+namespace Smartcat\Drupal\Helper;
 
 class ApiHelper
 {
