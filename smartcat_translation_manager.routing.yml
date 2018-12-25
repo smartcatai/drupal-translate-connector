@@ -21,3 +21,11 @@ smartcat_translation_manager.profile.edit:
     _form: 'Smartcat\Drupal\Form\ProfileForm'
   requirements:
     _permission: 'administer'
+
+smartcat_translation_manager.project:
+  path: '/admin/smartcat/project' 
+  defaults: 
+    _controller: 'Smartcat\Drupal\Controller\ProfileController::content' 
+    _title: 'Projects'
+  requirements: 
+    _permission: 'administer' 

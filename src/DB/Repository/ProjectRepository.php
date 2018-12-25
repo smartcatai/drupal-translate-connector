@@ -34,7 +34,7 @@ class ProjectRepository extends RepositoryAbstract {
           'name' => [
             'type' => 'varchar',
             'length' => 255,
-            'not null' => TRUE,
+            'not null' => FALSE,
           ],
           'entityId' => [
             'type' => 'int',
@@ -54,7 +54,7 @@ class ProjectRepository extends RepositoryAbstract {
           'externalProjectId' => [
             'type' => 'varchar',
             'length' => 255,
-            'not null' => TRUE,
+            'not null' => FALSE,
           ],
         ],
         'primary key' => ['id'],
@@ -67,12 +67,18 @@ class ProjectRepository extends RepositoryAbstract {
     $table_name = $this->getTableName();
 
     $data = [
-      'name' => $project->getName(),
       'entityId' => $project->getEntityId(),
       'profileId' => serialize($project->getProfileId()),
       'status' => $project->getStatus(),
-      'externalProjectId' => serialize($project->getExternalProjectId()),
     ];
+
+    if($project->getName() === NULL){
+      $data['name'] = $project->getName();
+    }
+
+    if($project->getExternalProjectId() === NULL){
+      $data['externalProjectId'] = serialize($project->getExternalProjectId());
+    }
 
     if (!empty($project->getId())) {
       $data['id'] = $project->getId();
@@ -97,12 +103,18 @@ class ProjectRepository extends RepositoryAbstract {
 
     if (!empty($project->getId())) {
       $data = [
-        'name' => $project->getName(),
         'entityId' => $project->getEntityId(),
         'profileId' => serialize($project->getProfileId()),
         'status' => $project->getStatus(),
-        'externalProjectId' => serialize($project->getExternalProjectId()),
       ];
+
+      if($project->getName() === NULL){
+        $data['name'] = $project->getName();
+      }
+
+      if($project->getExternalProjectId() === NULL){
+        $data['externalProjectId'] = serialize($project->getExternalProjectId());
+      }
 
       try {
         return $this->connection->update($table_name)
