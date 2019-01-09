@@ -6,9 +6,11 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Smartcat\Drupal\DB\Entity\Project;
 use Smartcat\Drupal\DB\Repository\ProfileRepository;
 use Smartcat\Drupal\DB\Repository\ProjectRepository;
-class ProfileController extends ControllerBase
+use Symfony\Component\HttpFoundation\JsonResponse;
+class ProjectController extends ControllerBase
 {
     public function content() {
         $table = [
@@ -35,7 +37,7 @@ class ProfileController extends ControllerBase
                     ->getStorage($profile->getEntityType())
                     ->load($project->getEntityId());
                 $table['#rows'][$i] = [
-                    $entity->getTitle(),
+                    $entity->label(),
                     $profile->getName(),
                     $project->getName(),
                     $project->getStatus(),
@@ -51,5 +53,35 @@ class ProfileController extends ControllerBase
                 $table,
             ],
         ];
+    }
+
+    public function add()
+    {
+        $entityManager = \Drupal::entityTypeManager();
+        $type_id = \Drupal::request()->query->get('type_id');
+        $entity_id = \Drupal::request()->query->get('entity_id');
+        $lang = \Drupal::request()->query->get('lang');
+        $entity = $entityManager
+            ->getStorage($type_id)
+            ->load($entity_id);
+        $profile = (new ProfileRepository())->getOneBy(['entityType'=>$type_id]);
+
+        
+        $project = (new Project())
+            ->setName($entity->label())
+            ->setEntityId($entity_id)
+            ->setProfileId($profile ? $profile->getId() : 0)
+            ->setStatus(Project::STATUS_NEW);
+    
+        
+        $project_id = (new ProjectRepository())->add($project);
+        
+        return new JsonResponse([
+            'data'=>'yes',
+            'lang' => $lang,
+            'entity_id' => $entity_id,
+            'name'=>$entity->label(),
+            'project' =>$project_id,
+        ]);
     }
 }

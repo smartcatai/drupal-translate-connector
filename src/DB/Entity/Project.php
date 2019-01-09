@@ -11,6 +11,7 @@ namespace SmartCAT\Drupal\DB\Entity;
 
 class Project
 {
+  const STATUS_NEW = 'new';
 
   /** @var  integer */
   private $id;

@@ -9,3 +9,24 @@ define(
   'SMARTCAT_PLUGIN_DIR',
   realpath( pathinfo( __FILE__, PATHINFO_DIRNAME ) ) . DIRECTORY_SEPARATOR
 );
+
+function smartcat_translation_manager_entity_insert(\Drupal\Core\Entity\EntityInterface $entity) {
+  \Drupal::logger('content')
+    ->info('Entity entity created: @label', [
+    '@label' => $entity
+      ->label(),
+  ]);
+}
+
+function smartcat_translation_manager_entity_translation_insert(\Drupal\Core\Entity\EntityInterface $translation) {
+  $variables = [
+    '@language' => $translation
+      ->language()
+      ->getName(),
+    '@label' => $translation
+      ->getUntranslated()
+      ->label(),
+  ];
+  \Drupal::logger('content')
+    ->notice('The @language translation of @label has just been stored.', $variables);
+}

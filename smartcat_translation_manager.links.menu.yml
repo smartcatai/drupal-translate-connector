@@ -2,4 +2,5 @@ smartcat_translation_manager.settings:
   title:  'Settings for connection to API'
   description: 'Enter your API key, token and choose your server'
   route_name: smartcat_translation_manager.settings
-  parent: system.admin_config'
+  parent: system.admin_config_development
+  weight: 100

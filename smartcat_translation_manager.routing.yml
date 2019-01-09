@@ -15,7 +15,7 @@ smartcat_translation_manager.profile:
     _permission: 'administer' 
 
 smartcat_translation_manager.profile.edit:
-  path: '/admin/smartcat/profile/edit'
+  path: '/admin/config/smartcat/advanced'
   defaults:
     _title: 'Translation profile'
     _form: 'Smartcat\Drupal\Form\ProfileForm'
@@ -25,7 +25,16 @@ smartcat_translation_manager.profile.edit:
 smartcat_translation_manager.project:
   path: '/admin/smartcat/project' 
   defaults: 
-    _controller: 'Smartcat\Drupal\Controller\ProfileController::content' 
+    _controller: 'Smartcat\Drupal\Controller\ProjectController::content' 
     _title: 'Projects'
+  requirements: 
+    _permission: 'administer'
+
+smartcat_translation_manager.project.add:
+  path: '/admin/smartcat/project/add' 
+  defaults: 
+    _controller: 'Smartcat\Drupal\Controller\ProjectController::add' 
+    _title: 'Projects'
+  methods: ['POST']
   requirements: 
     _permission: 'administer' 

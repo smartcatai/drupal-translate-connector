@@ -42,7 +42,7 @@ class ProjectRepository extends RepositoryAbstract {
             'not null' => TRUE,
           ],
           'profileId' => [
-            'type' => 'int',
+            'type' => 'serial',
             'size' => 'big',
             'not null' => TRUE,
           ],
@@ -63,12 +63,12 @@ class ProjectRepository extends RepositoryAbstract {
     return $schema;
   }
 
-  public function add(Profile $project) {
+  public function add(Project $project) {
     $table_name = $this->getTableName();
 
     $data = [
       'entityId' => $project->getEntityId(),
-      'profileId' => serialize($project->getProfileId()),
+      'profileId' => $project->getProfileId(),
       'status' => $project->getStatus(),
     ];
 
@@ -159,7 +159,7 @@ class ProjectRepository extends RepositoryAbstract {
     }
 
     if (isset($row->profileId)) {
-      $result->setProfileId(unserialize($row->profileId));
+      $result->setProfileId($row->profileId);
     }
 
     if (isset($row->status)) {

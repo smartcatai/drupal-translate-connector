@@ -1,0 +1,6 @@
+send_to_smartcat:
+  version: 1.x
+  js:
+    js/send-to-translate.js: {}
+  dependencies:
+    - core/jquery

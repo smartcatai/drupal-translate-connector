@@ -3,11 +3,13 @@
 namespace Smartcat\Drupal\Helper;
 
 use Smartcat\Drupal\DB\Repository\ProfileRepository;
+use Smartcat\Drupal\DB\Repository\ProjectRepository;
 
 class SchemaHelper
 {
     protected static $repositoryList = [
         ProfileRepository::class,
+        ProjectRepository::class,
     ];
 
     public static function getSchemas()

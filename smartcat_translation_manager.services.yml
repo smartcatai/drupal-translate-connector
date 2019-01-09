@@ -1,0 +1,6 @@
+services:
+  smartcat_translation_manager.subscriber:
+    class: Smartcat\Drupal\SmartcatTranslationRouteSubscriber
+    arguments: ['@content_translation.manager']
+    tags:
+      - { name: event_subscriber }
