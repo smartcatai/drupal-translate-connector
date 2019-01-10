@@ -8,7 +8,6 @@ use Smartcat\Drupal\DB\Repository\ProjectRepository;
 class SchemaHelper
 {
     protected static $repositoryList = [
-        ProfileRepository::class,
         ProjectRepository::class,
     ];
 

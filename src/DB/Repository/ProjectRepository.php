@@ -41,9 +41,14 @@ class ProjectRepository extends RepositoryAbstract {
             'size' => 'big',
             'not null' => TRUE,
           ],
-          'profileId' => [
-            'type' => 'serial',
-            'size' => 'big',
+          'entityTypeId' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+          ],
+          'targetLanguages' => [
+            'type' => 'varchar',
+            'length' => 255,
             'not null' => TRUE,
           ],
           'status' => [
@@ -68,7 +73,8 @@ class ProjectRepository extends RepositoryAbstract {
 
     $data = [
       'entityId' => $project->getEntityId(),
-      'profileId' => $project->getProfileId(),
+      'entityTypeId' => $project->getEntityTypeId(),
+      'targetLanguages' => serialize($project->getTargetLanguages()),
       'status' => $project->getStatus(),
     ];
 
@@ -104,7 +110,8 @@ class ProjectRepository extends RepositoryAbstract {
     if (!empty($project->getId())) {
       $data = [
         'entityId' => $project->getEntityId(),
-        'profileId' => serialize($project->getProfileId()),
+        'entityTypeId' => $project->getEntityTypeId(),
+        'targetLanguages' => serialize($project->getTargetLanguages()),
         'status' => $project->getStatus(),
       ];
 
@@ -158,8 +165,12 @@ class ProjectRepository extends RepositoryAbstract {
       $result->setEntityId($row->entityId);
     }
 
-    if (isset($row->profileId)) {
-      $result->setProfileId($row->profileId);
+    if (isset($row->entityTypeId)) {
+      $result->setEntityTypeId($row->entityTypeId);
+    }
+
+    if (isset($row->targetLanguges)) {
+      $result->setTargetLanguges(unserialize($row->targetLanguges));
     }
 
     if (isset($row->status)) {

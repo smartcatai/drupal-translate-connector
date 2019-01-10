@@ -15,12 +15,11 @@ class ProjectController extends ControllerBase
     public function content() {
         $table = [
             '#type' => 'table',
-            '#title' => 'Профили',
+            '#title' => 'Проекты',
             '#header' =>[
-                'Профиль',
+                'Название проекта',
                 'Элемент',
                 'Перевод',
-                'Название проекта',
                 'Статус',
             ],
             '#rows' => [
@@ -28,18 +27,16 @@ class ProjectController extends ControllerBase
         ];
         $projects = (new ProjectRepository())->getBy();
         $entityManager = \Drupal::entityTypeManager();
-        $profileRepository = new ProfileRepository();
 
         if(!empty($projects)){
             foreach($projects as $i=>$project){
-                $prifile= $profileRepository->getOneBy(['id'=>$project->getProfileId]);
                 $entity = $entityManager
-                    ->getStorage($profile->getEntityType())
+                    ->getStorage($project->getEntityTypeId())
                     ->load($project->getEntityId());
                 $table['#rows'][$i] = [
-                    $entity->label(),
-                    $profile->getName(),
                     $project->getName(),
+                    $entity->label(),
+                    implode('|',$project->getTargetLanguages()),
                     $project->getStatus(),
                 ];
             }
@@ -64,18 +61,16 @@ class ProjectController extends ControllerBase
         $entity = $entityManager
             ->getStorage($type_id)
             ->load($entity_id);
-        $profile = (new ProfileRepository())->getOneBy(['entityType'=>$type_id]);
 
-        
         $project = (new Project())
             ->setName($entity->label())
             ->setEntityId($entity_id)
-            ->setProfileId($profile ? $profile->getId() : 0)
+            ->setEntityTypeId($type_id)
+            ->setTargetLanguages([$lang])
             ->setStatus(Project::STATUS_NEW);
-    
-        
+
         $project_id = (new ProjectRepository())->add($project);
-        
+
         return new JsonResponse([
             'data'=>'yes',
             'lang' => $lang,

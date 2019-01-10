@@ -21,7 +21,7 @@ class OverviewController extends ContentTranslationController
 
             $link = current($operations['data']['#links']);
 
-            if($link['language']){
+            if(isset($link['language'])){
                 $query['lang'] = $link['language']->getId();
             }
             $url->setOption('query', $query);

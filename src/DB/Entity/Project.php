@@ -22,8 +22,11 @@ class Project
   /** @var  integer */
   private $entityId;
 
-  /** @var  integer */
-  private $profileId;
+  /** @var  string */
+  private $entityTypeId;
+
+  /** @var  string */
+  private $targetLanguages;
 
   /** @var  string */
   private $status;
@@ -86,20 +89,38 @@ class Project
     return $this;
   }
 
-    /**
-   * @return int
+  /**
+   * @return string
    */
-  public function getProfileId() {
-    return $this->profileId;
+  public function getEntityTypeId() {
+    return $this->entityTypeId;
   }
 
   /**
-   * @param int $profileId
+   * @param string $entityTypeId
    *
    * @return Project
    */
-  public function setProfileId($profileId) {
-    $this->profileId = $profileId;
+  public function setEntityTypeId($entityTypeId) {
+    $this->entityTypeId = $entityTypeId;
+
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getTargetLanguages() {
+    return $this->targetLanguages;
+  }
+
+  /**
+   * @param string $targetLanguages
+   *
+   * @return Project
+   */
+  public function setTargetLanguages($targetLanguages) {
+    $this->targetLanguages = $targetLanguages;
 
     return $this;
   }
