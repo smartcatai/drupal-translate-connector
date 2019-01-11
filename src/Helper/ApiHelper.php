@@ -5,7 +5,7 @@ namespace Smartcat\Drupal\Helper;
 class ApiHelper
 {
     public static function filterChars($s) {
-        return str_replace(['*', '|', '\\', ':', '"', '<', '>', '?', '/'], '_', $s);
+        return substr(str_replace(['*', '|', '\\', ':', '"', '<', '>', '?', '/'], '_', $s), 0, 100);
     }
 
     public static function getDocumentLink($document_id){

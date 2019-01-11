@@ -56,20 +56,30 @@ class ProjectController extends ControllerBase
     {
         $entityManager = \Drupal::entityTypeManager();
         $type_id = \Drupal::request()->query->get('type_id');
+        $bundle = \Drupal::request()->query->get('type');
         $entity_id = \Drupal::request()->query->get('entity_id');
         $lang = \Drupal::request()->query->get('lang');
         $entity = $entityManager
             ->getStorage($type_id)
             ->load($entity_id);
 
-        $project = (new Project())
-            ->setName($entity->label())
-            ->setEntityId($entity_id)
-            ->setEntityTypeId($type_id)
-            ->setTargetLanguages([$lang])
-            ->setStatus(Project::STATUS_NEW);
+        // $project = (new Project())
+        //     ->setName($entity->label())
+        //     ->setEntityId($entity_id)
+        //     ->setEntityTypeId($type_id)
+        //     ->setTargetLanguages([$lang])
+        //     ->setStatus(Project::STATUS_NEW);
 
-        $project_id = (new ProjectRepository())->add($project);
+        // $project_id = (new ProjectRepository())->add($project);
+        // $config = $entityManager
+        //     ->getStorage('language_content_settings')
+        //     ->load($type_id . '.' . $bundle);
+
+        // $configType = '';
+        // if($config !== null){
+        //     $configType = $config->getLanguageAlterable();
+        // }
+        var_dump(array_keys($entity->getProperties()));
 
         return new JsonResponse([
             'data'=>'yes',
@@ -77,6 +87,7 @@ class ProjectController extends ControllerBase
             'entity_id' => $entity_id,
             'name'=>$entity->label(),
             'project' =>$project_id,
+            'entity_body' => $entity->body->value,
         ]);
     }
 }

@@ -4,17 +4,9 @@ namespace Smartcat\Drupal\Api;
 
 use \SmartCat\Client\SmartCat;
 
-class Directory
+class Directory extends ApiBaseAbstract
 {
     protected $directories = [];
-
-    /**
-     * @param SmartCat $api
-     */
-    public function __construct(SmartCat $api)
-    {
-        $this->api = $api;
-    }
 
     public function get(string $type)
     {
