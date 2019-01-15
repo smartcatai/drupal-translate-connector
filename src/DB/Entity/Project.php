@@ -26,6 +26,9 @@ class Project
   private $entityTypeId;
 
   /** @var  string */
+  private $sourceLanguage;
+
+  /** @var  string */
   private $targetLanguages;
 
   /** @var  string */
@@ -107,6 +110,23 @@ class Project
     return $this;
   }
 
+  /**
+   * @return string
+   */
+  public function getSourceLanguage() {
+    return $this->sourceLanguage;
+  }
+
+  /**
+   * @param string $sourceLanguage
+   *
+   * @return Project
+   */
+  public function setSourceLanguage($sourceLanguage) {
+    $this->sourceLanguage = $sourceLanguage;
+
+    return $this;
+  }
   /**
    * @return string
    */

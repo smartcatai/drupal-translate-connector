@@ -15,8 +15,9 @@ use SmartCat\Client\SmartCat;
 use Smartcat\Drupal\DB\Entity\Profile;
 use Smartcat\Drupal\DB\Repository\ProfileRepository;
 
-class ConfigMoreForm extends ConfigFormBase{
-
+class ConfigMoreForm extends ConfigFormBase
+{
+  const DEFAULT_VENDOR = [0=>'Без вендора'];
   /**
    * {@inheritdoc}
    */
@@ -36,14 +37,13 @@ class ConfigMoreForm extends ConfigFormBase{
       return parent::buildForm($form, $form_state);
     }
 
-    $defaultVendor = [0=>'Без вендора'];
     $vendors = $api->getVendor();
-    $vendors = array_merge($defaultVendor, $vendors);
+    $vendors = array_merge(self::DEFAULT_VENDOR, $vendors);
     $form['vendor'] = [
       '#title' => t('Vendor', [], ['context' => 'smartcat_translation_manager']),
       '#type' => 'select',
       '#required' => TRUE,
-      '#default_value' => \Drupal::state()->get('smartcat_api_vendor', $defaultVendor),
+      '#default_value' => \Drupal::state()->get('smartcat_api_vendor', self::DEFAULT_VENDOR),
       '#options' => $vendors,
     ];
 

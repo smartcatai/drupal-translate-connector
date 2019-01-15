@@ -45,6 +45,11 @@ class ProjectRepository extends RepositoryAbstract {
             'type' => 'varchar',
             'length' => 255,
             'not null' => TRUE,
+          ]
+          ,'sourceLanguage' => [
+            'type' => 'varchar',
+            'length' => 100,
+            'not null' => TRUE,
           ],
           'targetLanguages' => [
             'type' => 'varchar',
@@ -74,15 +79,16 @@ class ProjectRepository extends RepositoryAbstract {
     $data = [
       'entityId' => $project->getEntityId(),
       'entityTypeId' => $project->getEntityTypeId(),
+      'sourceLanguage' => serialize($project->getSourceLanguage()),
       'targetLanguages' => serialize($project->getTargetLanguages()),
       'status' => $project->getStatus(),
     ];
 
-    if($project->getName() === NULL){
+    if($project->getName() !== NULL){
       $data['name'] = $project->getName();
     }
 
-    if($project->getExternalProjectId() === NULL){
+    if($project->getExternalProjectId() !== NULL){
       $data['externalProjectId'] = serialize($project->getExternalProjectId());
     }
 
@@ -111,15 +117,16 @@ class ProjectRepository extends RepositoryAbstract {
       $data = [
         'entityId' => $project->getEntityId(),
         'entityTypeId' => $project->getEntityTypeId(),
+        'sourceLanguage' => serialize($project->getSourceLanguage()),
         'targetLanguages' => serialize($project->getTargetLanguages()),
         'status' => $project->getStatus(),
       ];
 
-      if($project->getName() === NULL){
+      if($project->getName() !== NULL){
         $data['name'] = $project->getName();
       }
 
-      if($project->getExternalProjectId() === NULL){
+      if($project->getExternalProjectId() !== NULL){
         $data['externalProjectId'] = serialize($project->getExternalProjectId());
       }
 
@@ -167,6 +174,10 @@ class ProjectRepository extends RepositoryAbstract {
 
     if (isset($row->entityTypeId)) {
       $result->setEntityTypeId($row->entityTypeId);
+    }
+
+    if (isset($row->sourceLanguge)) {
+      $result->setSourceLanguge(unserialize($row->sourceLanguge));
     }
 
     if (isset($row->targetLanguges)) {

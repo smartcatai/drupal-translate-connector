@@ -16,6 +16,8 @@ class Api
      */
     protected $directory;
 
+    public $project;
+
     public function __construct()
     {
         $state = \Drupal::state();
@@ -26,6 +28,7 @@ class Api
 
         $this->api = new SmartCat($login,$passwd,$server);
         $this->directory = new Directory($this->api);
+        $this->project = new Project($this->api);
     }
 
     public function getAccount()
@@ -51,5 +54,10 @@ class Api
     public function getProjectStatus()
     {
         return $this->directory->getItemsAsArray('projectStatus');
+    }
+
+    public function __call($method, $arguments)
+    {
+        return $this->api->$method(...$arguments);
     }
 }

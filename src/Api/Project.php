@@ -13,9 +13,10 @@ use Smartcat\Drupal\Helper\ApiHelper;
 
 class Project extends ApiBaseAbstract
 {
-    public static function createProject(ProjectEntity $project)
+    public function createProject(ProjectEntity $project)
     {
         $params = $this->prepareProjectParams($project);
+        var_dump($params);
 
         return (new CreateProjectModel())
             ->setName($params['name'])
@@ -37,7 +38,7 @@ class Project extends ApiBaseAbstract
             'name' => ApiHelper::filterChars($project->getName()),
             'desc' => 'Content from drupal module',
             'source_lang' => $project->getSourceLanguage(),
-            'target_langs' => $project->getLanguages(),
+            'target_langs' => $project->getTargetLanguages(),
             'stages' => explode(',', \Drupal::state()->get('smartcat_api_workflow_stages', ['Translation'])),
             'test' => false,
             'deadline' => (new \DateTime('now'))->modify(' +1 day'), 
@@ -56,7 +57,7 @@ class Project extends ApiBaseAbstract
     public function createDocumentFromFile($filePath, $fileName)
     {
         $documentModel = new CreateDocumentPropertyWithFilesModel();
-        $documentModel->setBilingualFileImportSettings(self::getFileImportSettings());
+        $documentModel->setBilingualFileImportSettings($this->getFileImportSettings());
         $documentModel->attachFile($filePath, $fileName);
         return $documentModel;
     }

@@ -21,9 +21,8 @@ class OverviewController extends ContentTranslationController
 
             $link = current($operations['data']['#links']);
 
-            if(isset($link['language'])){
-                $query['lang'] = $link['language']->getId();
-            }
+            $query['lang'] = $link['url']->getRouteParameters()['target'];
+
             $url->setOption('query', $query);
             
             $operations['data']['#links']['smartcat'] = [
