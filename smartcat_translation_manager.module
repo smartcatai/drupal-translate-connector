@@ -30,3 +30,11 @@ function smartcat_translation_manager_entity_translation_insert(\Drupal\Core\Ent
   \Drupal::logger('content')
     ->notice('The @language translation of @label has just been stored.', $variables);
 }
+
+function smartcat_translation_manager_cron() {
+  $cronHandler = Smartcat\Drupal\CronHandler::create();
+
+  if($cronHandler !== null){
+    $cronHandler->run();
+  }
+}

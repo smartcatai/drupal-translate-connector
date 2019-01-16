@@ -7,7 +7,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Smartcat\Drupal\DB\Entity\Project;
-use Smartcat\Drupal\DB\Repository\ProfileRepository;
 use Smartcat\Drupal\DB\Repository\ProjectRepository;
 use Smartcat\Drupal\Helper\FileHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
