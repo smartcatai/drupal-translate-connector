@@ -110,6 +110,13 @@ class ProjectRepository extends RepositoryAbstract {
     return $insert_id;
   }
 
+  public function delete($projectId)
+  {
+    return $this->connection->delete($this->getTableName())
+      ->condition('id', $projectId)
+      ->execute();
+  }
+
   public function update(Project $project) {
     $table_name = $this->getTableName();
 

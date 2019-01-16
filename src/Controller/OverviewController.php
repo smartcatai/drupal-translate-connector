@@ -20,15 +20,18 @@ class OverviewController extends ContentTranslationController
             $operations = array_pop($row);
 
             $link = current($operations['data']['#links']);
+            $params = $link['url']->getRouteParameters();
 
-            $query['lang'] = $link['url']->getRouteParameters()['target'];
+            if(isset($params['target'])){
+                $query['lang'] = $params['target'];
 
-            $url->setOption('query', $query);
-            
-            $operations['data']['#links']['smartcat'] = [
-                'title' => 'Send to smartcat',
-                'url' => $url,
-            ];
+                $url->setOption('query', $query);
+                
+                $operations['data']['#links']['smartcat'] = [
+                    'title' => 'Send to smartcat',
+                    'url' => $url,
+                ];
+            }
 
             array_push($row, $operations);
         }

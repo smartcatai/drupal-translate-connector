@@ -29,4 +29,13 @@ smartcat_translation_manager.project.add:
     _title: 'Projects'
   methods: ['POST']
   requirements: 
-    _permission: 'administer' 
+    _permission: 'administer'
+
+smartcat_translation_manager.project.delete:
+  path: '/admin/smartcat/project/delete/{id}' 
+  defaults: 
+    _controller: 'Smartcat\Drupal\Controller\ProjectController::delete' 
+    _title: 'Projects'
+  methods: ['POST']
+  requirements: 
+    _permission: 'administer'

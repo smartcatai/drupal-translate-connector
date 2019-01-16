@@ -11,9 +11,22 @@ use Smartcat\Drupal\DB\Repository\ProfileRepository;
 use Smartcat\Drupal\DB\Repository\ProjectRepository;
 use Smartcat\Drupal\Helper\FileHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Cache\Cache;
 class ProjectController extends ControllerBase
 {
+    /**
+     * @var \Smartcat\Drupal\Api\Api
+     */
+    protected $api;
+    protected $projectRepository;
+
+    public function __construct()
+    {
+        $this->api = new \Smartcat\Drupal\Api\Api();
+        $this->projectRepository = new ProjectRepository();
+    }
+
     public function content() {
         $table = [
             '#type' => 'table',
@@ -23,11 +36,12 @@ class ProjectController extends ControllerBase
                 'Элемент',
                 'Перевод',
                 'Статус',
+                'Операции',
             ],
             '#rows' => [
             ]
         ];
-        $projects = (new ProjectRepository())->getBy();
+        $projects = $this->projectRepository->getBy();
         $entityManager = \Drupal::entityTypeManager();
 
         if(!empty($projects)){
@@ -38,8 +52,18 @@ class ProjectController extends ControllerBase
                 $table['#rows'][$i] = [
                     $project->getName(),
                     $entity->label(),
-                    implode('|',$project->getTargetLanguages()),
+                    $project->getTargetLanguages(),//implode('|',$project->getTargetLanguages()),
                     $project->getStatus(),
+                    [
+                        'data' => [
+                            '#type' => 'form',
+                            '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
+                            'submit' => [
+                                '#type'=>'submit',
+                                '#value'=>'Delete',
+                            ],
+                        ],
+                    ],
                 ];
             }
         }
@@ -54,6 +78,12 @@ class ProjectController extends ControllerBase
         ];
     }
 
+    public function delete($id)
+    {
+        $this->projectRepository->delete($id);
+        return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.project')->toString());
+    }
+
     public function add()
     {
         $entityManager = \Drupal::entityTypeManager();
@@ -65,9 +95,7 @@ class ProjectController extends ControllerBase
             ->getStorage($type_id)
             ->load($entity_id);
 
-        $api = new \Smartcat\Drupal\Api\Api();
-        $projectRepository = new ProjectRepository();
-        $projectManager = $api->getProjectManager();
+        $projectManager = $this->api->getProjectManager();
 
         $project = (new Project())
             ->setName($entity->label())
@@ -77,7 +105,7 @@ class ProjectController extends ControllerBase
             ->setTargetLanguages([$lang])
             ->setStatus(Project::STATUS_NEW);
 
-        $scNewProject = $api->project->createProject($project);
+        $scNewProject = $this->api->project->createProject($project);
         try{
             $scProject = $projectManager->projectCreateProject($scNewProject);
         }catch(\Exception $e){
@@ -86,12 +114,12 @@ class ProjectController extends ControllerBase
 
         $project->setExternalProjectId($scProject->getId());
         $project->setName($scProject->getName());
-        $project_id = $projectRepository->add($project);
+        $project_id = $this->projectRepository->add($project);
 
         $fileHelper = new FileHelper($entity);
         $dest = $fileHelper->createFileByEntity(['title','body','comment']);
 
-        $documentModel = $api->project->createDocumentFromFile($dest, 'TRANSLATED-' . $type_id .'.'. $bundle .'.'. $entity_id .'.html');
+        $documentModel = $this->api->project->createDocumentFromFile($dest, 'TRANSLATED-' . $type_id .'.'. $bundle .'.'. $entity_id .'.html');
 
         $documents = $projectManager->projectAddDocument([
             'documentModel' => [$documentModel],
@@ -100,7 +128,7 @@ class ProjectController extends ControllerBase
 
         $vendor = \Drupal::state()->get('smartcat_api_vendor', '0');
         if($vendor !=='0'){
-            $projectChanges = $api->project->createVendorChange($vendor);
+            $projectChanges = $this->api->project->createVendorChange($vendor);
             $projectChanges
                 ->setName($scProject->getName())
                 ->setDescription($scProject->getDescription())

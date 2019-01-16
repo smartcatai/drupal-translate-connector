@@ -16,7 +16,6 @@ class Project extends ApiBaseAbstract
     public function createProject(ProjectEntity $project)
     {
         $params = $this->prepareProjectParams($project);
-        var_dump($params);
 
         return (new CreateProjectModel())
             ->setName($params['name'])
