@@ -36,23 +36,30 @@ class CronHandler
         $this->api = new \Smartcat\Drupal\Api\Api();
         $this->projectRepository = new ProjectRepository();
         $this->entityTypeManager = \Drupal::entityTypeManager();
+        $this->logger = \Drupal::logger('smartcat_translation_manager_cron');
     }
 
     public function run()
     {
         if($this->buildStatistic()){
+            $this->logger->info('Method buildStatistic completed');
             return;
         }
         if($this->updateStatusFor(Project::STATUS_CREATED)){
+            $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_CREATED);
             return;
         }
         if($this->updateStatusFor(Project::STATUS_INPROGRESS)){
+            $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_INPROGRESS);
             return;
         }
         if($this->requestDocsForExport()){
+            $this->logger->info('Method requestDocsForExport completed');
             return;
         }
-        $this->downloadDocs();
+        if($this->downloadDocs()){
+            $this->logger->info('Method downloadDocs completed');
+        }
         return;
     }
 
@@ -131,6 +138,10 @@ class CronHandler
                 $sourceEntity = $this->entityTypeManager
                     ->getStorage($project->getEntityTypeId())
                     ->load($project->getEntityId());
+
+                if(!$sourceEntity){
+                    continue;
+                }
                 
                 $targetEntity = (new FileHelper($sourceEntity))
                     ->markupToEntityTranslation($response->getBody()->getContents(),$project->getTargetLanguages()[0]);
