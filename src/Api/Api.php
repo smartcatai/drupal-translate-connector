@@ -2,7 +2,8 @@
 
 namespace Smartcat\Drupal\Api;
 
-use \SmartCat\Client\SmartCat;
+use SmartCat\Client\SmartCat;
+use Smartcat\Drupal\DB\Entity\Project as ProjectEntity;
 
 class Api
 {
@@ -95,6 +96,14 @@ class Api
         return $this->api
             ->getDocumentExportManager()
             ->documentExportDownloadExportResult($exportId);
+    }
+
+    public function createProject(ProjectEntity $project)
+    {
+        $scNewProject = $this->project->createProject($project);
+        return $this->api
+            ->getProjectManager()
+            ->projectCreateProject($scNewProject);
     }
 
     public function __call($method, $arguments)

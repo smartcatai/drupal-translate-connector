@@ -11,6 +11,8 @@ use Smartcat\Drupal\DB\Repository\ProjectRepository;
 use Smartcat\Drupal\Helper\FileHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Cache\Cache;
 class ProjectController extends ControllerBase
 {
@@ -92,9 +94,14 @@ class ProjectController extends ControllerBase
         $bundle = \Drupal::request()->query->get('type');
         $entity_id = \Drupal::request()->query->get('entity_id');
         $lang = \Drupal::request()->query->get('lang');
+        $lang = !is_array($lang) ? [$lang] : $lang;
         $entity = $entityManager
             ->getStorage($type_id)
             ->load($entity_id);
+
+        if(!$entity){
+            throw new NotFoundHttpException("Entity $type_id $entity_id not found");
+        }
 
         $projectManager = $this->api->getProjectManager();
 
@@ -103,14 +110,13 @@ class ProjectController extends ControllerBase
             ->setEntityId($entity_id)
             ->setEntityTypeId($type_id)
             ->setSourceLanguage($entity->language()->getId())
-            ->setTargetLanguages([$lang])
+            ->setTargetLanguages($lang)
             ->setStatus(Project::STATUS_NEW);
 
-        $scNewProject = $this->api->project->createProject($project);
         try{
-            $scProject = $projectManager->projectCreateProject($scNewProject);
+            $scProject = $this->api->createProject($project);
         }catch(\Exception $e){
-            throw new \Exception($e->getMessage());
+            throw new \HttpException(500, $e->getMessage());
         }
 
         $project->setExternalProjectId($scProject->getId());
