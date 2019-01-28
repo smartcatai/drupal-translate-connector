@@ -63,13 +63,9 @@ class FileHelper
     public function markupToEntityTranslation($content,$langcode)
     {
         $fieldPattern = str_replace('/', '\/', sprintf(self::FIELD_TAG, '(.+?)','(.*?)'));
-        try{
+
         preg_match_all('/' . $fieldPattern . '/is', $content, $matches);
-        }catch(\Exception $e){
-            var_dump($fieldPattern);
-            die;
-            throw $e;
-        }
+
         $values = [];
 
         if ($this->hasTranslation($langcode)) {

@@ -79,12 +79,10 @@ class CronHandler
     public function updateStatusFor($status){
         $projects = $this->projectRepository->getBy(['status'=>$status]);
         if(!empty($projects)){
-            //var_dump($status,count($projects));
             foreach($projects as $i=>$project){
                 $scProject = $this->api->getProject($project->getExternalProjectId());
                 $this->changeStatus($project, $scProject);
             }
-            //die;
             return true;
         }
         return false;
@@ -115,19 +113,19 @@ class CronHandler
     public function downloadDocs()
     {
         $projects = $this->projectRepository->getBy([
-            'status'=>Project::STATUS_DOWNLOAD, 
-            //'externalExportId'=>[NULL, 'IS NOT NULL'],
+            'status'=>Project::STATUS_DOWNLOAD,
         ]);
-        //var_dump($projects); die;
+
         if(empty($projects)){
             return false;
         }
         foreach($projects as $project){
             try{
                 $response = $this->api->downloadExportDocuments($project->getExternalExportId());
-            }catch(\Exception $e){
+            }catch(\Http\Client\Common\Exception\ClientErrorException $e){
                 $project->setStatus(Project::STATUS_COMPLETED);
                 $this->projectRepository->update($project);
+                $this->logger->alert($e->getRequest()->getBody()->getContents());
                 continue;
             }
             $mimeType = $response->getHeaderLine('Content-Type');
@@ -147,7 +145,6 @@ class CronHandler
                     ->markupToEntityTranslation($response->getBody()->getContents(),$project->getTargetLanguages()[0]);
             }
         }
-        die;
         return true;
     }
 
