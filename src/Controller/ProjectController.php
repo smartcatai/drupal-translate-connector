@@ -48,22 +48,24 @@ class ProjectController extends ControllerBase
                 $entity = $entityManager
                     ->getStorage($project->getEntityTypeId())
                     ->load($project->getEntityId());
-                $table['#rows'][$i] = [
-                    $project->getName(),
-                    $entity->label(),
-                    $project->getTargetLanguages(),//implode('|',$project->getTargetLanguages()),
-                    $project->getStatus(),
-                    [
-                        'data' => [
-                            '#type' => 'form',
-                            '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
-                            'submit' => [
-                                '#type'=>'submit',
-                                '#value'=>'Delete',
+                if($entity){
+                    $table['#rows'][$i] = [
+                        $project->getName(),
+                        $entity->label(),
+                        $project->getTargetLanguages(),//implode('|',$project->getTargetLanguages()),
+                        $project->getStatus(),
+                        [
+                            'data' => [
+                                '#type' => 'form',
+                                '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
+                                'submit' => [
+                                    '#type'=>'submit',
+                                    '#value'=>'Delete',
+                                ],
                             ],
                         ],
-                    ],
-                ];
+                    ];
+                }
             }
         }
 

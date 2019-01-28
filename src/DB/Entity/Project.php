@@ -11,7 +11,13 @@ namespace SmartCAT\Drupal\DB\Entity;
 
 class Project
 {
-  const STATUS_NEW = 'new';
+  const STATUS_NEW = "new";
+  const STATUS_CREATED = "created";
+  const STATUS_INPROGRESS = "inprogress";
+  const STATUS_COMPLETED = "completed";
+  const STATUS_DOWNLOAD = "download";
+  const STATUS_CANCELED = "canceled";
+  const STATUS_ARCHIVED = "archived";
 
   /** @var  integer */
   private $id;
@@ -37,6 +43,8 @@ class Project
   /** @var  string */
   private $externalProjectId = NULL;
 
+  /** @var  string */
+  private $externalExportId = NULL;
 
   /**
    * @return int
@@ -177,6 +185,24 @@ class Project
    */
   public function setExternalProjectId($externalProjectId) {
     $this->externalProjectId = $externalProjectId;
+
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getExternalExportId() {
+    return $this->externalExportId;
+  }
+
+  /**
+   * @param string $externalExportId
+   *
+   * @return Project
+   */
+  public function setExternalExportId($externalExportId) {
+    $this->externalExportId = $externalExportId;
 
     return $this;
   }

@@ -67,22 +67,4 @@ class Project extends ApiBaseAbstract
         return (new ProjectChangesModel())
             ->setVendorAccountIds([$vendorId]);
     }
-
-    public function buildStatistics($externalProjectId){
-        $scProject = $projectManager->projectGet($externalProjectId);
-
-        $disasemblingSuccess = true;
-        foreach($scProject->getDocuments() as $document){
-            if($document->getDocumentDisassemblingStatus() != 'success'){
-                $disasemblingSuccess = false;
-                break;
-            }
-        }
-
-        if($disasemblingSuccess){
-            $projectManager->projectBuildStatistics($scProject->getId());
-        }
-
-        return $scProject;
-    }
 }

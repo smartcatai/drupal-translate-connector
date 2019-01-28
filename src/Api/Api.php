@@ -56,8 +56,50 @@ class Api
         return $this->directory->getItemsAsArray('projectStatus');
     }
 
+    public function getProject($externalProjectId)
+    {
+        return $this->api->getProjectManager()->projectGet($externalProjectId);
+    }
+
+    public function buildStatistic($externalProjectId)
+    {
+        $scProject = $this->getProject($externalProjectId);
+
+        $disasemblingSuccess = true;
+        foreach($scProject->getDocuments() as $document){
+            if($document->getDocumentDisassemblingStatus() != 'success'){
+                $disasemblingSuccess = false;
+                break;
+            }
+        }
+
+        if($disasemblingSuccess){
+            $this->api->getProjectManager()->projectBuildStatistics($scProject->getId());
+        }
+
+        return $scProject;
+    }
+
+    public function requestExportDocuments($documentIds)
+    {
+        if(is_scalar($documentIds)){
+            $documentIds = [$documentIds];
+        }
+        return $this->api
+            ->getDocumentExportManager()
+            ->documentExportRequestExport(['documentIds'=>$documentIds]);
+    }
+
+    public function downloadExportDocuments($exportId)
+    {
+        return $this->api
+            ->getDocumentExportManager()
+            ->documentExportDownloadExportResult($exportId);
+    }
+
     public function __call($method, $arguments)
     {
         return $this->api->$method(...$arguments);
     }
+
 }

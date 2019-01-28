@@ -66,6 +66,11 @@ class ProjectRepository extends RepositoryAbstract {
             'length' => 255,
             'not null' => FALSE,
           ],
+          'externalExportId' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => FALSE,
+          ],
         ],
         'primary key' => ['id'],
       ],
@@ -79,7 +84,7 @@ class ProjectRepository extends RepositoryAbstract {
     $data = [
       'entityId' => $project->getEntityId(),
       'entityTypeId' => $project->getEntityTypeId(),
-      'sourceLanguage' => serialize($project->getSourceLanguage()),
+      'sourceLanguage' => $project->getSourceLanguage(),
       'targetLanguages' => serialize($project->getTargetLanguages()),
       'status' => $project->getStatus(),
     ];
@@ -89,7 +94,11 @@ class ProjectRepository extends RepositoryAbstract {
     }
 
     if($project->getExternalProjectId() !== NULL){
-      $data['externalProjectId'] = serialize($project->getExternalProjectId());
+      $data['externalProjectId'] = $project->getExternalProjectId();
+    }
+
+    if($project->getExternalExportId() !== NULL){
+      $data['externalExportId'] = $project->getExternalExportId();
     }
 
     if (!empty($project->getId())) {
@@ -124,7 +133,7 @@ class ProjectRepository extends RepositoryAbstract {
       $data = [
         'entityId' => $project->getEntityId(),
         'entityTypeId' => $project->getEntityTypeId(),
-        'sourceLanguage' => serialize($project->getSourceLanguage()),
+        'sourceLanguage' => $project->getSourceLanguage(),
         'targetLanguages' => serialize($project->getTargetLanguages()),
         'status' => $project->getStatus(),
       ];
@@ -134,7 +143,11 @@ class ProjectRepository extends RepositoryAbstract {
       }
 
       if($project->getExternalProjectId() !== NULL){
-        $data['externalProjectId'] = serialize($project->getExternalProjectId());
+        $data['externalProjectId'] = $project->getExternalProjectId();
+      }
+
+      if($project->getExternalExportId() !== NULL){
+        $data['externalExportId'] = $project->getExternalExportId();
       }
 
       try {
@@ -143,13 +156,14 @@ class ProjectRepository extends RepositoryAbstract {
           ->condition('id', $project->getId())
           ->execute();
       } catch (\Exception $e) {
+        var_dump($e->getMessage());
       }
     }
     return FALSE;
   }
 
   protected function doFlush(array $persists) {
-    /* @var Task[] $persists */
+    /* @var Project[] $persists */
     foreach ($persists as $project) {
       if (get_class($project) === 'Smartcat\Drupal\DB\Entity\Project') {
         if (empty($project->getId())) {
@@ -183,12 +197,12 @@ class ProjectRepository extends RepositoryAbstract {
       $result->setEntityTypeId($row->entityTypeId);
     }
 
-    if (isset($row->sourceLanguge)) {
-      $result->setSourceLanguge(unserialize($row->sourceLanguge));
+    if (isset($row->sourceLanguage)) {
+      $result->setSourceLanguage($row->sourceLanguage);
     }
 
-    if (isset($row->targetLanguges)) {
-      $result->setTargetLanguges(unserialize($row->targetLanguges));
+    if (isset($row->targetLanguages)) {
+      $result->setTargetLanguages(unserialize($row->targetLanguages));
     }
 
     if (isset($row->status)) {
@@ -196,7 +210,11 @@ class ProjectRepository extends RepositoryAbstract {
     }
 
     if (isset($row->externalProjectId)) {
-      $result->setExternalProjectId(unserialize($row->externalProjectId));
+      $result->setExternalProjectId($row->externalProjectId);
+    }
+
+    if (isset($row->externalExportId)) {
+      $result->setExternalExportId($row->externalExportId);
     }
 
     return $result;

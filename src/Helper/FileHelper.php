@@ -4,9 +4,7 @@ namespace Smartcat\Drupal\Helper;
 
 class FileHelper
 {
-    const REPLACABLE = '%';
-    const FIELD_OPEN_TAG = '<field id="%">';
-    const FIELD_CLOSE_TAG = '</field>';
+    const FIELD_TAG= '<field id="%s">%s</field>';
 
     public function __construct($entity)
     {
@@ -56,11 +54,49 @@ class FileHelper
             if(!empty($useFields) && !in_array($field->getName(), $useFields)){
                 continue;
             }
-            $data[] = str_replace(self::REPLACABLE, $field->getName(), self::FIELD_OPEN_TAG) 
-                .$this->entity->get($field->getName())->value 
-                .self::FIELD_CLOSE_TAG;
+            $data[] = sprintf(self::FIELD_TAG, $field->getName(), $this->entity->get($field->getName())->value );
         }
         
         return '<html><head></head><body>' . implode('',$data) . '</body></html>';
+    }
+
+    public function markupToEntityTranslation($content,$langcode)
+    {
+        $fieldPattern = str_replace('/', '\/', sprintf(self::FIELD_TAG, '(.+?)','(.*?)'));
+        try{
+        preg_match_all('/' . $fieldPattern . '/is', $content, $matches);
+        }catch(\Exception $e){
+            var_dump($fieldPattern);
+            die;
+            throw $e;
+        }
+        $values = [];
+
+        if ($this->hasTranslation($langcode)) {
+            $entity_translation = $this->entity->getTranslation($langcode);
+        }else {
+            $entity_translation = $this->entity->addTranslation($langcode, $this->entity->toArray());
+        }
+
+        $translated_fields = [];
+
+        foreach ($matches[1] as $i => $field) {
+            $value = $matches[2][$i];
+            
+            if($field === 'body'){
+                $value = [
+                    'value' => $value,
+                    'format' => 'full_html',
+                ];
+            }
+            $entity_translation->set($field, $value);
+        }
+
+        return $entity_translation;
+    }
+
+    public function hasTranslation($langcode) {
+        $existing_translation = \Drupal::service('entity.repository')->getTranslationFromContext($this->entity, $langcode);
+        return ($existing_translation->langcode->value === $langcode) ? TRUE : FALSE;
     }
 }

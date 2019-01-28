@@ -80,6 +80,10 @@ abstract class RepositoryAbstract implements RepositoryInterface {
 
     if(!empty($criterias)){
       foreach ($criterias as $key => $value) {
+        if(is_array($value)){
+          $query->condition($key, $value[0], $value[1]);
+          continue;
+        }
         $query->condition($key, $value);
       }
     }

@@ -4,3 +4,10 @@ smartcat_translation_manager.settings:
   route_name: smartcat_translation_manager.settings
   parent: system.admin_config_development
   weight: 100
+
+smartcat_translation_manager.settings_more:
+  title:  'Common settings for translation'
+  description: 'Choose your vendor and workflow stages'
+  route_name: smartcat_translation_manager.settings_more
+  parent: system.admin_config_regional
+  weight: 100
