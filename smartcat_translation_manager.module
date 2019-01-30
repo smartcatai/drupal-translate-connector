@@ -1,5 +1,7 @@
 <?php
 
+use Smartcat\Drupal\Event\EntityEvent;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 define('SMARTCAT_PLUGIN_FILE', __FILE__);
@@ -11,11 +13,15 @@ define(
 );
 
 function smartcat_translation_manager_entity_insert(\Drupal\Core\Entity\EntityInterface $entity) {
-  \Drupal::logger('content')
-    ->info('Entity entity created: @label', [
-    '@label' => $entity
-      ->label(),
-  ]);
+  \Drupal::service('event_dispatcher')->dispatch(EntityEvent::ENTITY_INSERT, new EntityEvent($entity));
+}
+
+function smartcat_translation_manager_entity_update(\Drupal\Core\Entity\EntityInterface $entity) {
+  \Drupal::service('event_dispatcher')->dispatch(EntityEvent::ENTITY_UPDATE, new EntityEvent($entity));
+}
+
+function smartcat_translation_manager_entity_delete(\Drupal\Core\Entity\EntityInterface $entity) {
+  \Drupal::service('event_dispatcher')->dispatch(EntityEvent::ENTITY_DELETE, new EntityEvent($entity));
 }
 
 function smartcat_translation_manager_entity_translation_insert(\Drupal\Core\Entity\EntityInterface $translation) {
