@@ -4,7 +4,11 @@ services:
     arguments: ['@content_translation.manager']
     tags:
       - { name: event_subscriber }
+
   smartcat_translation_manager.subscriber_entity:
     class: \Smartcat\Drupal\SmartcatTranslationEntitySubscriber
     tags:
       - { name: event_subscriber }
+
+  smartcat_translation_manager.service.project:
+    class: \Smartcat\Drupal\Service\ProjectService

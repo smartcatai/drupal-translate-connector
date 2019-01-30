@@ -89,12 +89,14 @@ class ProjectController extends ControllerBase
 
     public function add()
     {
+        $ProjectService = \Drupal::service('smartcat_translation_manager.service.project');
         $entityManager = \Drupal::entityTypeManager();
+
         $type_id = \Drupal::request()->query->get('type_id');
-        $bundle = \Drupal::request()->query->get('type');
         $entity_id = \Drupal::request()->query->get('entity_id');
         $lang = \Drupal::request()->query->get('lang');
         $lang = !is_array($lang) ? [$lang] : $lang;
+
         $entity = $entityManager
             ->getStorage($type_id)
             ->load($entity_id);
@@ -103,45 +105,10 @@ class ProjectController extends ControllerBase
             throw new NotFoundHttpException("Entity $type_id $entity_id not found");
         }
 
-        $projectManager = $this->api->getProjectManager();
-
-        $project = (new Project())
-            ->setName($entity->label())
-            ->setEntityId($entity_id)
-            ->setEntityTypeId($type_id)
-            ->setSourceLanguage($entity->language()->getId())
-            ->setTargetLanguages($lang)
-            ->setStatus(Project::STATUS_NEW);
-
         try{
-            $scProject = $this->api->createProject($project);
+            $project_id = $ProjectService->createProject($entity, $lang);
         }catch(\Exception $e){
             throw new \HttpException(500, $e->getMessage());
-        }
-
-        $project->setExternalProjectId($scProject->getId());
-        $project->setName($scProject->getName());
-        $project_id = $this->projectRepository->add($project);
-
-        $fileHelper = new FileHelper($entity);
-        $dest = $fileHelper->createFileByEntity(['title','body','comment']);
-
-        $documentModel = $this->api->project->createDocumentFromFile($dest, 'TRANSLATED-' . $type_id .'.'. $bundle .'.'. $entity_id .'.html');
-
-        $documents = $projectManager->projectAddDocument([
-            'documentModel' => [$documentModel],
-            'projectId' => $scProject->getId(),
-        ]);
-
-        $vendor = \Drupal::state()->get('smartcat_api_vendor', '0');
-        if($vendor !=='0'){
-            $projectChanges = $this->api->project->createVendorChange($vendor);
-            $projectChanges
-                ->setName($scProject->getName())
-                ->setDescription($scProject->getDescription())
-                ->setDeadline($scProject->getDeadline());
-
-            $projectManager->projectUpdateProject($scProject->getId(), $projectChanges);
         }
 
         return new JsonResponse([
@@ -151,7 +118,6 @@ class ProjectController extends ControllerBase
             'name'=>$entity->label(),
             'project' =>$project_id,
             'entity_body' => $entity->body->value,
-            'dest' => $dest,
         ]);
     }
 }
