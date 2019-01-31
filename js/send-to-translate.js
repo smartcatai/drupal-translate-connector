@@ -7,6 +7,7 @@
             $.post($(this).attr('href'),
                 function(resp){
                     console.log(resp)
+                    window.location.reload(true);
                 }
             )
         });

@@ -8,6 +8,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Smartcat\Drupal\DB\Entity\Project;
 use Smartcat\Drupal\DB\Repository\ProjectRepository;
+use Smartcat\Drupal\Helper\ApiHelper;
 use Smartcat\Drupal\Helper\FileHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,18 +32,23 @@ class ProjectController extends ControllerBase
     public function content() {
         $table = [
             '#type' => 'table',
-            '#title' => 'Проекты',
+            '#title' => 'Projects',
             '#header' =>[
-                'Название проекта',
-                'Элемент',
-                'Перевод',
-                'Статус',
-                'Операции',
+                'Project name',
+                'Content',
+                'Translate to',
+                'Status',
+                'Operations',
             ],
             '#rows' => [
             ]
         ];
-        $projects = $this->projectRepository->getBy();
+        $criteria = [];
+        $project_id = \Drupal::request()->query->get('project_id');
+        if($project_id){
+            $criteria['id'] = $project_id;
+        }
+        $projects = $this->projectRepository->getBy($criteria);
         $entityManager = \Drupal::entityTypeManager();
 
         if(!empty($projects)){
@@ -50,11 +56,29 @@ class ProjectController extends ControllerBase
                 $entity = $entityManager
                     ->getStorage($project->getEntityTypeId())
                     ->load($project->getEntityId());
+
                 if($entity){
                     $table['#rows'][$i] = [
-                        $project->getName(),
+                        ApiHelper::getProjectName($project),
                         $entity->label(),
-                        $project->getTargetLanguages(),//implode('|',$project->getTargetLanguages()),
+                        implode('|',$project->getTargetLanguages()),
+                        $project->getStatus(),
+                        [
+                            'data' => [
+                                '#type' => 'form',
+                                '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
+                                'submit' => [
+                                    '#type'=>'submit',
+                                    '#value'=>'Delete',
+                                ],
+                            ],
+                        ],
+                    ];
+                }else{
+                    $table['#rows'][$i] = [
+                        $project->getName(),
+                        'Not exists',
+                        implode('|',$project->getTargetLanguages()),
                         $project->getStatus(),
                         [
                             'data' => [

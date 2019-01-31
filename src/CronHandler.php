@@ -9,7 +9,7 @@ use Smartcat\Drupal\Helper\FileHelper;
 class CronHandler
 {
     const KEY_LAST_RUN = 'smartcat_cron.last_run';
-    const CRON_PERIOD = 30;
+    const CRON_PERIOD = 10;
 
     /**
      * @var \Smartcat\Drupal\Api\Api
@@ -124,12 +124,14 @@ class CronHandler
                 $response = $this->api->downloadExportDocuments($project->getExternalExportId());
             }catch(\Http\Client\Common\Exception\ClientErrorException $e){
                 $project->setStatus(Project::STATUS_COMPLETED);
+                $project->setExternalExportId(NULL);
                 $this->projectRepository->update($project);
-                $this->logger->alert($e->getRequest()->getBody()->getContents());
+                $this->logger->info($e->getResponse()->getBody()->getContents());
                 continue;
             }
             $mimeType = $response->getHeaderLine('Content-Type');
             if($response->getStatusCode() === 204){
+                $this->logger->info($response->getStatusCode());
                 continue;
             }
             if($mimeType==='text/html'){
@@ -138,11 +140,17 @@ class CronHandler
                     ->load($project->getEntityId());
 
                 if(!$sourceEntity){
+                    $this->logger->info('Entity not exist');
                     continue;
                 }
                 
                 $targetEntity = (new FileHelper($sourceEntity))
                     ->markupToEntityTranslation($response->getBody()->getContents(),$project->getTargetLanguages()[0]);
+                $targetEntity->save();
+
+                $project->setStatus(Project::STATUS_FINISHED);
+                $project->setExternalExportId(NULL);
+                $this->projectRepository->update($project);
             }
         }
         return true;

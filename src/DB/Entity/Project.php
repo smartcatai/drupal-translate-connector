@@ -16,6 +16,7 @@ class Project
   const STATUS_INPROGRESS = "inprogress";
   const STATUS_COMPLETED = "completed";
   const STATUS_DOWNLOAD = "download";
+  const STATUS_FINISHED = "finished";
   const STATUS_CANCELED = "canceled";
   const STATUS_ARCHIVED = "archived";
 
