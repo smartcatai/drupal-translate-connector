@@ -1,11 +1,14 @@
 <?php
 
-
 namespace Smartcat\Drupal;
 
+use Drupal\content_translation\ContentTranslationManagerInterface;
+use Drupal\Core\Language\Language;
+use Drupal\Core\Language\LanguageManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Smartcat\Drupal\DB\Repository\ProjectRepository;
 use Smartcat\Drupal\Event\EntityEvent;
+use Smartcat\Drupal\Service\ProjectService;
 
 
 /**
@@ -13,9 +16,61 @@ use Smartcat\Drupal\Event\EntityEvent;
  */
 class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
 
-    public function __construct()
-    {
+    /**
+     * The content translation manager.
+     *
+     * @var \Drupal\content_translation\ContentTranslationManagerInterface
+     */
+    protected $contentTranslationManager;
+
+    /**
+     * The languages manager.
+     *
+     * @var \Drupal\Core\Language\LangugeManagerInterface
+     */
+    protected $langugeManager;
+
+    /**
+     * The projects service.
+     *
+     * @var Smartcat\Drupal\Service\ProjectService
+     */
+    protected $projectService;
+
+    /**
+     * @param ContentTranslationManagerInterface $content_translation_manager
+     * @param LanguageManager $language_manager
+     * @param ProjectService $projectService
+     */
+    public function __construct(
+        ContentTranslationManagerInterface $content_translation_manager,
+        LanguageManager $language_manager,
+        ProjectService $projectService
+    ) {
+        $this->contentTranslationManager = $content_translation_manager;
+        $this->langugeManager = $language_manager;
+        $this->projectService = $projectService;
         $this->projectRepository = new ProjectRepository();
+    }
+
+    protected function getLanguages($sourceLanguage)
+    {
+        $langs = [];
+        foreach($this->langugeManager->getLanguages() as $language){
+            if($language->getId() !== $sourceLanguage){
+                $langs[] = $language->getId();
+            }
+        }
+        return $langs;
+    }
+
+    protected function sendToTranslate($entity)
+    {
+        if($this->contentTranslationManager->isEnabled($entity->getEntityTypeId(), $entity->bundle())){
+            $sourceLanguage = $entity->language()->getId();
+            $langs = $this->getLanguages($sourceLanguage);
+            $this->projectService->createProject($entity, $langs);
+        }
     }
 
     /**
@@ -24,7 +79,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
      * @param \Smartcat\Drupal\Event\EntityEvent $event
      */
     public function onEntityInsert(EntityEvent $event) {
-        $entity = $event->getEntity();
+        $this->sendToTranslate($event->getEntity());
     }
 
     /**
@@ -33,7 +88,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
      * @param \Smartcat\Drupal\Event\EntityEvent $event
      */
     public function onEntityUpdate(EntityEvent $event) {
-        $entity = $event->getEntity();
+        //$this->sendToTranslate($event->getEntity());
     }
 
     /**
@@ -42,8 +97,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
      * @param \Smartcat\Drupal\Event\EntityEvent $event
      */
     public function onEntityDelete(EntityEvent $event) {
-        $entity = $event->getEntity();
-        $this->projectRepository->delete($entity->id());
+        $this->projectRepository->delete($event->getEntity()->id());
     }
 
 

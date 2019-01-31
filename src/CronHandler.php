@@ -43,19 +43,15 @@ class CronHandler
     {
         if($this->buildStatistic()){
             $this->logger->info('Method buildStatistic completed');
-            return;
         }
         if($this->updateStatusFor(Project::STATUS_CREATED)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_CREATED);
-            return;
         }
         if($this->updateStatusFor(Project::STATUS_INPROGRESS)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_INPROGRESS);
-            return;
         }
         if($this->requestDocsForExport()){
             $this->logger->info('Method requestDocsForExport completed');
-            return;
         }
         if($this->downloadDocs()){
             $this->logger->info('Method downloadDocs completed');

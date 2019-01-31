@@ -7,6 +7,7 @@ services:
 
   smartcat_translation_manager.subscriber_entity:
     class: \Smartcat\Drupal\SmartcatTranslationEntitySubscriber
+    arguments: ['@content_translation.manager', '@language_manager', '@smartcat_translation_manager.service.project']
     tags:
       - { name: event_subscriber }
 
