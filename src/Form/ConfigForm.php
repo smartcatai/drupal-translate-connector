@@ -47,6 +47,13 @@ class ConfigForm extends ConfigFormBase{
       '#required' => TRUE,
     ];
 
+    $accountName = \Drupal::state()->get('smartcat_account_name', '');
+    if(!empty($accountName)){
+      $form['info'] = [
+        '#title'=>"You connected to account: $accountName",
+        '#type' => 'item'];
+    }
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -62,8 +69,9 @@ class ConfigForm extends ConfigFormBase{
         throw new \Exception('Invalid username or password');
       }
     } catch (\Exception $e) {
-      $form_state->setError('api_login', t('Invalid username or password', [], ['context' => 'smartcat_translation_manager']));
-      $form_state->setError('api_password');
+      \Drupal::messenger()->addError(t($e->getMessage(),[],['context'=>'smartcat_translation_manager']));
+      $form_state->setError($form['api_login'], 'Invalid username or password');
+      $form_state->setError($form['api_password']);
     }
   }
 
