@@ -49,14 +49,14 @@ class OverviewController extends ContentTranslationController
                         if(!in_array($query['lang'],$project->getTargetLanguages())){
                             continue;
                         }
-                        $urlProjectList->setOption('query', ['project_id' => $project[0]->getId()]);
+                        $urlProjectList->setOption('query', ['project_id' => $project->getId()]);
                         $translationStatus = $status->render();
-                        $link = \Drupal\Core\Link::fromTextAndUrl($project[0]->getStatus(),$urlProjectList)->toString();
+                        $link = \Drupal\Core\Link::fromTextAndUrl($project->getStatus(),$urlProjectList)->toString();
                         $status = ['data'=>[]];
                         $status['data']['#markup'] = "$translationStatus <br><small>Project state: $link</small>";
 
                         if( $project->getStatus() === Project::STATUS_NEW){
-                            \Drupal::messenger()->addMessage("Project {$project[0]->getName()} created", Messenger::TYPE_STATUS);
+                            \Drupal::messenger()->addMessage("Project {$project->getName()} created", Messenger::TYPE_STATUS);
                         }
                     }
                 }
