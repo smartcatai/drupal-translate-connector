@@ -38,6 +38,11 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
     protected $projectService;
 
     /**
+     * @var \Drupal\Core\Language\Language
+     */
+    protected $defaultLanguage;
+
+    /**
      * @param ContentTranslationManagerInterface $content_translation_manager
      * @param LanguageManager $language_manager
      * @param ProjectService $projectService
@@ -51,6 +56,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
         $this->langugeManager = $language_manager;
         $this->projectService = $projectService;
         $this->projectRepository = new ProjectRepository();
+        $this->defaultLanguage = $this->langugeManager->getDefaultLanguage();
     }
 
     protected function getLanguages($sourceLanguage)
@@ -66,6 +72,10 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
 
     protected function sendToTranslate($entity)
     {
+        if($this->defaultLanguage->getId() !== $entity->language()->getId()){
+            \Drupal::logger('smartcat_translation_manager')->info($this->defaultLanguage->getId() .'/'. $entity->language()->getId());
+            return;
+        }
         if($this->contentTranslationManager->isEnabled($entity->getEntityTypeId(), $entity->bundle())){
             $sourceLanguage = $entity->language()->getId();
             $langs = $this->getLanguages($sourceLanguage);
