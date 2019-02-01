@@ -24,12 +24,7 @@ class OverviewController extends ContentTranslationController
         /**
          * @var ProjectRepository
          */
-        $project = $projectRepository->getBy(['entityId'=> $entity->id() ]);
-
-        if(!empty($project) && $project[0]->getStatus() === Project::STATUS_NEW){
-            $messenger = \Drupal::messenger();
-            $messenger->addMessage("Project {$project[0]->getName()} created", Messenger::TYPE_STATUS);
-        }
+        $projects = $projectRepository->getBy(['entityId'=> $entity->id() ]);
 
         foreach ($build['content_translation_overview']['#rows'] as &$row){
             // take last column in row
@@ -49,12 +44,21 @@ class OverviewController extends ContentTranslationController
                     'url' => $url,
                 ];
 
-                if(!empty($project) && in_array($query['lang'],$project[0]->getTargetLanguages())){
-                    $urlProjectList->setOption('query', ['project_id' => $project[0]->getId()]);
-                    $translationStatus = $status->render();
-                    $link = \Drupal\Core\Link::fromTextAndUrl($project[0]->getStatus(),$urlProjectList)->toString();
-                    $status = ['data'=>[]];
-                    $status['data']['#markup'] = "$translationStatus <br><small>Project state: $link</small>";
+                if(!empty($projects)){
+                    foreach($projects as $project){
+                        if(!in_array($query['lang'],$project->getTargetLanguages())){
+                            continue;
+                        }
+                        $urlProjectList->setOption('query', ['project_id' => $project[0]->getId()]);
+                        $translationStatus = $status->render();
+                        $link = \Drupal\Core\Link::fromTextAndUrl($project[0]->getStatus(),$urlProjectList)->toString();
+                        $status = ['data'=>[]];
+                        $status['data']['#markup'] = "$translationStatus <br><small>Project state: $link</small>";
+
+                        if( $project->getStatus() === Project::STATUS_NEW){
+                            \Drupal::messenger()->addMessage("Project {$project[0]->getName()} created", Messenger::TYPE_STATUS);
+                        }
+                    }
                 }
             }
 
