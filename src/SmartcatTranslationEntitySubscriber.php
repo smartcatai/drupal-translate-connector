@@ -89,7 +89,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
      * @param \Smartcat\Drupal\Event\EntityEvent $event
      */
     public function onEntityInsert(EntityEvent $event) {
-        $this->sendToTranslate($event->getEntity());
+        // $this->sendToTranslate($event->getEntity());
     }
 
     /**
