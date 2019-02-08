@@ -44,6 +44,10 @@ class OverviewController extends ContentTranslationController
                     'url' => $url,
                 ];
 
+                if(is_array($status)){
+                    continue;
+                }
+
                 if(!empty($projects)){
                     foreach($projects as $project){
                         if(!in_array($query['lang'],$project->getTargetLanguages())){
