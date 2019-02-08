@@ -61,7 +61,7 @@ class CronHandler
 
     public function buildStatistic()
     {
-        $projects = $this->projectRepository->getBy(['status'=>Project::STATUS_NEW]);
+        $projects = $this->projectRepository->getBy(['status'=>Project::STATUS_NEW],0,100);
         if(!empty($projects)){
             foreach($projects as $i=>$project){
                 $scProject = $this->api->buildStatistic($project->getExternalProjectId());
@@ -73,7 +73,7 @@ class CronHandler
     }
 
     public function updateStatusFor($status){
-        $projects = $this->projectRepository->getBy(['status'=>$status]);
+        $projects = $this->projectRepository->getBy(['status'=>$status],0,100);
         if(!empty($projects)){
             foreach($projects as $i=>$project){
                 $scProject = $this->api->getProject($project->getExternalProjectId());
@@ -88,7 +88,7 @@ class CronHandler
     {
         $projects = $this->projectRepository->getBy([
             'status'=>Project::STATUS_COMPLETED,
-        ]);
+        ],0,100);
         if(!empty($projects)){
             foreach($projects as $i=>$project){
                 $scProject = $this->api->getProject($project->getExternalProjectId());
@@ -110,7 +110,7 @@ class CronHandler
     {
         $projects = $this->projectRepository->getBy([
             'status'=>Project::STATUS_DOWNLOAD,
-        ]);
+        ],0,100);
 
         if(empty($projects)){
             return false;
