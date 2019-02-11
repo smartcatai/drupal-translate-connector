@@ -56,7 +56,6 @@ class ConfigMoreForm extends ConfigFormBase
         'Translation' => t('Translation', [], ['context' => 'translation_connectors']),
         'Editing' => t('Editing', [], ['context' => 'translation_connectors']),
         'Proofreading' => t('Proofreading', [], ['context' => 'translation_connectors']),
-        'Postediting' => t('Postediting', [], ['context' => 'translation_connectors']),
       ],
     ];
 

@@ -47,7 +47,10 @@ class Project extends ApiBaseAbstract
             'desc' => 'Content from drupal module',
             'source_lang' => $project->getSourceLanguage(),
             'target_langs' => $project->getTargetLanguages(),
-            'stages' => \Drupal::state()->get('smartcat_api_workflow_stages', ['Translation']),
+            'stages' => array_filter(
+                \Drupal::state()->get('smartcat_api_workflow_stages', ['Translation']),
+                function($val){return $val !== 0;}
+            ),
             'test' => false,
             'deadline' => (new \DateTime('now'))->modify(' +1 day'), 
             'external_tag' => 'source:Drupal',
