@@ -132,7 +132,7 @@ class ProjectController extends ControllerBase
         try{
             $project_id = $ProjectService->createProject($entity, $lang);
         }catch(\Exception $e){
-            throw new \HttpException(500, $e->getMessage());
+            throw new HttpException(500, $e->getMessage());
         }
 
         return new JsonResponse([
