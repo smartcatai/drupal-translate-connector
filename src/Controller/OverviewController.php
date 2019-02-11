@@ -17,8 +17,6 @@ class OverviewController extends ContentTranslationController
         $projectRepository = new ProjectRepository();
         $build = parent::overview($route_match, $entity_type_id);
         $entity = $route_match->getParameter($entity_type_id);
-        $url = Url::fromRoute('smartcat_translation_manager.project.add');
-        $urlProjectList = Url::fromRoute('smartcat_translation_manager.project');
         $query = ['entity_id' => $entity->id(), 'type'=> $entity->getType(), 'type_id' => $entity_type_id];
 
         /**
@@ -30,6 +28,8 @@ class OverviewController extends ContentTranslationController
             // take last column in row
             $operations = array_pop($row);
             $status = array_pop($row);
+            $url = Url::fromRoute('smartcat_translation_manager.project.add');
+            $urlProjectList = Url::fromRoute('smartcat_translation_manager.project');
 
             $link = current($operations['data']['#links']);
             $params = $link['url']->getRouteParameters();
