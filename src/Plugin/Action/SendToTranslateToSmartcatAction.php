@@ -39,7 +39,7 @@ class SendToTranslateToSmartcatAction extends ActionBase
     foreach(\Drupal::languageManager()->getLanguages() as $language){
       if($language->getId() !== $sourceLanguage){
         try{
-          $this->projectService->createProject($entity, $language->getId());
+          $this->projectService->createProject($entity, [$language->getId()]);
         }catch(\Exception $e){
           $this->logger->info($e->getResponse()->getBody()->getContents());
         }
