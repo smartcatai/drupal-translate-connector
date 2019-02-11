@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: send_to_translate_to_smartcat_action
+label: 'Send to smartcat'
+type: node
+plugin: send_to_translate_to_smartcat_action
+configuration: {  }

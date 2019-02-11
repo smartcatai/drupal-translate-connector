@@ -1,0 +1,3 @@
+action.configuration.send_to_translate_to_smartcat_action:
+  type: send_to_translate_to_smartcat_action
+  label: 'Send selected content to translate to smartcat'
