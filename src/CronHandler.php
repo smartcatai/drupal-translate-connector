@@ -1,10 +1,10 @@
 <?php
 
-namespace Smartcat\Drupal;
+namespace Drupal\smartcat_translation_manager;
 
-use Smartcat\Drupal\DB\Entity\Project;
-use Smartcat\Drupal\DB\Repository\ProjectRepository;
-use Smartcat\Drupal\Helper\FileHelper;
+use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
+use Drupal\smartcat_translation_manager\Helper\FileHelper;
 
 class CronHandler
 {
@@ -12,7 +12,7 @@ class CronHandler
     const CRON_PERIOD = 10;
 
     /**
-     * @var \Smartcat\Drupal\Api\Api
+     * @var \Drupal\smartcat_translation_manager\Api\Api
      */
     protected $api;
 
@@ -33,7 +33,7 @@ class CronHandler
     }
 
     public function __construct(){
-        $this->api = new \Smartcat\Drupal\Api\Api();
+        $this->api = new \Drupal\smartcat_translation_manager\Api\Api();
         $this->projectRepository = new ProjectRepository();
         $this->entityTypeManager = \Drupal::entityTypeManager();
         $this->logger = \Drupal::logger('smartcat_translation_manager_cron');

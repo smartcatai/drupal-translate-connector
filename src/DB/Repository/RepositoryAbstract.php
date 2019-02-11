@@ -6,7 +6,7 @@
  * Time: 19:20
  */
 
-namespace Smartcat\Drupal\DB\Repository;
+namespace Drupal\smartcat_translation_manager\DB\Repository;
 
 abstract class RepositoryAbstract implements RepositoryInterface {
 

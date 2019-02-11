@@ -1,13 +1,13 @@
 <?php
 
-namespace Smartcat\Drupal\Controller;
+namespace Drupal\smartcat_translation_manager\Controller;
 
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\content_translation\Controller\ContentTranslationController;
-use Smartcat\Drupal\DB\Entity\Project;
-use Smartcat\Drupal\DB\Repository\ProjectRepository;
-use Smartcat\Drupal\Helper\ApiHelper;
+use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
+use Drupal\smartcat_translation_manager\Helper\ApiHelper;
 
 class OverviewController extends ContentTranslationController
 {

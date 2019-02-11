@@ -1,6 +1,6 @@
 <?php
 
-namespace Smartcat\Drupal\Api;
+namespace Drupal\smartcat_translation_manager\Api;
 
 use \SmartCat\Client\SmartCat;
 

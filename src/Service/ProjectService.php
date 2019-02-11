@@ -1,13 +1,13 @@
 <?php
 
-namespace Smartcat\Drupal\Service;
+namespace Drupal\smartcat_translation_manager\Service;
 
 use Drupal\Core\Entity\EntityInterface;
 use SmartCat\Client\Model\DocumentModel;
-use Smartcat\Drupal\Api\Api;
-use Smartcat\Drupal\DB\Entity\Project;
-use Smartcat\Drupal\DB\Repository\ProjectRepository;
-use Smartcat\Drupal\Helper\FileHelper;
+use Drupal\smartcat_translation_manager\Api\Api;
+use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
+use Drupal\smartcat_translation_manager\Helper\FileHelper;
 
 class ProjectService
 {

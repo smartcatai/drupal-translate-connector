@@ -1,9 +1,9 @@
 <?php
 
-namespace Smartcat\Drupal\Api;
+namespace Drupal\smartcat_translation_manager\Api;
 
 use SmartCat\Client\SmartCat;
-use Smartcat\Drupal\DB\Entity\Project as ProjectEntity;
+use Drupal\smartcat_translation_manager\DB\Entity\Project as ProjectEntity;
 
 class Api
 {

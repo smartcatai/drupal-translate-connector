@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Smartcat\Drupal;
+namespace Drupal\smartcat_translation_manager;
 
 use Drupal\content_translation\ContentTranslationManager;
 use Drupal\content_translation\ContentTranslationManagerInterface;
@@ -49,7 +49,7 @@ class SmartcatTranslationRouteSubscriber extends RouteSubscriberBase {
                 $route_name = "entity.$entity_type_id.content_translation_overview";
                 $route = $collection->get($route_name);
                 $route->setDefaults([
-                    '_controller' => '\Smartcat\Drupal\Controller\OverviewController::overview',
+                    '_controller' => '\Drupal\smartcat_translation_manager\Controller\OverviewController::overview',
                     'entity_type_id' => $entity_type_id,
                 ]);
                 $collection->remove($route_name);

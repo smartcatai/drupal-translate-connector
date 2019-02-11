@@ -15,6 +15,6 @@ function smartcat_translation_manager_disable() {
 }
 
 function smartcat_translation_manager_schema() {
-    return \Smartcat\Drupal\Helper\SchemaHelper::getSchemas();
+    return \Drupal\smartcat_translation_manager\Helper\SchemaHelper::getSchemas();
 }
 

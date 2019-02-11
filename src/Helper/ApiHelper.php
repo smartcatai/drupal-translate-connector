@@ -1,6 +1,6 @@
 <?php
 
-namespace Smartcat\Drupal\Helper;
+namespace Drupal\smartcat_translation_manager\Helper;
 
 use Drupal\Core\Link;
 use Drupal\Core\Url;

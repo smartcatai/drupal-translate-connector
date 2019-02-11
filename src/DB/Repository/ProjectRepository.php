@@ -6,9 +6,9 @@
  * Time: 18:48
  */
 
-namespace Smartcat\Drupal\DB\Repository;
+namespace Drupal\smartcat_translation_manager\DB\Repository;
 
-use Smartcat\Drupal\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Entity\Project;
 
 
 /** Репозиторий таблицы обмена */
@@ -165,7 +165,7 @@ class ProjectRepository extends RepositoryAbstract {
   protected function doFlush(array $persists) {
     /* @var Project[] $persists */
     foreach ($persists as $project) {
-      if (get_class($project) === 'Smartcat\Drupal\DB\Entity\Project') {
+      if (get_class($project) === 'Drupal\smartcat_translation_manager\DB\Entity\Project') {
         if (empty($project->getId())) {
           if ($res = $this->add($project)) {
             $project->setId($res);

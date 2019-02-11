@@ -1,6 +1,6 @@
 <?php
 
-namespace Smartcat\Drupal\Event;
+namespace Drupal\smartcat_translation_manager\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use Drupal\Core\Entity\EntityInterface;

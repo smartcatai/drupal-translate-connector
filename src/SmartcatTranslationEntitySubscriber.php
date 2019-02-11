@@ -1,14 +1,14 @@
 <?php
 
-namespace Smartcat\Drupal;
+namespace Drupal\smartcat_translation_manager;
 
 use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Language\LanguageManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Smartcat\Drupal\DB\Repository\ProjectRepository;
-use Smartcat\Drupal\Event\EntityEvent;
-use Smartcat\Drupal\Service\ProjectService;
+use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
+use Drupal\smartcat_translation_manager\Event\EntityEvent;
+use Drupal\smartcat_translation_manager\Service\ProjectService;
 
 
 /**
@@ -33,7 +33,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
     /**
      * The projects service.
      *
-     * @var Smartcat\Drupal\Service\ProjectService
+     * @var Drupal\smartcat_translation_manager\Service\ProjectService
      */
     protected $projectService;
 
@@ -86,7 +86,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
     /**
      * Log the creation of a new node.
      *
-     * @param \Smartcat\Drupal\Event\EntityEvent $event
+     * @param \Drupal\smartcat_translation_manager\Event\EntityEvent $event
      */
     public function onEntityInsert(EntityEvent $event) {
         // $this->sendToTranslate($event->getEntity());
@@ -95,7 +95,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
     /**
      * Log the creation of a new node.
      *
-     * @param \Smartcat\Drupal\Event\EntityEvent $event
+     * @param \Drupal\smartcat_translation_manager\Event\EntityEvent $event
      */
     public function onEntityUpdate(EntityEvent $event) {
         //$this->sendToTranslate($event->getEntity());
@@ -104,7 +104,7 @@ class SmartcatTranslationEntitySubscriber implements EventSubscriberInterface {
     /**
      * Log the creation of a new node.
      *
-     * @param \Smartcat\Drupal\Event\EntityEvent $event
+     * @param \Drupal\smartcat_translation_manager\Event\EntityEvent $event
      */
     public function onEntityDelete(EntityEvent $event) {
         $this->projectRepository->delete($event->getEntity()->id());

@@ -6,7 +6,7 @@
  * Time: 14:11
  */
 
-namespace SmartCAT\Drupal\DB\Entity;
+namespace Drupal\smartcat_translation_manager\DB\Entity;
 
 
 class Project

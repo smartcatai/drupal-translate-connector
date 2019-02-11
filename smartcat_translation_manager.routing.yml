@@ -2,7 +2,7 @@ smartcat_translation_manager.settings:
   path: '/admin/config/smartcat'
   defaults:
     _title: 'Smartcat auth config form'
-    _form: 'Smartcat\Drupal\Form\ConfigForm'
+    _form: 'Drupal\smartcat_translation_manager\Form\ConfigForm'
   requirements:
     _permission: 'administer'
 
@@ -10,14 +10,14 @@ smartcat_translation_manager.settings_more:
   path: '/admin/config/smartcat/more'
   defaults:
     _title: 'Translation profile'
-    _form: 'Smartcat\Drupal\Form\ConfigMoreForm'
+    _form: 'Drupal\smartcat_translation_manager\Form\ConfigMoreForm'
   requirements:
     _permission: 'administer'
 
 smartcat_translation_manager.project:
   path: '/admin/smartcat/project' 
   defaults: 
-    _controller: 'Smartcat\Drupal\Controller\ProjectController::content' 
+    _controller: 'Drupal\smartcat_translation_manager\Controller\ProjectController::content' 
     _title: 'Projects'
   requirements: 
     _permission: 'administer'
@@ -25,7 +25,7 @@ smartcat_translation_manager.project:
 smartcat_translation_manager.project.add:
   path: '/admin/smartcat/project/add' 
   defaults: 
-    _controller: 'Smartcat\Drupal\Controller\ProjectController::add' 
+    _controller: 'Drupal\smartcat_translation_manager\Controller\ProjectController::add' 
     _title: 'Projects'
   methods: ['POST']
   requirements: 
@@ -34,7 +34,7 @@ smartcat_translation_manager.project.add:
 smartcat_translation_manager.project.delete:
   path: '/admin/smartcat/project/delete/{id}' 
   defaults: 
-    _controller: 'Smartcat\Drupal\Controller\ProjectController::delete' 
+    _controller: 'Drupal\smartcat_translation_manager\Controller\ProjectController::delete' 
     _title: 'Projects'
   methods: ['POST']
   requirements: 

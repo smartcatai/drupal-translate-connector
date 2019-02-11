@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Smartcat\\Drupal\\": "src"
+      "Drupal\\smartcat_translation_manager\\": "src"
     }
   }
 }

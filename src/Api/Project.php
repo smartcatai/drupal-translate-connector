@@ -1,6 +1,6 @@
 <?php
 
-namespace Smartcat\Drupal\Api;
+namespace Drupal\smartcat_translation_manager\Api;
 
 use SmartCat\Client\Model\BilingualFileImportSettingsModel;
 use SmartCat\Client\Model\CreateDocumentPropertyWithFilesModel;
@@ -8,8 +8,8 @@ use SmartCat\Client\Model\CreateProjectModel;
 use SmartCat\Client\Model\CreateProjectWithFilesModel;
 use SmartCat\Client\Model\ProjectChangesModel;
 use SmartCat\Client\SmartCat;
-use Smartcat\Drupal\DB\Entity\Project as ProjectEntity;
-use Smartcat\Drupal\Helper\ApiHelper;
+use Drupal\smartcat_translation_manager\DB\Entity\Project as ProjectEntity;
+use Drupal\smartcat_translation_manager\Helper\ApiHelper;
 
 class Project extends ApiBaseAbstract
 {

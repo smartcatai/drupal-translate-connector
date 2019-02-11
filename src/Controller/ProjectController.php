@@ -1,15 +1,15 @@
 <?php
 
-namespace Smartcat\Drupal\Controller;
+namespace Drupal\smartcat_translation_manager\Controller;
 
 use Drupal\Component\Render\FormattableMarkup;  
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Smartcat\Drupal\DB\Entity\Project;
-use Smartcat\Drupal\DB\Repository\ProjectRepository;
-use Smartcat\Drupal\Helper\ApiHelper;
-use Smartcat\Drupal\Helper\FileHelper;
+use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
+use Drupal\smartcat_translation_manager\Helper\ApiHelper;
+use Drupal\smartcat_translation_manager\Helper\FileHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -18,14 +18,14 @@ use Drupal\Core\Cache\Cache;
 class ProjectController extends ControllerBase
 {
     /**
-     * @var \Smartcat\Drupal\Api\Api
+     * @var \Drupal\smartcat_translation_manager\Api\Api
      */
     protected $api;
     protected $projectRepository;
 
     public function __construct()
     {
-        $this->api = new \Smartcat\Drupal\Api\Api();
+        $this->api = new \Drupal\smartcat_translation_manager\Api\Api();
         $this->projectRepository = new ProjectRepository();
     }
 

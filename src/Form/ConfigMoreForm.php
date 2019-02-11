@@ -6,14 +6,14 @@
  * Time: 16:43
  */
 
-namespace Smartcat\Drupal\Form;
+namespace Drupal\smartcat_translation_manager\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Http\Client\Common\Exception\ClientErrorException;
 use SmartCat\Client\SmartCat;
-use Smartcat\Drupal\DB\Entity\Profile;
-use Smartcat\Drupal\DB\Repository\ProfileRepository;
+use Drupal\smartcat_translation_manager\DB\Entity\Profile;
+use Drupal\smartcat_translation_manager\DB\Repository\ProfileRepository;
 
 class ConfigMoreForm extends ConfigFormBase
 {
@@ -28,7 +28,7 @@ class ConfigMoreForm extends ConfigFormBase
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = [];
 
-    $api = new \Smartcat\Drupal\Api\Api();
+    $api = new \Drupal\smartcat_translation_manager\Api\Api();
     $account_info = $api->getAccount();
 
     //сохраняем account_name

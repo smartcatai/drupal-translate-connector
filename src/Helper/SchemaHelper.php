@@ -1,9 +1,9 @@
 <?php 
 
-namespace Smartcat\Drupal\Helper;
+namespace Drupal\smartcat_translation_manager\Helper;
 
-use Smartcat\Drupal\DB\Repository\ProfileRepository;
-use Smartcat\Drupal\DB\Repository\ProjectRepository;
+use Drupal\smartcat_translation_manager\DB\Repository\ProfileRepository;
+use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 
 class SchemaHelper
 {

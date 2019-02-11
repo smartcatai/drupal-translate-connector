@@ -6,7 +6,7 @@
  * Time: 16:43
  */
 
-namespace Smartcat\Drupal\Form;
+namespace Drupal\smartcat_translation_manager\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;

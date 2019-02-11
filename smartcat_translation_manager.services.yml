@@ -1,15 +1,15 @@
 services:
   smartcat_translation_manager.subscriber_route:
-    class: \Smartcat\Drupal\SmartcatTranslationRouteSubscriber
+    class: \Drupal\smartcat_translation_manager\SmartcatTranslationRouteSubscriber
     arguments: ['@content_translation.manager']
     tags:
       - { name: event_subscriber }
 
   smartcat_translation_manager.subscriber_entity:
-    class: \Smartcat\Drupal\SmartcatTranslationEntitySubscriber
+    class: \Drupal\smartcat_translation_manager\SmartcatTranslationEntitySubscriber
     arguments: ['@content_translation.manager', '@language_manager', '@smartcat_translation_manager.service.project']
     tags:
       - { name: event_subscriber }
 
   smartcat_translation_manager.service.project:
-    class: \Smartcat\Drupal\Service\ProjectService
+    class: \Drupal\smartcat_translation_manager\Service\ProjectService
