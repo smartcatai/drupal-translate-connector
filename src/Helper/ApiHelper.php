@@ -14,10 +14,15 @@ class ApiHelper
     public static function getProjectName($project){
         $name = $project->getName();
         if($project->getExternalProjectId()){
-            $projectUrl = Url::fromUri("https://smartcat.ai/projects/{$project->getExternalProjectId()}");
+            $projectUrl = self::getProjectUrl($project);
             $name = Link::fromTextAndUrl($project->getName(),$projectUrl)->toString();
         }
         return $name;
+    }
+
+    public static function getProjectUrl($project)
+    {
+        return Url::fromUri("https://smartcat.ai/projects/{$project->getExternalProjectId()}");;
     }
 
     public static function getDocumentLink($document_id){
