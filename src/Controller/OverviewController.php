@@ -5,7 +5,9 @@ namespace Drupal\smartcat_translation_manager\Controller;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\content_translation\Controller\ContentTranslationController;
+use Drupal\smartcat_translation_manager\DB\Entity\Document;
 use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 use Drupal\smartcat_translation_manager\Helper\ApiHelper;
 
@@ -14,15 +16,15 @@ class OverviewController extends ContentTranslationController
     public function overview(\Drupal\Core\Routing\RouteMatchInterface $route_match, $entity_type_id = NULL)
     {
 
-        $projectRepository = new ProjectRepository();
+        $documentRepository = new DocumentRepository();
         $build = parent::overview($route_match, $entity_type_id);
         $entity = $route_match->getParameter($entity_type_id);
         $query = ['entity_id' => $entity->id(), 'type'=> $entity->getType(), 'type_id' => $entity_type_id];
 
         /**
-         * @var ProjectRepository
+         * @var DocumentRepository
          */
-        $projects = $projectRepository->getBy(['entityId'=> $entity->id(), 'status' =>[Project::STATUS_FINISHED,'<>'] ]);
+        $documents = $documentRepository->getBy(['entityId'=> $entity->id(), ]);
 
         foreach ($build['content_translation_overview']['#rows'] as &$row){
             // take last column in row
@@ -30,7 +32,7 @@ class OverviewController extends ContentTranslationController
             // take next last column in row
             $status = array_pop($row);
 
-            $urlProjectList = Url::fromRoute('smartcat_translation_manager.project');
+            $urlDocumentList = Url::fromRoute('smartcat_translation_manager.document');
 
             $link = current($operations['data']['#links']);
             $params = $link['url']->getRouteParameters();
@@ -39,7 +41,7 @@ class OverviewController extends ContentTranslationController
                 $query['lang'] = $params['target'];
 
                 $operations['data']['#links'] = [];
-                if(empty($projects)){
+                if(empty($documents)){
                     $url = Url::fromRoute('smartcat_translation_manager.project.add');
                     $url->setOption('query', $query);
                     $operations['data']['#links']['smartcat'] = [
@@ -47,8 +49,14 @@ class OverviewController extends ContentTranslationController
                         'url' => $url,
                     ];
                 }else{
-                    foreach($projects as $project){
-                        if(!in_array($query['lang'],$project->getTargetLanguages())){
+                    foreach($documents as $document){
+                        if($query['lang'] !== $document->getTargetLanguage()){
+                            // $url = Url::fromRoute('smartcat_translation_manager.project.add');
+                            // $url->setOption('query', $query);
+                            // $operations['data']['#links']['smartcat'] = [
+                            //     'title' => 'Send to smartcat' .$document->getTargetLanguage(),
+                            //     'url' => $url,
+                            // ];
                             continue;
                         }
                         if(is_array($status)){
@@ -57,17 +65,17 @@ class OverviewController extends ContentTranslationController
 
                         $operations['data']['#links']['smartcat'] = [
                             'title' => 'Go to smartcat',
-                            'url' => ApiHelper::getProjectUrl($project),
+                            'url' => ApiHelper::getProjectUrlBydocument($document),
                         ];
 
-                        $urlProjectList->setOption('query', ['project_id' => $project->getId()]);
+                        $urlDocumentList->setOption('query', ['document_id' => $document->getId()]);
                         $translationStatus = $status->render();
-                        $link = \Drupal\Core\Link::fromTextAndUrl($project->getStatus(),$urlProjectList)->toString();
+                        $link = \Drupal\Core\Link::fromTextAndUrl($document->getStatus(),$urlDocumentList)->toString();
                         $status = ['data'=>[]];
-                        $status['data']['#markup'] = "$translationStatus <br><small>Project state: $link</small>";
+                        $status['data']['#markup'] = "$translationStatus <br><small>Translation state: $link</small>";
 
-                        if( $project->getStatus() === Project::STATUS_NEW){
-                            \Drupal::messenger()->addMessage("Project {$project->getName()} created", Messenger::TYPE_STATUS);
+                        if( $document->getStatus() === Project::STATUS_NEW){
+                            \Drupal::messenger()->addMessage("Project {$document->getName()} created", Messenger::TYPE_STATUS);
                         }
                     }
                 }

@@ -35,18 +35,38 @@ class SendToTranslateToSmartcatAction extends ActionBase
       return;
     }
 
+    $defaultLang = \Drupal::languageManager()->getDefaultLanguage()->getId();
     $sourceLanguage = $entity->language()->getId();
+    if($defaultLang !== $sourceLanguage){
+      return;
+    }
+
+    $langs = [];
     foreach(\Drupal::languageManager()->getLanguages() as $language){
-      if($language->getId() !== $sourceLanguage){
-        try{
-          $this->projectService->createProject($entity, [$language->getId()]);
-        }catch(\Exception $e){
-          $this->logger->info($e->getResponse()->getBody()->getContents());
-        }
+      if($language->getId() !== $sourceLanguage && !in_array($language->getId(),$langs)){
+        array_push($langs, $language->getId());
       }
+    }
+
+    if(empty($langs)){
+      return $this->t('Not lengs for send to translate');
+    }
+
+    try{
+      $this->projectService->addEntityToTranslete($entity, $langs);
+    }catch(\Exception $e){
+      $this->logger->info($e->getResponse()->getBody()->getContents());
     }
     
     return $this->t('Entities successful sended');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function executeMultiple(array $entities) {
+    parent::executeMultiple($entities);
+    $this->projectService->sendProjectWithDocuments();
   }
 
   /**

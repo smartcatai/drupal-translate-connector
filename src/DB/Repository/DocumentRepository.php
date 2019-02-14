@@ -8,13 +8,13 @@
 
 namespace Drupal\smartcat_translation_manager\DB\Repository;
 
-use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Entity\Document;
 
 
 /** Репозиторий таблицы обмена */
-class ProjectRepository extends RepositoryAbstract {
+class DocumentRepository extends RepositoryAbstract {
 
-  const TABLE_NAME = 'projects';
+  const TABLE_NAME = 'documents';
 
   public function getTableName() {
     return self::TABLE_PREFIX . self::TABLE_NAME;
@@ -36,9 +36,14 @@ class ProjectRepository extends RepositoryAbstract {
             'length' => 255,
             'not null' => FALSE,
           ],
+          'entityId' => [
+            'type' => 'int',
+            'size' => 'big',
+            'not null' => TRUE,
+          ],
           'entityTypeId' => [
             'type' => 'varchar',
-            'length' => 255,
+            'length' => 100,
             'not null' => TRUE,
           ]
           ,'sourceLanguage' => [
@@ -46,7 +51,7 @@ class ProjectRepository extends RepositoryAbstract {
             'length' => 100,
             'not null' => TRUE,
           ],
-          'targetLanguages' => [
+          'targetLanguage' => [
             'type' => 'varchar',
             'length' => 255,
             'not null' => TRUE,
@@ -56,15 +61,20 @@ class ProjectRepository extends RepositoryAbstract {
             'length' => 255,
             'not null' => TRUE,
           ],
-          'externalProjectId' => [
-            'type' => 'varchar',
-            'length' => 255,
-            'not null' => FALSE,
-          ],
           'externalExportId' => [
             'type' => 'varchar',
             'length' => 255,
             'not null' => FALSE,
+          ],
+          'externalProjectId' => [
+            'type' => 'varchar',
+            'length' => 100,
+            'not null' => TRUE,
+          ],
+          'externalDocumentId' => [
+            'type' => 'varchar',
+            'length' => 100,
+            'not null' => TRUE,
           ],
         ],
         'primary key' => ['id'],
@@ -73,30 +83,29 @@ class ProjectRepository extends RepositoryAbstract {
     return $schema;
   }
 
-  public function add(Project $project) {
+  public function add(Document $document) {
     $table_name = $this->getTableName();
 
     $data = [
-      'entityTypeId' => $project->getEntityTypeId(),
-      'sourceLanguage' => $project->getSourceLanguage(),
-      'targetLanguages' => serialize($project->getTargetLanguages()),
-      'status' => $project->getStatus(),
+      'entityId' => $document->getEntityId(),
+      'entityTypeId' => $document->getEntityTypeId(),
+      'sourceLanguage' => $document->getSourceLanguage(),
+      'targetLanguage' => $document->getTargetLanguage(),
+      'status' => $document->getStatus(),
+      'externalProjectId' => $document->getExternalProjectId(),
+      'externalDocumentId' => $document->getExternalDocumentId(),
     ];
 
-    if($project->getName() !== NULL){
-      $data['name'] = $project->getName();
+    if($document->getName() !== NULL){
+      $data['name'] = $document->getName();
     }
 
-    if($project->getExternalProjectId() !== NULL){
-      $data['externalProjectId'] = $project->getExternalProjectId();
+    if($document->getExternalExportId() !== NULL){
+      $data['externalExportId'] = $document->getExternalExportId();
     }
 
-    if($project->getExternalExportId() !== NULL){
-      $data['externalExportId'] = $project->getExternalExportId();
-    }
-
-    if (!empty($project->getId())) {
-      $data['id'] = $project->getId();
+    if (!empty($document->getId())) {
+      $data['id'] = $document->getId();
     }
 
     $insert_id = FALSE;
@@ -105,7 +114,7 @@ class ProjectRepository extends RepositoryAbstract {
       $insert_id = $this->connection->insert($table_name)
         ->fields($data)
         ->execute();
-      $project->setId($insert_id);
+      $document->setId($insert_id);
     } catch (\Exception $e) {
       throw new \Exception('Table '.$table_name .': ' . $e->getMessage());
     }
@@ -113,40 +122,39 @@ class ProjectRepository extends RepositoryAbstract {
     return $insert_id;
   }
 
-  public function delete($projectId)
+  public function delete($documentId)
   {
     return $this->connection->delete($this->getTableName())
-      ->condition('id', $projectId)
+      ->condition('id', $documentId)
       ->execute();
   }
 
-  public function update(Project $project) {
+  public function update(Document $document) {
     $table_name = $this->getTableName();
 
-    if (!empty($project->getId())) {
+    if (!empty($document->getId())) {
       $data = [
-        'entityTypeId' => $project->getEntityTypeId(),
-        'sourceLanguage' => $project->getSourceLanguage(),
-        'targetLanguages' => serialize($project->getTargetLanguages()),
-        'status' => $project->getStatus(),
+        'entityId' => $document->getEntityId(),
+        'entityTypeId' => $document->getEntityTypeId(),
+        'externalProjectId' => $document->getExternalProjectId(),
+        'externalDocumentId' => $document->getExternalDocumentId(),
+        'sourceLanguage' => $document->getSourceLanguage(),
+        'targetLanguage' => $document->getTargetLanguage(),
+        'status' => $document->getStatus(),
       ];
 
-      if($project->getName() !== NULL){
-        $data['name'] = $project->getName();
+      if($document->getName() !== NULL){
+        $data['name'] = $document->getName();
       }
 
-      if($project->getExternalProjectId() !== NULL){
-        $data['externalProjectId'] = $project->getExternalProjectId();
-      }
-
-      if($project->getExternalExportId() !== NULL){
-        $data['externalExportId'] = $project->getExternalExportId();
+      if($document->getExternalExportId() !== NULL){
+        $data['externalExportId'] = $document->getExternalExportId();
       }
 
       try {
         return $this->connection->update($table_name)
           ->fields($data)
-          ->condition('id', $project->getId())
+          ->condition('id', $document->getId())
           ->execute();
       } catch (\Exception $e) {
         var_dump($e->getMessage());
@@ -157,22 +165,22 @@ class ProjectRepository extends RepositoryAbstract {
 
   protected function doFlush(array $persists) {
     /* @var Project[] $persists */
-    foreach ($persists as $project) {
-      if (get_class($project) === 'Drupal\smartcat_translation_manager\DB\Entity\Project') {
-        if (empty($project->getId())) {
-          if ($res = $this->add($project)) {
-            $project->setId($res);
+    foreach ($persists as $document) {
+      if (get_class($document) === 'Drupal\smartcat_translation_manager\DB\Entity\Document') {
+        if (empty($document->getId())) {
+          if ($res = $this->add($document)) {
+            $document->setId($res);
           }
         }
         else {
-          $this->update($project);
+          $this->update($document);
         }
       }
     }
   }
 
   protected function toEntity($row) {
-    $result = new Project();
+    $result = new Document();
 
     if (isset($row->id)) {
       $result->setId(intval($row->id));
@@ -182,24 +190,32 @@ class ProjectRepository extends RepositoryAbstract {
       $result->setName($row->name);
     }
 
+    if (isset($row->entityId)) {
+      $result->setEntityId($row->entityId);
+    }
+
     if (isset($row->entityTypeId)) {
       $result->setEntityTypeId($row->entityTypeId);
+    }
+
+    if (isset($row->externalProjectId)) {
+      $result->setExternalProjectId($row->externalProjectId);
+    }
+
+    if (isset($row->externalDocumentId)) {
+      $result->setExternalDocumentId($row->externalDocumentId);
     }
 
     if (isset($row->sourceLanguage)) {
       $result->setSourceLanguage($row->sourceLanguage);
     }
 
-    if (isset($row->targetLanguages)) {
-      $result->setTargetLanguages(unserialize($row->targetLanguages));
+    if (isset($row->targetLanguage)) {
+      $result->setTargetLanguage($row->targetLanguage);
     }
 
     if (isset($row->status)) {
       $result->setStatus($row->status);
-    }
-
-    if (isset($row->externalProjectId)) {
-      $result->setExternalProjectId($row->externalProjectId);
     }
 
     if (isset($row->externalExportId)) {

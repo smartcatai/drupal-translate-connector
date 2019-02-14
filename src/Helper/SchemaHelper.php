@@ -2,12 +2,13 @@
 
 namespace Drupal\smartcat_translation_manager\Helper;
 
-use Drupal\smartcat_translation_manager\DB\Repository\ProfileRepository;
+use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 
 class SchemaHelper
 {
     protected static $repositoryList = [
+        DocumentRepository::class,
         ProjectRepository::class,
     ];
 

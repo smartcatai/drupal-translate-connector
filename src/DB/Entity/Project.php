@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Diversant_
- * Date: 17.07.2017
- * Time: 14:11
- */
 
 namespace Drupal\smartcat_translation_manager\DB\Entity;
 
@@ -25,12 +19,6 @@ class Project
 
   /** @var  string */
   private $name;
-
-  /** @var  integer */
-  private $entityId;
-
-  /** @var  string */
-  private $entityTypeId;
 
   /** @var  string */
   private $sourceLanguage;
@@ -79,24 +67,6 @@ class Project
    */
   public function setName($name) {
     $this->name = $name;
-
-    return $this;
-  }
-
-  /**
-   * @return int
-   */
-  public function getEntityId() {
-    return $this->entityId;
-  }
-
-  /**
-   * @param int $entityId
-   *
-   * @return Project
-   */
-  public function setEntityId($entityId) {
-    $this->entityId = $entityId;
 
     return $this;
   }

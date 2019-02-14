@@ -39,3 +39,20 @@ smartcat_translation_manager.project.delete:
   methods: ['POST']
   requirements: 
     _permission: 'administer'
+
+smartcat_translation_manager.document:
+  path: '/admin/smartcat/document' 
+  defaults: 
+    _controller: 'Drupal\smartcat_translation_manager\Controller\DocumentController::content' 
+    _title: 'Documents'
+  requirements: 
+    _permission: 'administer'
+
+smartcat_translation_manager.document.delete:
+  path: '/admin/smartcat/document/delete/{id}' 
+  defaults: 
+    _controller: 'Drupal\smartcat_translation_manager\Controller\DocumentController::delete' 
+    _title: 'Documents'
+  methods: ['POST']
+  requirements: 
+    _permission: 'administer'

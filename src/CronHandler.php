@@ -2,7 +2,9 @@
 
 namespace Drupal\smartcat_translation_manager;
 
+use Drupal\smartcat_translation_manager\DB\Entity\Document;
 use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 use Drupal\smartcat_translation_manager\Helper\FileHelper;
 
@@ -21,6 +23,11 @@ class CronHandler
      */
     protected $projectRepository;
 
+    /**
+     * @var DocumentRepository
+     */
+    protected $documentRepository;
+
     public static function create()
     {
         $last_run = \Drupal::state()->get(self::KEY_LAST_RUN, 0);
@@ -35,6 +42,7 @@ class CronHandler
     public function __construct(){
         $this->api = new \Drupal\smartcat_translation_manager\Api\Api();
         $this->projectRepository = new ProjectRepository();
+        $this->documentRepository = new DocumentRepository();
         $this->entityTypeManager = \Drupal::entityTypeManager();
         $this->logger = \Drupal::logger('smartcat_translation_manager_cron');
     }
@@ -44,10 +52,10 @@ class CronHandler
         if($this->buildStatistic()){
             $this->logger->info('Method buildStatistic completed');
         }
-        if($this->updateStatusFor(Project::STATUS_CREATED)){
+        if($this->updateStatusForProject(Project::STATUS_CREATED)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_CREATED);
         }
-        if($this->updateStatusFor(Project::STATUS_INPROGRESS)){
+        if($this->updateStatusForProject(Project::STATUS_INPROGRESS)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_INPROGRESS);
         }
         if($this->requestDocsForExport()){
@@ -62,44 +70,69 @@ class CronHandler
     public function buildStatistic()
     {
         $projects = $this->projectRepository->getBy(['status'=>Project::STATUS_NEW],0,100);
+
         if(!empty($projects)){
             foreach($projects as $i=>$project){
                 $scProject = $this->api->buildStatistic($project->getExternalProjectId());
                 $this->changeStatus($project, $scProject);
+
             }
             return true;
         }
         return false;
     }
 
-    public function updateStatusFor($status){
+    public function updateStatusForProject($status){
         $projects = $this->projectRepository->getBy(['status'=>$status],0,100);
         if(!empty($projects)){
             foreach($projects as $i=>$project){
                 $scProject = $this->api->getProject($project->getExternalProjectId());
                 $this->changeStatus($project, $scProject);
+                $this->updateStatusForDocument($scProject);
             }
             return true;
         }
         return false;
     }
 
+    protected function updateStatusForDocument($scProject){
+        $documents = $this->documentRepository->getBy(['externalProjectId'=>$scProject->getId()],0,100);
+        if(!empty($documents)){
+            foreach($documents as $i=>$document){
+                foreach($scProject->getDocuments() as $scDocument){
+                    if($scDocument->getId()!== $document->getExternalDocumentId()){
+                        continue;
+                    }
+
+                    $this->changeStatus($document, $scDocument, $this->documentRepository);
+                }
+            }
+        }
+    }
+
     public function requestDocsForExport()
     {
-        $projects = $this->projectRepository->getBy([
-            'status'=>Project::STATUS_COMPLETED,
+        $documents = $this->documentRepository->getBy([
+            'status'=>Document::STATUS_COMPLETED,
         ],0,100);
-        if(!empty($projects)){
-            foreach($projects as $i=>$project){
-                $scProject = $this->api->getProject($project->getExternalProjectId());
+        $tempProjects = [];
+        if(!empty($documents)){
+            foreach($documents as $i=>$document){
+                if(!array_key_exists($document->getExternalProjectId(),$tempProjects)){
+                    $tempProjects[$document->getExternalProjectId()] = $this->api->getProject($document->getExternalProjectId());
+                }
+                $scProject = $tempProjects[$document->getExternalProjectId()];
+
                 $documentIds = [];
-                foreach($scProject->getDocuments() as $document){
-                    $documentIds[] = $document->getId();
+                foreach($scProject->getDocuments() as $scDocument){
+                    if($scDocument->getId() !== $document->getExternalDocumentId()){
+                        continue;
+                    }
+                    $documentIds[] = $scDocument->getId();
                 }
                 $export = $this->api->requestExportDocuments($documentIds);
-                $project->setExternalExportId($export->getId());
-                $project->setStatus(Project::STATUS_DOWNLOAD);
-                $this->projectRepository->update($project);
+                $document->setExternalExportId($export->getId());
+                $this->documentRepository->update($document);
             }
             return true;
         }
@@ -108,32 +141,33 @@ class CronHandler
 
     public function downloadDocs()
     {
-        $projects = $this->projectRepository->getBy([
-            'status'=>Project::STATUS_DOWNLOAD,
+        $documents = $this->documentRepository->getBy([
+            'status'=>Project::STATUS_COMPLETED,
+            'externalExportId'=>[null,'IS NOT NULL']
         ],0,100);
 
-        if(empty($projects)){
+        if(empty($documents)){
             return false;
         }
-        foreach($projects as $project){
+        foreach($documents as $document){
             try{
-                $response = $this->api->downloadExportDocuments($project->getExternalExportId());
+                $response = $this->api->downloadExportDocuments($document->getExternalExportId());
             }catch(\Http\Client\Common\Exception\ClientErrorException $e){
-                $project->setStatus(Project::STATUS_COMPLETED);
-                $project->setExternalExportId(NULL);
-                $this->projectRepository->update($project);
+                $document->setExternalExportId(NULL);
+                $this->documentRepository->update($document);
                 $this->logger->info($e->getResponse()->getBody()->getContents());
                 continue;
             }
+
             $mimeType = $response->getHeaderLine('Content-Type');
             if($response->getStatusCode() === 204){
-                $this->logger->info($response->getStatusCode());
+                $this->logger->info($response->getStatusCode() .'|>'. $response->getBody()->getContents());
                 continue;
             }
             if($mimeType==='text/html'){
                 $sourceEntity = $this->entityTypeManager
-                    ->getStorage($project->getEntityTypeId())
-                    ->load($project->getEntityId());
+                    ->getStorage($document->getEntityTypeId())
+                    ->load($document->getEntityId());
 
                 if(!$sourceEntity){
                     $this->logger->info('Entity not exist');
@@ -141,22 +175,22 @@ class CronHandler
                 }
                 
                 $targetEntity = (new FileHelper($sourceEntity))
-                    ->markupToEntityTranslation($response->getBody()->getContents(),$project->getTargetLanguages()[0]);
+                    ->markupToEntityTranslation($response->getBody()->getContents(),$document->getTargetLanguage());
                 $targetEntity->save();
-
-                $project->setStatus(Project::STATUS_FINISHED);
-                $project->setExternalExportId(NULL);
-                $this->projectRepository->update($project);
+                $document->setExternalExportId(NULL);
+                $document->setStatus(Document::STATUS_DOWNLOADED);
+                $this->documentRepository->update($document);
             }
         }
         return true;
     }
 
-    protected function changeStatus($project, $scProject)
+    protected function changeStatus($project, $scProject, $repo = null)
     {
+        $repo = $repo ?? $this->projectRepository;
         if($project->getStatus()!==$scProject->getStatus()){
             $project->setStatus(strtolower($scProject->getStatus()));
-            return $this->projectRepository->update($project);
+            return $repo->update($project);
         }
         return false;
     }

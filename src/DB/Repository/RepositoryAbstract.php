@@ -10,7 +10,7 @@ namespace Drupal\smartcat_translation_manager\DB\Repository;
 
 abstract class RepositoryAbstract implements RepositoryInterface {
 
-  const TABLE_PREFIX = 'smartcat_translation_manager';
+  const TABLE_PREFIX = 'smartcat_translation_manager_';
 
   protected $connection;
 

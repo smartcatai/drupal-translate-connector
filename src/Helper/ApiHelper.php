@@ -22,7 +22,12 @@ class ApiHelper
 
     public static function getProjectUrl($project)
     {
-        return Url::fromUri("https://smartcat.ai/projects/{$project->getExternalProjectId()}");;
+        return Url::fromUri("https://smartcat.ai/projects/{$project->getExternalProjectId()}");
+    }
+
+    public static function getProjectUrlBydocument($document)
+    {
+        return Url::fromUri("https://smartcat.ai/projects/{$document->getExternalProjectId()}");
     }
 
     public static function getDocumentLink($document_id){

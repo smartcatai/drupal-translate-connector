@@ -35,7 +35,7 @@ class ProjectController extends ControllerBase
             '#title' => 'Projects',
             '#header' =>[
                 'Project name',
-                'Content',
+             //   'Content',
                 'Translate to',
                 'Status',
                 'Operations',
@@ -53,14 +53,14 @@ class ProjectController extends ControllerBase
 
         if(!empty($projects)){
             foreach($projects as $i=>$project){
-                $entity = $entityManager
-                    ->getStorage($project->getEntityTypeId())
-                    ->load($project->getEntityId());
+                // $entity = $entityManager
+                //     ->getStorage($project->getEntityTypeId())
+                //     ->load($project->getEntityId());
 
-                if($entity){
+                //if($entity){
                     $table['#rows'][$i] = [
                         ApiHelper::getProjectName($project),
-                        $entity->label(),
+                        //$entity->label(),
                         implode('|',$project->getTargetLanguages()),
                         $project->getStatus(),
                         [
@@ -74,24 +74,24 @@ class ProjectController extends ControllerBase
                             ],
                         ],
                     ];
-                }else{
-                    $table['#rows'][$i] = [
-                        $project->getName(),
-                        'Not exists',
-                        implode('|',$project->getTargetLanguages()),
-                        $project->getStatus(),
-                        [
-                            'data' => [
-                                '#type' => 'form',
-                                '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
-                                'submit' => [
-                                    '#type'=>'submit',
-                                    '#value'=>'Delete',
-                                ],
-                            ],
-                        ],
-                    ];
-                }
+                // }else{
+                //     $table['#rows'][$i] = [
+                //         $project->getName(),
+                //         //'Not exists',
+                //         implode('|',$project->getTargetLanguages()),
+                //         $project->getStatus(),
+                //         [
+                //             'data' => [
+                //                 '#type' => 'form',
+                //                 '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
+                //                 'submit' => [
+                //                     '#type'=>'submit',
+                //                     '#value'=>'Delete',
+                //                 ],
+                //             ],
+                //         ],
+                //     ];
+                // }
             }
         }
 
@@ -130,7 +130,9 @@ class ProjectController extends ControllerBase
         }
 
         try{
-            $project_id = $ProjectService->createProject($entity, $lang);
+            $project_id = $ProjectService
+                ->addEntityToTranslete($entity, $lang)
+                ->sendProjectWithDocuments();
         }catch(\Exception $e){
             throw new HttpException(500, $e->getMessage());
         }

@@ -5,7 +5,9 @@ namespace Drupal\smartcat_translation_manager\Service;
 use Drupal\Core\Entity\EntityInterface;
 use SmartCat\Client\Model\DocumentModel;
 use Drupal\smartcat_translation_manager\Api\Api;
+use Drupal\smartcat_translation_manager\DB\Entity\Document;
 use Drupal\smartcat_translation_manager\DB\Entity\Project;
+use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 use Drupal\smartcat_translation_manager\Helper\FileHelper;
 
@@ -21,9 +23,20 @@ class ProjectService
      */
     protected $projectRepository;
 
+    /**
+     * @var Project
+     */
+    protected $project;
+
+    /**
+     * @var array
+     */
+    protected $documents = [];
+
     public function __construct()
     {
         $this->api = new Api();
+        $this->documentRepository = new DocumentRepository();
         $this->projectRepository = new ProjectRepository();
     }
 
@@ -34,23 +47,63 @@ class ProjectService
      */
     public function createProject(EntityInterface $entity, $translateTo = NULL)
     {
-        $project = (new Project())
+        $this->project = (new Project())
             ->setName($entity->label())
-            ->setEntityId($entity->id())
             ->setEntityTypeId($entity->getEntityTypeId())
             ->setSourceLanguage($entity->language()->getId())
             ->setTargetLanguages($translateTo)
             ->setStatus(Project::STATUS_NEW);
+    }
 
-        $scProject = $this->api->createProject($project);
+    public function sendProject(){
+        $project = $this->project;
+        $scProject = $this->api->createProject($this->project);
 
         $project->setExternalProjectId($scProject->getId());
         $project->setName($scProject->getName());
 
-        $document = $this->createDocument($entity);
-        $documents = $this->addDocuments([$document], $scProject->getId());
+        $project->setId($this->projectRepository->add($project));
+        $this->project = null;
+        return $project;
+    }
 
-        return $this->projectRepository->add($project);
+    public function sendDocuments($project){
+        $documents = $this->addDocuments(array_values($this->documents),$project->getExternalProjectId());
+
+        foreach($documents as $scDocument){
+            preg_match('/-(\d+)$/',$scDocument->getName(), $matches );
+            $this->documentRepository->add( 
+                (new Document())
+                    ->setName($scDocument->getName())
+                    ->setEntityId($matches[1])
+                    ->setEntityTypeId($project->getEntityTypeId())
+                    ->setSourceLanguage($scDocument->getSourceLanguage())
+                    ->setTargetLanguage($scDocument->getTargetLanguage())
+                    ->setStatus($scDocument->getStatus())
+                    ->setExternalProjectId($project->getExternalProjectId())
+                    ->setExternalDocumentId($scDocument->getId())
+            );
+        }
+        $this->documents = [];
+        return $documents;
+    }
+
+    public function sendProjectWithDocuments(){
+
+        $project = $this->sendProject();
+
+        $documents = $this->sendDocuments($project);
+
+    }
+
+    public function addEntityToTranslete($entity, $translateTo){
+        if(empty($this->project)){
+            $this->createProject($entity, $translateTo);
+        }else{
+            $this->project->setName("{$this->project->getName()}, {$entity->label()}");
+        }
+        $this->documents[$entity->id()] = $this->createDocument($entity);
+        return $this;
     }
 
     /**
@@ -75,7 +128,7 @@ class ProjectService
     protected function createDocument(EntityInterface $entity)
     {
         $file = (new FileHelper($entity))->createFileByEntity(['title','body','comment']);
-        $fileName = \sprintf('Tranclate-%s.%s.%d.html', $entity->getEntityTypeId(), $entity->bundle(), $entity->id());
+        $fileName = \sprintf('%s-%d.html', $entity->label(), $entity->id()); //, $entity->label()
 
         return $this->api->project->createDocumentFromFile($file, $fileName);
     }
