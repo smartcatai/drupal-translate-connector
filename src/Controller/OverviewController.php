@@ -51,12 +51,12 @@ class OverviewController extends ContentTranslationController
                 }else{
                     foreach($documents as $document){
                         if($query['lang'] !== $document->getTargetLanguage()){
-                            // $url = Url::fromRoute('smartcat_translation_manager.project.add');
-                            // $url->setOption('query', $query);
-                            // $operations['data']['#links']['smartcat'] = [
-                            //     'title' => 'Send to smartcat' .$document->getTargetLanguage(),
-                            //     'url' => $url,
-                            // ];
+                            $url = Url::fromRoute('smartcat_translation_manager.project.add');
+                            $url->setOption('query', $query);
+                            $operations['data']['#links']['smartcat'] = [
+                                'title' => 'Send to smartcat' .$document->getTargetLanguage(),
+                                'url' => $url,
+                            ];
                             continue;
                         }
                         if(is_array($status)){
