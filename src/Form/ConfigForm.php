@@ -42,7 +42,7 @@ class ConfigForm extends ConfigFormBase{
     ];
 
     $form['api_password'] = [
-      '#title' => t('API Password', [], ['context' => 'smartcat_translation_manager']),
+      '#title' => t('API password', [], ['context' => 'smartcat_translation_manager']),
       '#type' => 'password',
       '#required' => TRUE,
     ];

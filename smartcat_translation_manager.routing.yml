@@ -1,7 +1,7 @@
 smartcat_translation_manager.settings:
   path: '/admin/config/smartcat'
   defaults:
-    _title: 'Smartcat auth config form'
+    _title: 'Smartcat Translation Manager'
     _form: 'Drupal\smartcat_translation_manager\Form\ConfigForm'
   requirements:
     _permission: 'administer'
