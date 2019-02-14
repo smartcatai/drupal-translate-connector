@@ -114,6 +114,7 @@ class CronHandler
     {
         $documents = $this->documentRepository->getBy([
             'status'=>Document::STATUS_COMPLETED,
+            'externalExportId'=>[null,'IS NULL'],
         ],0,100);
         $tempProjects = [];
         if(!empty($documents)){
