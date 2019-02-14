@@ -54,7 +54,7 @@ class OverviewController extends ContentTranslationController
                             $url = Url::fromRoute('smartcat_translation_manager.project.add');
                             $url->setOption('query', $query);
                             $operations['data']['#links']['smartcat'] = [
-                                'title' => 'Send to smartcat' .$document->getTargetLanguage(),
+                                'title' => 'Send to smartcat',
                                 'url' => $url,
                             ];
                             continue;
