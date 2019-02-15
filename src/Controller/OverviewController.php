@@ -25,12 +25,14 @@ class OverviewController extends ContentTranslationController
          * @var DocumentRepository
          */
         $documents = $documentRepository->getBy(['entityId'=> $entity->id(), ]);
+        $lastColumn = array_pop($build['content_translation_overview']['#header']);
+        array_push($build['content_translation_overview']['#header'], $this->t('Translation process'));
+        array_push($build['content_translation_overview']['#header'], $lastColumn);
 
         foreach ($build['content_translation_overview']['#rows'] as &$row){
             // take last column in row
             $operations = array_pop($row);
-            // take next last column in row
-            $status = array_pop($row);
+            $translationStatus = ['data'=>['#markup' => '&mdash;']];
 
             $urlDocumentList = Url::fromRoute('smartcat_translation_manager.document');
 
@@ -59,9 +61,6 @@ class OverviewController extends ContentTranslationController
                             ];
                             continue;
                         }
-                        if(is_array($status)){
-                            continue;
-                        }
 
                         $operations['data']['#links']['smartcat'] = [
                             'title' => 'Go to smartcat',
@@ -69,10 +68,10 @@ class OverviewController extends ContentTranslationController
                         ];
 
                         $urlDocumentList->setOption('query', ['document_id' => $document->getId()]);
-                        $translationStatus = $status->render();
-                        $link = \Drupal\Core\Link::fromTextAndUrl($document->getStatus(),$urlDocumentList)->toString();
-                        $status = ['data'=>[]];
-                        $status['data']['#markup'] = "$translationStatus <br><small>Translation state: $link</small>";
+
+                        $translationStatusName = Document::STATUSES[$document->getStatus()];
+                        $link = \Drupal\Core\Link::fromTextAndUrl($this->t($translationStatusName),$urlDocumentList)->toString();
+                        $translationStatus['data']['#markup'] = $link;
 
                         if( $document->getStatus() === Project::STATUS_NEW){
                             \Drupal::messenger()->addMessage("Project {$document->getName()} created", Messenger::TYPE_STATUS);
@@ -81,7 +80,7 @@ class OverviewController extends ContentTranslationController
                 }
             }
 
-            array_push($row, $status);
+            array_push($row, $translationStatus);
             array_push($row, $operations);
         }
         $build['content_translation_overview']['#attached']['library'][]

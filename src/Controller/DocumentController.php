@@ -62,7 +62,7 @@ class DocumentController extends ControllerBase
                         ApiHelper::getProjectName($document),
                         //$entity->label(),
                         $document->getTargetLanguage(),
-                        $document->getStatus(),
+                        Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [
                                 '#type' => 'form',
@@ -79,7 +79,7 @@ class DocumentController extends ControllerBase
                         $document->getName(),
                         //'Not exists',
                         $document->getTargetLanguage(),
-                        $document->getStatus(),
+                        Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [
                                 '#type' => 'form',

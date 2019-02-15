@@ -8,7 +8,16 @@ class Document
     const STATUS_INPROGRESS = "inprogress";
     const STATUS_COMPLETED = "completed";
     const STATUS_CANCELED = "canceled";
+    const STATUS_FAILED = "failed";
     const STATUS_DOWNLOADED = "downloaded";
+
+    const STATUSES = [
+        self::STATUS_CREATED => "Sent to Smartcat",
+        self::STATUS_INPROGRESS => "Translating in Smartcat",
+        self::STATUS_CANCELED => "Completed",
+        self::STATUS_CANCELED => "Canceled",
+        self::STATUS_FAILED => "Failed",
+    ];
 
     /** @var  integer */
     private $id;
