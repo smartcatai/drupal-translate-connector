@@ -43,27 +43,14 @@ class OverviewController extends ContentTranslationController
                 $query['lang'] = $params['target'];
 
                 $operations['data']['#links'] = [];
-                if(empty($documents)){
-                    $url = Url::fromRoute('smartcat_translation_manager.project.add');
-                    $url->setOption('query', $query);
-                    $operations['data']['#links']['smartcat'] = [
-                        'title' => 'Send to smartcat',
-                        'url' => $url,
-                    ];
-                }else{
+                if(!empty($documents)){
                     foreach($documents as $document){
                         if($query['lang'] !== $document->getTargetLanguage()){
-                            $url = Url::fromRoute('smartcat_translation_manager.project.add');
-                            $url->setOption('query', $query);
-                            $operations['data']['#links']['smartcat'] = [
-                                'title' => 'Send to smartcat',
-                                'url' => $url,
-                            ];
                             continue;
                         }
 
                         $operations['data']['#links']['smartcat'] = [
-                            'title' => 'Go to smartcat',
+                            'title' => $this->t('Go to Smartcat'),
                             'url' => ApiHelper::getProjectUrlBydocument($document),
                         ];
 
@@ -77,6 +64,14 @@ class OverviewController extends ContentTranslationController
                             \Drupal::messenger()->addMessage("Project {$document->getName()} created", Messenger::TYPE_STATUS);
                         }
                     }
+                }
+                if(empty($operations['data']['#links']['smartcat'])){
+                    $url = Url::fromRoute('smartcat_translation_manager.project.add');
+                    $url->setOption('query', $query);
+                    $operations['data']['#links']['smartcat'] = [
+                        'title' => $this->t('Send to Smartcat'),
+                        'url' => $url,
+                    ];
                 }
             }
 
