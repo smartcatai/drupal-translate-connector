@@ -14,7 +14,7 @@ class Document
     const STATUSES = [
         self::STATUS_CREATED => "Sent to Smartcat",
         self::STATUS_INPROGRESS => "Translating in Smartcat",
-        self::STATUS_CANCELED => "Completed",
+        self::STATUS_COMPLETED => "Completed",
         self::STATUS_CANCELED => "Canceled",
         self::STATUS_FAILED => "Failed",
     ];
