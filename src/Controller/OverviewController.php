@@ -57,8 +57,7 @@ class OverviewController extends ContentTranslationController
                         $urlDocumentList->setOption('query', ['document_id' => $document->getId()]);
 
                         $translationStatusName = Document::STATUSES[$document->getStatus()];
-                        $link = \Drupal\Core\Link::fromTextAndUrl($this->t($translationStatusName),$urlDocumentList)->toString();
-                        $translationStatus['data']['#markup'] = $link;
+                        $translationStatus['data']['#markup'] = $this->t($translationStatusName);
 
                         if( $document->getStatus() === Project::STATUS_NEW){
                             \Drupal::messenger()->addMessage("Project {$document->getName()} created", Messenger::TYPE_STATUS);
