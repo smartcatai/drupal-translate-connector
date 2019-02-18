@@ -19,7 +19,7 @@ class OverviewController extends ContentTranslationController
         $documentRepository = new DocumentRepository();
         $build = parent::overview($route_match, $entity_type_id);
         $entity = $route_match->getParameter($entity_type_id);
-        $query = ['entity_id' => $entity->id(), 'type'=> $entity->getType(), 'type_id' => $entity_type_id];
+        $query = ['entity_id' => $entity->id(), 'type'=> $entity->getEntityTypeId(), 'type_id' => $entity_type_id];
 
         /**
          * @var DocumentRepository
