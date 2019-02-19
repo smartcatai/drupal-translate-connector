@@ -88,7 +88,7 @@ class CronHandler
                 try{
                     $scProject = $this->api->buildStatistic($project->getExternalProjectId());
                 }catch(\Http\Client\Common\Exception\ClientErrorException $e){
-                    $this->logger->info($e->response->getBody()->getContents());
+                    $this->logger->info($e->getResponse()->getBody()->getContents());
                     $this->logger->info($document->getName());
                     $this->logger->info($document->getStatus());
                     continue;
@@ -108,7 +108,7 @@ class CronHandler
                 try{
                     $scProject = $this->api->getProject($project->getExternalProjectId());
                 }catch(\Http\Client\Common\Exception\ClientErrorException $e){
-                    $this->logger->info($e->response->getBody()->getContents());
+                    $this->logger->info($e->getResponse()->getBody()->getContents());
                     $this->logger->info($document->getName());
                     $this->logger->info($document->getStatus());
                     continue;
@@ -149,7 +149,7 @@ class CronHandler
                     try{
                         $tempProjects[$document->getExternalProjectId()] = $this->api->getProject($document->getExternalProjectId());
                     }catch(\Http\Client\Common\Exception\ClientErrorException $e){
-                        $this->logger->info($e->response->getBody()->getContents());
+                        $this->logger->info($e->getResponse()->getBody()->getContents());
                         $this->logger->info($document->getName());
                         $this->logger->info($document->getStatus());
                         continue;
@@ -167,7 +167,7 @@ class CronHandler
                 try{
                     $export = $this->api->requestExportDocuments($documentIds);
                 }catch(\Http\Client\Common\Exception\ClientErrorException $e){
-                    $this->logger->info($e->response->getBody()->getContents());
+                    $this->logger->info($e->getResponse()->getBody()->getContents());
                     $this->logger->info($document->getName());
                     $this->logger->info($document->getStatus());
                     continue;
@@ -198,7 +198,7 @@ class CronHandler
             }catch(\Http\Client\Common\Exception\ClientErrorException $e){
                 $document->setStatus(Document::STATUS_FAILED);
                 $this->documentRepository->update($document);
-                $this->logger->info($e->response->getBody()->getContents());
+                $this->logger->info($e->getResponse()->getBody()->getContents());
                 $this->logger->info($document->getName());
                 $this->logger->info($document->getStatus());
                 continue;
