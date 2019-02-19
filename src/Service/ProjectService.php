@@ -2,7 +2,9 @@
 
 namespace Drupal\smartcat_translation_manager\Service;
 
+use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityManagerInterface;
 use SmartCat\Client\Model\DocumentModel;
 use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\smartcat_translation_manager\DB\Entity\Document;
@@ -24,6 +26,18 @@ class ProjectService
     protected $projectRepository;
 
     /**
+     * @var DocumentRepository
+     */
+    protected $documentRepository;
+
+    /**
+     * The entity type manager.
+     *
+     * @var \Drupal\Core\Entity\EntityManagerInterface
+     */
+    protected $entityManager;
+
+    /**
      * @var Project
      */
     protected $project;
@@ -33,8 +47,9 @@ class ProjectService
      */
     protected $documents = [];
 
-    public function __construct()
+    public function __construct(EntityManagerInterface $entityManager)
     {
+        $this->entityManager = $entityManager;
         $this->api = new Api();
         $this->documentRepository = new DocumentRepository();
         $this->projectRepository = new ProjectRepository();
@@ -127,9 +142,26 @@ class ProjectService
      */
     protected function createDocument(EntityInterface $entity)
     {
-        $file = (new FileHelper($entity))->createFileByEntity(['title','body','comment']);
+        $fieldDefinitions = $this->entityManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
+        $translatable = [];
+        foreach($fieldDefinitions as $fieldName => $fieldDefinition){
+            if( $fieldDefinition->isTranslatable() && ($fieldDefinition->isComputed() || $this->checkDiff($entity, $fieldName))){
+                array_push($translatable, $fieldName);
+            }
+        }
+        if(empty($translatable)){
+            $translatable = ['title','body','comment'];
+        }
+
+        $file = (new FileHelper($entity))->createFileByEntity($translatable);
         $fileName = \sprintf('%s-%d.html', $entity->label(), $entity->id()); //, $entity->label()
 
         return $this->api->project->createDocumentFromFile($file, $fileName);
+    }
+
+    protected function checkDiff($entity, $field_name){
+        $entity_type = $entity->getEntityTypeId();
+        $storage_definitions =  $entity instanceof ContentEntityTypeInterface ? $this->entityManager->getFieldStorageDefinitions($entity_type) : [];
+        return (!empty($storage_definitions[$field_name]) && _content_translation_is_field_translatability_configurable($entity_type, $storage_definitions[$field_name]));
     }
 }

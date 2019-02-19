@@ -13,3 +13,4 @@ services:
 
   smartcat_translation_manager.service.project:
     class: \Drupal\smartcat_translation_manager\Service\ProjectService
+    arguments: ['@entity.manager']

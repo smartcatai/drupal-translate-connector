@@ -35,7 +35,7 @@ class DocumentController extends ControllerBase
             '#title' => 'Documents',
             '#header' =>[
                 'Document name',
-             //   'Content',
+                'Export Id',
                 'Translate to',
                 'Status',
                 'Operations',
@@ -60,13 +60,13 @@ class DocumentController extends ControllerBase
                 if($entity){
                     $table['#rows'][$i] = [
                         ApiHelper::getProjectName($document),
-                        //$entity->label(),
+                        $document->getExternalExportId(),
                         $document->getTargetLanguage(),
                         Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [
                                 '#type' => 'form',
-                                '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$document->getId()])->toString(),
+                                '#action' => Url::fromRoute('smartcat_translation_manager.document.delete',['id'=>$document->getId()])->toString(),
                                 'submit' => [
                                     '#type'=>'submit',
                                     '#value'=>'Delete',
@@ -77,13 +77,13 @@ class DocumentController extends ControllerBase
                 }else{
                     $table['#rows'][$i] = [
                         $document->getName(),
-                        //'Not exists',
+                        $document->getExternalExportId(),
                         $document->getTargetLanguage(),
                         Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [
                                 '#type' => 'form',
-                                '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$document->getId()])->toString(),
+                                '#action' => Url::fromRoute('smartcat_translation_manager.document.delete',['id'=>$document->getId()])->toString(),
                                 'submit' => [
                                     '#type'=>'submit',
                                     '#value'=>'Delete',
@@ -108,7 +108,7 @@ class DocumentController extends ControllerBase
     public function delete($id)
     {
         $this->documentRepository->delete($id);
-        return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.project')->toString());
+        return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.document')->toString());
     }
 
 }

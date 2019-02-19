@@ -49,6 +49,7 @@ class CronHandler
 
     public function run()
     {
+        $this->logger->info('Start cron');
         if($this->buildStatistic()){
             $this->logger->info('Method buildStatistic completed');
         }
@@ -58,12 +59,18 @@ class CronHandler
         if($this->updateStatusForProject(Project::STATUS_INPROGRESS)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_INPROGRESS);
         }
+
+        if($this->updateStatusForProject(Project::STATUS_COMPLETED)){
+            $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_COMPLETED);
+        }
         if($this->requestDocsForExport()){
             $this->logger->info('Method requestDocsForExport completed');
         }
         if($this->downloadDocs()){
             $this->logger->info('Method downloadDocs completed');
         }
+        $this->finishedProject();
+        $this->logger->info('End cron');
         return;
     }
 
@@ -143,20 +150,24 @@ class CronHandler
     public function downloadDocs()
     {
         $documents = $this->documentRepository->getBy([
-            'status'=>Project::STATUS_COMPLETED,
-            'externalExportId'=>[null,'IS NOT NULL']
+            'status'=>Document::STATUS_COMPLETED,
         ],0,100);
 
         if(empty($documents)){
             return false;
         }
         foreach($documents as $document){
+            if(empty($document->getExternalExportId())){
+                continue;
+            }
             try{
                 $response = $this->api->downloadExportDocuments($document->getExternalExportId());
             }catch(\Http\Client\Common\Exception\ClientErrorException $e){
-                $document->setExternalExportId(NULL);
-                $this->documentRepository->update($document);
-                $this->logger->info($e->getResponse()->getBody()->getContents());
+                //$document->setExternalExportId(NULL);
+                $this->logger->info($document->getStatus());
+                $document->setStatus(Document::STATUS_FAILED);
+                $this->logger->info((string)$this->documentRepository->update($document));
+                $this->logger->info($document->getStatus());
                 continue;
             }
 
@@ -184,6 +195,33 @@ class CronHandler
             }
         }
         return true;
+    }
+
+    public function finishedProject(){
+        $projects = $this->projectRepository->getBy(['status'=>Project::STATUS_COMPLETED],0,100);
+        if(empty($projects)){
+            return false;
+        }
+        foreach($projects as $i=>$project){
+            $documents = $this->documentRepository->getBy([
+                'externalProjectId'=> $project->getExternalProjectId(),
+            ],0,100);
+
+            $continue = false;
+            foreach($documents as $document){
+                if($document->getStatus()=== Document::STATUS_INPROGRESS ||$document->getStatus()=== Document::STATUS_CREATED ){
+                    $continue = true;
+                    break;
+                }
+            }
+
+            if($continue){
+                continue;
+            }
+
+            $project->setStatus(Project::STATUS_FINISHED);
+            $this->projectRepository->update($project);
+        }
     }
 
     protected function changeStatus($project, $scProject, $repo = null)

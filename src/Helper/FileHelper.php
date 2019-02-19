@@ -55,6 +55,9 @@ class FileHelper
                 continue;
             }
             $data[] = sprintf(self::FIELD_TAG, $field->getName(), $this->entity->get($field->getName())->value );
+            if($field->getName() === 'body'){
+                $data[] = sprintf(self::FIELD_TAG, $field->getName(). '_summary', $this->entity->get($field->getName())->summary );
+            }
         }
         
         return '<html><head></head><body>' . implode('',$data) . '</body></html>';
@@ -82,7 +85,16 @@ class FileHelper
             if($field === 'body'){
                 $value = [
                     'value' => $value,
-                    'format' => 'full_html',
+                    'format' => $entity_translation->get('body')->format,
+                ];
+            }
+
+            if($field === 'body_summary'){
+                $field = 'body';
+                $value = [
+                    'value' => $entity_translation->get('body')->value,
+                    'summary' => $value,
+                    'format' => $entity_translation->get('body')->format,
                 ];
             }
             $entity_translation->set($field, $value);

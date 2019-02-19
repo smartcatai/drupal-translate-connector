@@ -158,6 +158,7 @@ class DocumentRepository extends RepositoryAbstract {
           ->execute();
       } catch (\Exception $e) {
         var_dump($e->getMessage());
+        die;
       }
     }
     return FALSE;
