@@ -25,7 +25,7 @@ class ConfigForm extends ConfigFormBase{
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = [];
     $form['api_server'] = [
-      '#title' => t('API server', [], ['context' => 'smartcat_translation_manager']),
+      '#title' => t('Server', [], ['context' => 'smartcat_translation_manager']),
       '#type' => 'select',
       '#options' => [
         SmartCat::SC_EUROPE => t('Europe', [], ['context' => 'smartcat_translation_manager']),
@@ -35,15 +35,17 @@ class ConfigForm extends ConfigFormBase{
     ];
 
     $form['api_login'] = [
-      '#title' => t('API login', [], ['context' => 'smartcat_translation_manager']),
+      '#title' => t('Smartcat account ID', [], ['context' => 'smartcat_translation_manager']),
       '#type' => 'textfield',
       '#default_value' => \Drupal::state()->get('smartcat_api_login', ''),
       '#required' => TRUE,
     ];
 
+    $lenpass = strlen(\Drupal::state()->get('smartcat_api_password', ''));
     $form['api_password'] = [
-      '#title' => t('API password', [], ['context' => 'smartcat_translation_manager']),
+      '#title' => t('API key', [], ['context' => 'smartcat_translation_manager']),
       '#type' => 'password',
+      '#placeholder' => $lenpass > 0 ? str_repeat('•', $lenpass) : '',
       '#required' => TRUE,
     ];
 
