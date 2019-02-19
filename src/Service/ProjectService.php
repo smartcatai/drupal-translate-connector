@@ -5,6 +5,8 @@ namespace Drupal\smartcat_translation_manager\Service;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use SmartCat\Client\Model\DocumentModel;
 use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\smartcat_translation_manager\DB\Entity\Document;
@@ -144,11 +146,11 @@ class ProjectService
     {
         $fieldDefinitions = $this->entityManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
         $translatable = [];
-        foreach($fieldDefinitions as $fieldName => $fieldDefinition){
-            if( $fieldDefinition->isTranslatable() && ($fieldDefinition->isComputed() || $this->checkDiff($entity, $fieldName))){
-                array_push($translatable, $fieldName);
-            }
-        }
+        // foreach($fieldDefinitions as $fieldName => $fieldDefinition){
+        //     if( $fieldDefinition->isTranslatable() && ($fieldDefinition->isComputed() || $this->is_field_translatability_configurable($entity, $fieldName))){
+        //         array_push($translatable, $fieldName);
+        //     }
+        // }
         if(empty($translatable)){
             $translatable = ['title','body','comment'];
         }
@@ -159,9 +161,19 @@ class ProjectService
         return $this->api->project->createDocumentFromFile($file, $fileName);
     }
 
-    protected function checkDiff($entity, $field_name){
-        $entity_type = $entity->getEntityTypeId();
-        $storage_definitions =  $entity instanceof ContentEntityTypeInterface ? $this->entityManager->getFieldStorageDefinitions($entity_type) : [];
-        return (!empty($storage_definitions[$field_name]) && _content_translation_is_field_translatability_configurable($entity_type, $storage_definitions[$field_name]));
+    protected function is_field_translatability_configurable( $entity, $field_name) {
+        $entity_type = $this->entityManager->getDefinition($entity->getEntityTypeId());
+        $storage_definitions = $this->entityManager->getFieldStorageDefinitions($entity->getEntityTypeId()) ;
+        $fields = [$entity_type->getKey('langcode'), $entity_type->getKey('default_langcode'), 'revision_translation_affected'];
+        var_dump($fields);
+        // Allow to configure only fields supporting multilingual storage. We skip our
+        // own fields as they are always translatable. Additionally we skip a set of
+        // well-known fields implementing entity system business logic.
+        return
+            !empty($storage_definitions[$field_name]) &&
+            $storage_definitions[$field_name]->isTranslatable() &&
+            $storage_definitions[$field_name]->getProvider() != 'content_translation' &&
+            !in_array($field_name, $fields);
     }
+
 }
