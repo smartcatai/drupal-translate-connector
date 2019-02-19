@@ -51,9 +51,9 @@ class FileHelper
         $fields = $this->entity->getFieldDefinitions();
 
         foreach($fields as $field){
-            // if(!$field->isTranslatable()){
-            //     continue;
-            // }
+            if(!$field->isTranslatable()){
+                continue;
+            }
             if(!empty($useFields) && !in_array($field->getName(), $useFields)){
                 continue;
             }

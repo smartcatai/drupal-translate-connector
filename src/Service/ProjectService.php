@@ -146,11 +146,13 @@ class ProjectService
     {
         $fieldDefinitions = $this->entityManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
         $translatable = [];
-        // foreach($fieldDefinitions as $fieldName => $fieldDefinition){
-        //     if( $fieldDefinition->isTranslatable() && ($fieldDefinition->isComputed() || $this->is_field_translatability_configurable($entity, $fieldName))){
-        //         array_push($translatable, $fieldName);
-        //     }
-        // }
+
+        foreach($fieldDefinitions as $fieldName => $fieldDefinition){
+            if( ($fieldDefinition->isComputed() || $this->is_field_translatability_configurable($entity, $fieldName))){
+                array_push($translatable, $fieldName);
+            }
+        }
+
         if(empty($translatable)){
             $translatable = ['title','body','comment'];
         }
@@ -165,7 +167,6 @@ class ProjectService
         $entity_type = $this->entityManager->getDefinition($entity->getEntityTypeId());
         $storage_definitions = $this->entityManager->getFieldStorageDefinitions($entity->getEntityTypeId()) ;
         $fields = [$entity_type->getKey('langcode'), $entity_type->getKey('default_langcode'), 'revision_translation_affected'];
-        var_dump($fields);
         // Allow to configure only fields supporting multilingual storage. We skip our
         // own fields as they are always translatable. Additionally we skip a set of
         // well-known fields implementing entity system business logic.
