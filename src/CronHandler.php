@@ -89,8 +89,8 @@ class CronHandler
                     $scProject = $this->api->buildStatistic($project->getExternalProjectId());
                 }catch(\Http\Client\Common\Exception\ClientErrorException $e){
                     $this->logger->info($e->getResponse()->getBody()->getContents());
-                    $this->logger->info($document->getName());
-                    $this->logger->info($document->getStatus());
+                    $this->logger->info($project->getName());
+                    $this->logger->info($project->getStatus());
                     continue;
                 }
                 $this->changeStatus($project, $scProject);
@@ -109,8 +109,8 @@ class CronHandler
                     $scProject = $this->api->getProject($project->getExternalProjectId());
                 }catch(\Http\Client\Common\Exception\ClientErrorException $e){
                     $this->logger->info($e->getResponse()->getBody()->getContents());
-                    $this->logger->info($document->getName());
-                    $this->logger->info($document->getStatus());
+                    $this->logger->info($project->getName());
+                    $this->logger->info($project->getStatus());
                     continue;
                 }
                 $this->changeStatus($project, $scProject);
