@@ -50,22 +50,27 @@ class CronHandler
     public function run()
     {
         $this->logger->info('Start cron');
+        $this->logger->info('Method buildStatistic start');
         if($this->buildStatistic()){
             $this->logger->info('Method buildStatistic completed');
         }
+        $this->logger->info('Method updateStatusFor start with status: '. Project::STATUS_CREATED);
         if($this->updateStatusForProject(Project::STATUS_CREATED)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_CREATED);
         }
+        $this->logger->info('Method updateStatusFor start with status: '. Project::STATUS_INPROGRESS);
         if($this->updateStatusForProject(Project::STATUS_INPROGRESS)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_INPROGRESS);
         }
-
+        $this->logger->info('Method updateStatusFor start with status: '. Project::STATUS_COMPLETED);
         if($this->updateStatusForProject(Project::STATUS_COMPLETED)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_COMPLETED);
         }
+        $this->logger->info('Method requestDocsForExport start');
         if($this->requestDocsForExport()){
             $this->logger->info('Method requestDocsForExport completed');
         }
+        $this->logger->info('Method downloadDocs start');
         if($this->downloadDocs()){
             $this->logger->info('Method downloadDocs completed');
         }
@@ -80,7 +85,14 @@ class CronHandler
 
         if(!empty($projects)){
             foreach($projects as $i=>$project){
-                $scProject = $this->api->buildStatistic($project->getExternalProjectId());
+                try{
+                    $scProject = $this->api->buildStatistic($project->getExternalProjectId());
+                }catch(\Http\Client\Common\Exception\ClientErrorException $e){
+                    $this->logger->info($e->response->getBody()->getContents());
+                    $this->logger->info($document->getName());
+                    $this->logger->info($document->getStatus());
+                    continue;
+                }
                 $this->changeStatus($project, $scProject);
 
             }
@@ -93,7 +105,14 @@ class CronHandler
         $projects = $this->projectRepository->getBy(['status'=>$status],0,100);
         if(!empty($projects)){
             foreach($projects as $i=>$project){
-                $scProject = $this->api->getProject($project->getExternalProjectId());
+                try{
+                    $scProject = $this->api->getProject($project->getExternalProjectId());
+                }catch(\Http\Client\Common\Exception\ClientErrorException $e){
+                    $this->logger->info($e->response->getBody()->getContents());
+                    $this->logger->info($document->getName());
+                    $this->logger->info($document->getStatus());
+                    continue;
+                }
                 $this->changeStatus($project, $scProject);
                 $this->updateStatusForDocument($scProject);
             }
@@ -127,7 +146,14 @@ class CronHandler
         if(!empty($documents)){
             foreach($documents as $i=>$document){
                 if(!array_key_exists($document->getExternalProjectId(),$tempProjects)){
-                    $tempProjects[$document->getExternalProjectId()] = $this->api->getProject($document->getExternalProjectId());
+                    try{
+                        $tempProjects[$document->getExternalProjectId()] = $this->api->getProject($document->getExternalProjectId());
+                    }catch(\Http\Client\Common\Exception\ClientErrorException $e){
+                        $this->logger->info($e->response->getBody()->getContents());
+                        $this->logger->info($document->getName());
+                        $this->logger->info($document->getStatus());
+                        continue;
+                    }
                 }
                 $scProject = $tempProjects[$document->getExternalProjectId()];
 
@@ -138,7 +164,14 @@ class CronHandler
                     }
                     $documentIds[] = $scDocument->getId();
                 }
-                $export = $this->api->requestExportDocuments($documentIds);
+                try{
+                    $export = $this->api->requestExportDocuments($documentIds);
+                }catch(\Http\Client\Common\Exception\ClientErrorException $e){
+                    $this->logger->info($e->response->getBody()->getContents());
+                    $this->logger->info($document->getName());
+                    $this->logger->info($document->getStatus());
+                    continue;
+                }
                 $document->setExternalExportId($export->getId());
                 $this->documentRepository->update($document);
             }
@@ -163,10 +196,10 @@ class CronHandler
             try{
                 $response = $this->api->downloadExportDocuments($document->getExternalExportId());
             }catch(\Http\Client\Common\Exception\ClientErrorException $e){
-                //$document->setExternalExportId(NULL);
-                $this->logger->info($document->getStatus());
                 $document->setStatus(Document::STATUS_FAILED);
-                $this->logger->info((string)$this->documentRepository->update($document));
+                $this->documentRepository->update($document);
+                $this->logger->info($e->response->getBody()->getContents());
+                $this->logger->info($document->getName());
                 $this->logger->info($document->getStatus());
                 continue;
             }
