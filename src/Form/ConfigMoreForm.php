@@ -124,7 +124,7 @@ class ConfigMoreForm extends ConfirmFormBase
     $this->selection = $this->tempStore->get(\Drupal::service('current_user')->id() . ':' . $this->entityTypeId);
 
     if (empty($this->entityTypeId) || empty($this->selection)) {
-      var_dump($this->entityTypeId,$this->selection); die;
+      //var_dump($this->entityTypeId,$this->selection); die;
       return new RedirectResponse($this->getCancelUrl()
         ->setAbsolute()
         ->toString());
@@ -132,9 +132,12 @@ class ConfigMoreForm extends ConfirmFormBase
 
     $items = [];
     $entities = $this->entityTypeManager->getStorage($entity_type_id)->loadMultiple(array_keys($this->selection));
+    $sourceLangs = [];
+    //var_dump(count($entities));
     foreach ($this->selection as $id => $selected_langcodes) {
       $entity = $entities[$id];
       foreach ($selected_langcodes as $langcode) {
+        $sourceLangs[] = $langcode;
         $key = $id . ':' . $langcode;
         if ($entity instanceof TranslatableInterface) {
           $entity = $entity->getTranslation($langcode);
@@ -143,7 +146,7 @@ class ConfigMoreForm extends ConfirmFormBase
           // Build a nested list of translations that will be deleted if the
           // entity has multiple translations.
           $entity_languages = $entity->getTranslationLanguages();
-          if (count($entity_languages) > 1 && $entity->isDefaultTranslation()) {
+          if (count($entity_languages) > 1) { // && $entity->isDefaultTranslation()) {
             $names = [];
             foreach ($entity_languages as $translation_langcode => $language) {
               $names[] = $language->getName();
@@ -179,15 +182,12 @@ class ConfigMoreForm extends ConfirmFormBase
       '#items' => $items,
     ];
 
-    $defaultLang = \Drupal::languageManager()->getDefaultLanguage()->getId();
-    $sourceLanguage = $entity->language()->getId();
-    if($defaultLang !== $sourceLanguage){
-      return;
-    }
-
     $langs = [];
     foreach(\Drupal::languageManager()->getLanguages() as $language){
-      if($language->getId() !== $defaultLang && !in_array($language->getId(),$langs)){
+      if(in_array($language->getId(),$sourceLangs) ){
+        continue;
+      }
+      if( !in_array($language->getId(),$langs)){
         $langs[$language->getId()] = $language->getName();
       }
     }
