@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 class ApiHelper
 {
     public static function filterChars($s) {
-        return substr(str_replace(['*', '|', '\\', ':', '"', '<', '>', '?', '/'], '_', $s), 0, 94);
+        return mb_substr(str_replace(['*', '|', '\\', ':', '"', '<', '>', '?', '/'], '_', $s), 0, 94);
     }
 
     public static function getProjectName($project){

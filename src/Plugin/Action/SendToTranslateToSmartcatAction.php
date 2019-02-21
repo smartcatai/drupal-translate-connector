@@ -43,8 +43,6 @@ class SendToTranslateToSmartcatAction extends ActionBase
       $selection[$entity->id()][$langcode] = $langcode;
     }
     $this->tempStore->set($this->currentUser->id() . ':' . $this->getPluginDefinition()['type'], $selection);
-    // var_dump($this->currentUser->id() . ':' . $this->getPluginDefinition()['type']);
-    // die;
   }
 
   /**
@@ -53,50 +51,6 @@ class SendToTranslateToSmartcatAction extends ActionBase
   public function execute($object = NULL) {
     $this->executeMultiple([$object]);
   }
-
-  // /**
-  //  * {@inheritdoc}
-  //  */
-  // public function execute($entity = NULL)
-  // {
-  //   if($entity === NULL){
-  //     return;
-  //   }
-
-  //   $defaultLang = \Drupal::languageManager()->getDefaultLanguage()->getId();
-  //   $sourceLanguage = $entity->language()->getId();
-  //   if($defaultLang !== $sourceLanguage){
-  //     return;
-  //   }
-
-  //   $langs = [];
-  //   foreach(\Drupal::languageManager()->getLanguages() as $language){
-  //     if($language->getId() !== $sourceLanguage && !in_array($language->getId(),$langs)){
-  //       array_push($langs, $language->getId());
-  //     }
-  //   }
-
-  //   if(empty($langs)){
-  //     return $this->t('Not lengs for send to translate');
-  //   }
-
-  //   try{
-  //     $this->projectService->addEntityToTranslete($entity, $langs);
-  //   }catch(\Exception $e){
-  //     $this->logger->info($e->getResponse()->getBody()->getContents());
-  //   }
-    
-  //   return $this->t('Entities successful sended');
-  // }
-
-  // /**
-  //  * {@inheritdoc}
-  //  */
-  // public function executeMultiple(array $entities) {
-  //   parent::executeMultiple($entities);
-  //   $this->tempStore->set($this->currentUser->id() . ':' . $this->getPluginDefinition()['type'], $selection);
-  //   $this->projectService->sendProjectWithDocuments();
-  // }
 
   /**
    * {@inheritdoc}
