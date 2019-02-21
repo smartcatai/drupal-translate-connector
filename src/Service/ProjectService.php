@@ -73,8 +73,11 @@ class ProjectService
     }
 
     public function sendProject(){
+        if(empty($this->project)){
+            return null;
+        }
         $project = $this->project;
-        $scProject = $this->api->createProject($this->project);
+        $scProject = $this->api->createProject($project);
 
         $project->setExternalProjectId($scProject->getId());
         $project->setName($scProject->getName());

@@ -6,11 +6,21 @@ smartcat_translation_manager.settings:
   requirements:
     _permission: 'administer'
 
+# smartcat_translation_manager.settings_more:
+#   path: '/admin/config/smartcat/more'
+#   defaults:
+#     _title: 'Translation profile'
+#     _form: 'Drupal\smartcat_translation_manager\Form\ConfigMoreForm'
+#     entity_type_id: 'node'
+#   requirements:
+#     _permission: 'administer'
+
 smartcat_translation_manager.settings_more:
-  path: '/admin/config/smartcat/more'
+  path: '/admin/config/smartcat/more/{entity_type_id}'
   defaults:
     _title: 'Translation profile'
     _form: 'Drupal\smartcat_translation_manager\Form\ConfigMoreForm'
+    entity_type_id: 'node'
   requirements:
     _permission: 'administer'
 
@@ -27,7 +37,7 @@ smartcat_translation_manager.project.add:
   defaults: 
     _controller: 'Drupal\smartcat_translation_manager\Controller\ProjectController::add' 
     _title: 'Projects'
-  methods: ['POST']
+  methods: ['GET','POST']
   requirements: 
     _permission: 'administer'
 
