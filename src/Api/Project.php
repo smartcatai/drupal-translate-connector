@@ -24,7 +24,7 @@ class Project extends ApiBaseAbstract
         if($vendorId !=='0'){
             $newScProject
                 ->setAssignToVendor(true)
-                ->setVendorAccountIds($vendorId);
+                ->setVendorAccountIds([$vendorId]);
         }
 
         $params = $this->prepareProjectParams($project);
