@@ -250,7 +250,7 @@ class ConfigMoreForm extends ConfirmFormBase
     $this->projectService->sendProjectWithDocuments();
 
     $this->tempStore->delete(\Drupal::service('current_user')->id());
-    \Drupal::messenger()->addMessage(t('The selected items have been sended to Smartcat.',[],['context'=>'smartcat_translation_manager']));
+    \Drupal::messenger()->addMessage(t('Selected items have been successfully submitted for translation.',[],['context'=>'smartcat_translation_manager']));
     return TRUE;
   }
 
