@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ConfigMoreForm extends ConfirmFormBase
 {
-  const DEFAULT_VENDOR = [0=>'Без вендора'];
+  const DEFAULT_VENDOR = [0=>'Translate internally'];
   /**
    * The current user.
    *
@@ -95,11 +95,7 @@ class ConfigMoreForm extends ConfirmFormBase
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->formatPlural(
-      count($this->selection), 'Are you sure you want to Submit for translation this item?', 'Are you sure you want to Submit for translation these items?', [
-      '@item' => $this->entityType->getSingularLabel(),
-      '@items' => $this->entityType->getPluralLabel(),
-    ]);
+    return $this->t('Are you sure you want to submit selected items for translation?');
   }
 
   public function buildForm(array $form, FormStateInterface $form_state, $entity_type_id = NULl) {
@@ -146,7 +142,7 @@ class ConfigMoreForm extends ConfirmFormBase
           // Build a nested list of translations that will be deleted if the
           // entity has multiple translations.
           $entity_languages = $entity->getTranslationLanguages();
-          if (count($entity_languages) > 1) { // && $entity->isDefaultTranslation()) {
+          if (count($entity_languages) > 1 && $entity->isDefaultTranslation()) {
             $names = [];
             foreach ($entity_languages as $translation_langcode => $language) {
               $names[] = $language->getName();
@@ -154,7 +150,7 @@ class ConfigMoreForm extends ConfirmFormBase
             }
             $items[$default_key] = [
               'label' => [
-                '#markup' => $this->t('@label (Original translation) - <em>The following @entity_type translations will be deleted:</em>',
+                '#markup' => $this->t('@label (Original translation)</em>',
                   [
                     '@label' => $entity->label(),
                     '@entity_type' => $this->entityType->getSingularLabel(),
@@ -193,7 +189,7 @@ class ConfigMoreForm extends ConfirmFormBase
     }
 
     $form['langs'] = [
-      '#title' => t('Language', [], ['context' => 'smartcat_translation_manager']),
+      '#title' => t('Target languages', [], ['context' => 'smartcat_translation_manager']),
       '#type' => 'checkboxes',
       '#required' => TRUE,
       '#default_value' => \Drupal::state()->get('smartcat_api_languages', []),

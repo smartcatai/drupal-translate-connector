@@ -116,13 +116,14 @@ class ProjectController extends ControllerBase
 
     public function add()
     {
-        $ProjectService = \Drupal::service('smartcat_translation_manager.service.project');
         $entityManager = \Drupal::entityTypeManager();
 
         $type_id = \Drupal::request()->query->get('type_id');
         $entity_id = \Drupal::request()->query->get('entity_id');
         $lang = \Drupal::request()->query->get('lang');
         $lang = !is_array($lang) ? [$lang] : $lang;
+
+        \Drupal::state()->set('smartcat_api_languages', $lang);
 
         $entity = $entityManager
             ->getStorage($type_id)

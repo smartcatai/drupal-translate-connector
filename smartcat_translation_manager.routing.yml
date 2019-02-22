@@ -6,15 +6,6 @@ smartcat_translation_manager.settings:
   requirements:
     _permission: 'administer'
 
-# smartcat_translation_manager.settings_more:
-#   path: '/admin/config/smartcat/more'
-#   defaults:
-#     _title: 'Translation profile'
-#     _form: 'Drupal\smartcat_translation_manager\Form\ConfigMoreForm'
-#     entity_type_id: 'node'
-#   requirements:
-#     _permission: 'administer'
-
 smartcat_translation_manager.settings_more:
   path: '/admin/config/smartcat/more/{entity_type_id}'
   defaults:
