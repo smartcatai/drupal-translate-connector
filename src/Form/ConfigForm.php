@@ -71,7 +71,7 @@ class ConfigForm extends ConfigFormBase{
         throw new \Exception('Invalid username or password');
       }
     } catch (\Exception $e) {
-      \Drupal::messenger()->addError(t($e->getMessage(),[],['context'=>'smartcat_translation_manager']));
+      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key',[],['context'=>'smartcat_translation_manager']));
       $form_state->setError($form['api_login'], 'Invalid username or password');
       $form_state->setError($form['api_password']);
     }
