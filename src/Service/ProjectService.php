@@ -2,12 +2,8 @@
 
 namespace Drupal\smartcat_translation_manager\Service;
 
-use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use SmartCat\Client\Model\DocumentModel;
 use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\smartcat_translation_manager\DB\Entity\Document;
 use Drupal\smartcat_translation_manager\DB\Entity\Project;
@@ -91,6 +87,7 @@ class ProjectService
         $documents = $this->addDocuments(array_values($this->documents),$project->getExternalProjectId());
 
         foreach($documents as $scDocument){
+            $matches = [];
             preg_match('/-(\d+)$/',$scDocument->getName(), $matches );
             $this->documentRepository->add( 
                 (new Document())
@@ -161,8 +158,7 @@ class ProjectService
         }
 
         $file = (new FileHelper($entity))->createFileByEntity($translatable);
-        $fileName = \sprintf('%s-%d.html', $entity->label(), $entity->id()); //, $entity->label()
-
+        $fileName = \sprintf('%s-%d.html', $entity->label(), $entity->id());
         return $this->api->project->createDocumentFromFile($file, $fileName);
     }
 
