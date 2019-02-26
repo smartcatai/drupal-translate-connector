@@ -57,10 +57,6 @@ class OverviewController extends ContentTranslationController
                             $translationStatusName = Document::STATUSES[$document->getStatus()];
                             $translationStatus['data']['#markup'] = $this->t($translationStatusName);
 
-                            if($document->getStatus() === Document::STATUS_DOWNLOADED){
-                                continue;
-                            }
-
                             $operations['data']['#links']['smartcat'] = [
                                 'title' => $this->t('Go to Smartcat'),
                                 'url' => ApiHelper::getProjectUrlBydocument($document),
