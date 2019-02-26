@@ -70,9 +70,9 @@ class FileHelper
     {
         $fieldPattern = str_replace('/', '\/', sprintf(self::FIELD_TAG, '(.+?)','(.*?)'));
 
-        preg_match_all('/' . $fieldPattern . '/is', $content, $matches);
+        $matches = [];
 
-        $values = [];
+        preg_match_all('/' . $fieldPattern . '/is', $content, $matches);
 
         if ($this->hasTranslation($langcode)) {
             $entity_translation = $this->entity->getTranslation($langcode);
@@ -80,26 +80,26 @@ class FileHelper
             $entity_translation = $this->entity->addTranslation($langcode, $this->entity->toArray());
         }
 
-        $translated_fields = [];
-
         foreach ($matches[1] as $i => $field) {
             $value = $matches[2][$i];
+            $entityValue = $entity_translation->get($field);
             
-            if($field === 'body'){
+            if($field === 'body' || $field === 'comment_body' ){
                 $value = [
                     'value' => $value,
-                    'format' => $entity_translation->get('body')->format,
+                    'format' => $entityValue->format,
                 ];
             }
 
             if($field === 'body_summary'){
                 $field = 'body';
                 $value = [
-                    'value' => $entity_translation->get('body')->value,
+                    'value' => $entityValue->value,
                     'summary' => $value,
-                    'format' => $entity_translation->get('body')->format,
+                    'format' => $entityValue->format,
                 ];
             }
+
             $entity_translation->set($field, $value);
         }
 
