@@ -101,16 +101,16 @@ class DocumentController extends ControllerBase
                 }
             }
         }
-
         return [
             '#type' => 'page',
             'header' => ['#markup'=>'<h1>Document list</h1>'],
             'content' => [
                 ['#markup'=>'<br>'],
                 $table,
-            ],
-            'pager'=> [
-                '#type' => 'pager',
+                ['#markup'=>'<br>'],
+                'pager'=> [
+                    '#type' => 'pager',
+                ],
             ],
         ];
     }
