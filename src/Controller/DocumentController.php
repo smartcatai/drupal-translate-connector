@@ -1,20 +1,15 @@
 <?php
 
 namespace Drupal\smartcat_translation_manager\Controller;
-
-use Drupal\Component\Render\FormattableMarkup;  
+ 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\smartcat_translation_manager\DB\Entity\Document;
 use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\Helper\ApiHelper;
-use Drupal\smartcat_translation_manager\Helper\FileHelper;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Cache\Cache;
+
 class DocumentController extends ControllerBase
 {
     /**
@@ -32,13 +27,13 @@ class DocumentController extends ControllerBase
     public function content() {
         $table = [
             '#type' => 'table',
-            '#title' => 'Documents',
+            '#title' => 'Dashboard',
             '#header' =>[
-                'Document name',
-                'Export Id',
-                'Translate to',
+                'Item',
+                'Source language',
+                'Target language',
                 'Status',
-                'Operations',
+                'Smartcat project',
             ],
             '#rows' => [
             ]
@@ -48,30 +43,42 @@ class DocumentController extends ControllerBase
         if($document_id){
             $criteria['id'] = $document_id;
         }
-        $documents = $this->documentRepository->getBy($criteria);
+
+        $total = $this->documentRepository->count();
+        $page = pager_find_page();
+        $perPage = 10;
+        $offset = $perPage * $page;
+        pager_default_initialize($total, $perPage);
+
+        $documents = $this->documentRepository->getBy($criteria,(int)$offset, $perPage);
         $entityManager = \Drupal::entityTypeManager();
 
         if(!empty($documents)){
             foreach($documents as $i=>$document){
+                $language = $this->languageManager()->getLanguage($document->getSourceLanguage());
+                $options = ['language' => $language];
                 $entity = $entityManager
                     ->getStorage($document->getEntityTypeId())
                     ->load($document->getEntityId());
+                
+                $edit_url = $entity->toUrl('canonical', $options);
 
                 if($entity){
                     $table['#rows'][$i] = [
-                        ApiHelper::getProjectName($document),
-                        $document->getExternalExportId(),
+                        Link::fromTextAndUrl($entity->label(), $edit_url),
+                        $document->getSourceLanguage(),
                         $document->getTargetLanguage(),
                         Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [
-                                '#type' => 'form',
-                                '#action' => Url::fromRoute('smartcat_translation_manager.document.delete',['id'=>$document->getId()])->toString(),
-                                'submit' => [
-                                    '#type'=>'submit',
-                                    '#value'=>'Delete',
+                                '#type' => 'operations',
+                                '#links' => [
+                                    'smartcat_doc'=>[
+                                        'url' => ApiHelper::getDocumentUrl($document),
+                                        'title'=>$this->t('Go to Smartcat'),
+                                    ]
                                 ],
-                            ],
+                            ]
                         ],
                     ];
                 }else{
@@ -101,6 +108,9 @@ class DocumentController extends ControllerBase
             'content' => [
                 ['#markup'=>'<br>'],
                 $table,
+            ],
+            'pager'=> [
+                '#type' => 'pager',
             ],
         ];
     }

@@ -42,10 +42,10 @@ smartcat_translation_manager.project.delete:
     _permission: 'administer'
 
 smartcat_translation_manager.document:
-  path: '/admin/smartcat/document' 
+  path: '/admin/smartcat' 
   defaults: 
     _controller: 'Drupal\smartcat_translation_manager\Controller\DocumentController::content' 
-    _title: 'Documents'
+    _title: 'Dashboard'
   requirements: 
     _permission: 'administer'
 

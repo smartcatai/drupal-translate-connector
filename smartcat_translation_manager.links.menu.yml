@@ -4,3 +4,10 @@ smartcat_translation_manager.settings:
   route_name: smartcat_translation_manager.settings
   parent: system.admin_config_regional
   weight: 100
+
+smartcat_translation_manager.dashboard:
+  title:  'Smartcat Dashboard'
+  description: 'All translations in one page'
+  route_name: smartcat_translation_manager.document
+  parent: system.admin
+  weight: 100

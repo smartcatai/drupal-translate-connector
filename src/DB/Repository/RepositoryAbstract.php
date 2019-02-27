@@ -98,4 +98,28 @@ abstract class RepositoryAbstract implements RepositoryInterface {
     return $entities;
   }
 
+  /**
+   * @param array $criterias
+   * @param integer $offset
+   * @param integer $limit
+   * @return array
+   */
+  public function count(array $criterias = []) {
+    $table_name = $this->getTableName();
+    $query = $this->connection->select($table_name, 's')
+      ->fields('s');
+
+    if(!empty($criterias)){
+      foreach ($criterias as $key => $value) {
+        if(is_array($value)){
+          $query->condition($key, $value[0], $value[1]);
+          continue;
+        }
+        $query->condition($key, $value);
+      }
+    }
+
+    return $query->countQuery()->execute()->fetchField();
+  }
+
 }

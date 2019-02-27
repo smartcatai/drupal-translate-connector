@@ -30,6 +30,10 @@ class ApiHelper
         return Url::fromUri("https://smartcat.ai/projects/{$document->getExternalProjectId()}");
     }
 
+    public static function getDocumentUrl($document){
+        return Url::fromUri(self::getDocumentLink($document->getExternalDocumentId()));
+    }
+
     public static function getDocumentLink($document_id){
         $ids = explode('_',$document_id);
         $state = \Drupal::state();
