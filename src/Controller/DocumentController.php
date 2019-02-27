@@ -60,10 +60,9 @@ class DocumentController extends ControllerBase
                 $entity = $entityManager
                     ->getStorage($document->getEntityTypeId())
                     ->load($document->getEntityId());
-                
-                $edit_url = $entity->toUrl('canonical', $options);
 
                 if($entity){
+                    $edit_url = $entity->toUrl('canonical', $options);
                     $table['#rows'][$i] = [
                         Link::fromTextAndUrl($entity->label(), $edit_url),
                         $document->getSourceLanguage(),
