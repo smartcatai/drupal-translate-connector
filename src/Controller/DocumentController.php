@@ -83,19 +83,20 @@ class DocumentController extends ControllerBase
                     ];
                 }else{
                     $table['#rows'][$i] = [
-                        $document->getName(),
-                        $document->getExternalExportId(),
+                        $this->t('Entity Not found'),
+                        $document->getSourceLanguage(),
                         $document->getTargetLanguage(),
                         Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [
-                                '#type' => 'form',
-                                '#action' => Url::fromRoute('smartcat_translation_manager.document.delete',['id'=>$document->getId()])->toString(),
-                                'submit' => [
-                                    '#type'=>'submit',
-                                    '#value'=>'Delete',
+                                '#type' => 'operations',
+                                '#links' => [
+                                    'smartcat_doc'=>[
+                                        'url' => ApiHelper::getDocumentUrl($document),
+                                        'title'=>$this->t('Go to Smartcat'),
+                                    ]
                                 ],
-                            ],
+                            ]
                         ],
                     ];
                 }
@@ -103,7 +104,7 @@ class DocumentController extends ControllerBase
         }
         return [
             '#type' => 'page',
-            'header' => ['#markup'=>'<h1>Document list</h1>'],
+            'header' => ['#markup'=>'<h1>Dashboard</h1>'],
             'content' => [
                 ['#markup'=>'<br>'],
                 $table,

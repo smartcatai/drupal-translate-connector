@@ -1,3 +1,9 @@
+smartcat_base:
+  version: 1.x
+  css:
+    base: 
+      css/smartcat_base.css: {}
+
 send_to_smartcat:
   version: 1.x
   js:
