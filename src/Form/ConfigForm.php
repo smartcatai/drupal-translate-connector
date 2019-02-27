@@ -65,14 +65,10 @@ class ConfigForm extends ConfigFormBase{
     $server = $form_state->getValues()['api_server'];
     try {
       $api = new SmartCat($login, $password, $server);
-      $account_info = $api->getAccountManager()->accountGetAccountInfo();
-      $is_ok = (bool) $account_info->getId();
-      if (!$is_ok) {
-        throw new \Exception('Invalid username or password');
-      }
+      $api->getAccountManager()->accountGetAccountInfo();
     } catch (\Exception $e) {
       \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key',[],['context'=>'smartcat_translation_manager']));
-      $form_state->setError($form['api_login'], 'Invalid username or password');
+      $form_state->setError($form['api_login']);
       $form_state->setError($form['api_password']);
     }
   }
@@ -86,7 +82,9 @@ class ConfigForm extends ConfigFormBase{
     $state->set('smartcat_api_server', $formValues['api_server']);
 
     $api = new SmartCat($formValues['api_login'], $formValues['api_password'], $formValues['api_server']);
-    $account_info = $api->getAccountManager()->accountGetAccountInfo();
+    try{
+      $account_info = $api->getAccountManager()->accountGetAccountInfo();
+    }catch(\Exception $e){}
 
     //сохраняем account_name
     if ($account_info && $account_info->getName()) {
