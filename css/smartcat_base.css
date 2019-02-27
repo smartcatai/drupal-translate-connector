@@ -2,3 +2,6 @@
 {
     background: url('../images/smartcat.svg');
 }
+.smartcat_list_item{
+    margin: 0 0 0.75em 0 !important;
+}

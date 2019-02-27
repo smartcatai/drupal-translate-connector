@@ -150,7 +150,7 @@ class ConfigMoreForm extends ConfirmFormBase
             }
             $items[$default_key] = [
               'label' => [
-                '#markup' => $this->t('@label (Original translation)</em>',
+                '#markup' => $this->t('@label (Original translation)',
                   [
                     '@label' => $entity->label(),
                     '@entity_type' => $this->entityType->getSingularLabel(),
@@ -176,6 +176,7 @@ class ConfigMoreForm extends ConfirmFormBase
       '#title' => t('Items for translation', [], ['context' => 'smartcat_translation_manager']),
       '#theme' => 'item_list',
       '#items' => $items,
+      '#attributes'=>['class' => 'smartcat_list_item'],
     ];
 
     $langs = [];
