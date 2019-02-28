@@ -57,6 +57,16 @@ class OverviewController extends ContentTranslationController
                             $translationStatusName = Document::STATUSES[$document->getStatus()];
                             $translationStatus['data']['#markup'] = $this->t($translationStatusName);
 
+                            if($document->getStatus() === Document::STATUS_DOWNLOADED){
+                                $operations['data']['#links']['smartcat_refresh_doc'] = [
+                                    'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', 
+                                        ['id'=>$document->getId()],
+                                        ['query'=>['destination'=>\Drupal::request()->getRequestUri()]]
+                                    ),
+                                    'title'=>$this->t('Check updates'),
+                                ];
+                            }
+
                             $operations['data']['#links']['smartcat'] = [
                                 'title' => $this->t('Go to Smartcat'),
                                 'url' => ApiHelper::getProjectUrlBydocument($document),

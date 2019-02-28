@@ -57,3 +57,12 @@ smartcat_translation_manager.document.delete:
   methods: ['POST']
   requirements: 
     _permission: 'administer'
+
+smartcat_translation_manager.document.refresh:
+  path: '/admin/smartcat/document/refresh/{id}' 
+  defaults: 
+    _controller: 'Drupal\smartcat_translation_manager\Controller\DocumentController::refresh' 
+    _title: 'Documents'
+  methods: ['GET']
+  requirements: 
+    _permission: 'administer'

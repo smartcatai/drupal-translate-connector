@@ -22,6 +22,7 @@ class DocumentController extends ControllerBase
     {
         $this->api = new \Drupal\smartcat_translation_manager\Api\Api();
         $this->documentRepository = new DocumentRepository();
+        $this->entityManager = \Drupal::entityTypeManager();
     }
 
     public function content() {
@@ -51,13 +52,31 @@ class DocumentController extends ControllerBase
         pager_default_initialize($total, $perPage);
 
         $documents = $this->documentRepository->getBy($criteria,(int)$offset, $perPage, ['id'=>'DESC']);
-        $entityManager = \Drupal::entityTypeManager();
 
         if(!empty($documents)){
             foreach($documents as $i=>$document){
+                $operations = [
+                    'data' => [
+                        '#type' => 'operations',
+                        '#links' => [],
+                    ],
+                ];
+
+                if($document->getStatus() === Document::STATUS_DOWNLOADED){
+                    $operations['data']['#links']['smartcat_refresh_doc'] = [
+                        'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', ['id'=>$document->getId()]),
+                        'title'=>$this->t('Check updates'),
+                    ];
+                }
+
+                $operations['data']['#links']['smartcat_doc'] = [
+                    'url' => ApiHelper::getDocumentUrl($document),
+                    'title'=>$this->t('Go to Smartcat'),
+                ];
+
                 $language = $this->languageManager()->getLanguage($document->getSourceLanguage());
                 $options = ['language' => $language];
-                $entity = $entityManager
+                $entity = $this->entityManager
                     ->getStorage($document->getEntityTypeId())
                     ->load($document->getEntityId());
 
@@ -68,17 +87,7 @@ class DocumentController extends ControllerBase
                         $language->getName(),
                         $this->languageManager()->getLanguage($document->getTargetLanguage())->getName(),
                         Document::STATUSES[$document->getStatus()],
-                        [
-                            'data' => [
-                                '#type' => 'operations',
-                                '#links' => [
-                                    'smartcat_doc'=>[
-                                        'url' => ApiHelper::getDocumentUrl($document),
-                                        'title'=>$this->t('Go to Smartcat'),
-                                    ]
-                                ],
-                            ]
-                        ],
+                        $operations,
                     ];
                 }else{
                     $table['#rows'][$i] = [
@@ -86,17 +95,7 @@ class DocumentController extends ControllerBase
                         $language->getName(),
                         $this->languageManager()->getLanguage($document->getTargetLanguage())->getName(),
                         Document::STATUSES[$document->getStatus()],
-                        [
-                            'data' => [
-                                '#type' => 'operations',
-                                '#links' => [
-                                    'smartcat_doc'=>[
-                                        'url' => ApiHelper::getDocumentUrl($document),
-                                        'title'=>$this->t('Go to Smartcat'),
-                                    ]
-                                ],
-                            ]
-                        ],
+                        $operations,
                     ];
                 }
             }
@@ -113,6 +112,22 @@ class DocumentController extends ControllerBase
                 ],
             ],
         ];
+    }
+
+    public function refresh($id)
+    {
+        $document = $this->documentRepository->getOneBy(['id' => $id]);
+        if($document->getStatus() === Document::STATUS_DOWNLOADED){
+            $document->setStatus(Document::STATUS_INPROGRESS);
+            $document->setExternalExportId(NULL);
+            $this->documentRepository->update($document);
+        }
+        $prev = \Drupal::request()->query->get('destination',false);
+        if($prev){
+            \Drupal::messenger()->addMessage(t('Translation for selected item is updating.',[],['context'=>'smartcat_translation_manager']));
+            return  new RedirectResponse($prev);
+        }
+        return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.document')->toString());
     }
 
     public function delete($id)

@@ -61,6 +61,8 @@ class CronHandler
         $this->logger->info('Method updateStatusFor start with status: '. Project::STATUS_INPROGRESS);
         if($this->updateStatusForProject(Project::STATUS_INPROGRESS)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_INPROGRESS);
+        }else{
+            $this->updateStatusForInprogressDocument();
         }
         $this->logger->info('Method updateStatusFor start with status: '. Project::STATUS_COMPLETED);
         if($this->updateStatusForProject(Project::STATUS_COMPLETED)){
@@ -132,6 +134,20 @@ class CronHandler
 
                     $this->changeStatus($document, $scDocument, $this->documentRepository);
                 }
+            }
+        }
+    }
+
+    public function updateStatusForInprogressDocument()
+    {
+        $documents = $this->documentRepository->getBy([
+            'status'=>Document::STATUS_INPROGRESS,
+        ],0,100);
+
+        if(!empty($documents)){
+            foreach($documents as $i=>$document){
+                $scDocument = $this->api->getDocument($document->getExternalDocumentId());
+                $this->changeStatus($document, $scDocument, $this->documentRepository);
             }
         }
     }
@@ -219,8 +235,15 @@ class CronHandler
                     continue;
                 }
                 
-                $targetEntity = (new FileHelper($sourceEntity))
-                    ->markupToEntityTranslation($response->getBody()->getContents(),$document->getTargetLanguage());
+                try{
+                    $targetEntity = (new FileHelper($sourceEntity))
+                        ->markupToEntityTranslation($response->getBody()->getContents(),$document->getTargetLanguage());
+                }catch(\Exception $e){
+                    $document->setStatus(Document::STATUS_FAILED);
+                    $this->documentRepository->update($document);
+                    $this->logger->info('Parse file error: '. $e->getMessage());
+                    continue;
+                }
                 $targetEntity->save();
                 $document->setExternalExportId(NULL);
                 $document->setStatus(Document::STATUS_DOWNLOADED);

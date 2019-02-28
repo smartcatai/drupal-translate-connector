@@ -57,6 +57,11 @@ class Api
         return $this->directory->getItemsAsArray('projectStatus');
     }
 
+    public function getDocument($externalDocumentId)
+    {
+        return $this->api->getDocumentManager()->documentGet(['documentId'=>$externalDocumentId]);
+    }
+
     public function getProject($externalProjectId)
     {
         return $this->api->getProjectManager()->projectGet($externalProjectId);

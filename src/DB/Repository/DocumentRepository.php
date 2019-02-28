@@ -147,9 +147,7 @@ class DocumentRepository extends RepositoryAbstract {
         $data['name'] = $document->getName();
       }
 
-      if($document->getExternalExportId() !== NULL){
-        $data['externalExportId'] = $document->getExternalExportId();
-      }
+      $data['externalExportId'] = $document->getExternalExportId();
 
       try {
         return $this->connection->update($table_name)

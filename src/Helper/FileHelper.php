@@ -82,25 +82,28 @@ class FileHelper
 
         foreach ($matches[1] as $i => $field) {
             $value = $matches[2][$i];
-            $entityValue = $entity_translation->get($field);
             
             if($field === 'body' || $field === 'comment_body' ){
                 $value = [
                     'value' => $value,
-                    'format' => $entityValue->format,
+                    'format' => $entity_translation->get($field)->format,
                 ];
             }
 
             if($field === 'body_summary'){
                 $field = 'body';
                 $value = [
-                    'value' => $entityValue->value,
+                    'value' => $entity_translation->get($field)->value,
                     'summary' => $value,
-                    'format' => $entityValue->format,
+                    'format' => $entity_translation->get($field)->format,
                 ];
             }
 
-            $entity_translation->set($field, $value);
+            try{
+                $entity_translation->set($field, $value);
+            }catch(\Exception $e){
+                throw new \Exception("field = $field, value = $value, error = {$e->getMessage()}"); 
+            }
         }
 
         return $entity_translation;
