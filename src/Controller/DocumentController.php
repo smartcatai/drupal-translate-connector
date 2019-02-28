@@ -74,8 +74,8 @@ class DocumentController extends ControllerBase
                     'title'=>$this->t('Go to Smartcat'),
                 ];
 
-                $language = $this->languageManager()->getLanguage($document->getSourceLanguage());
-                $targetLanguage = $this->languageManager()->getLanguage($document->getTargetLanguage());
+                $language = $this->languageManager()->getLanguage(strtolower($document->getSourceLanguage()));
+                $targetLanguage = $this->languageManager()->getLanguage(strtolower($document->getTargetLanguage()));
                 $options = ['language' => $language];
                 $entity = $this->entityManager
                     ->getStorage($document->getEntityTypeId())
