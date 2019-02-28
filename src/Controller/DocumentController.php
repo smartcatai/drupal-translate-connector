@@ -50,7 +50,7 @@ class DocumentController extends ControllerBase
         $offset = $perPage * $page;
         pager_default_initialize($total, $perPage);
 
-        $documents = $this->documentRepository->getBy($criteria,(int)$offset, $perPage);
+        $documents = $this->documentRepository->getBy($criteria,(int)$offset, $perPage, ['id'=>'DESC']);
         $entityManager = \Drupal::entityTypeManager();
 
         if(!empty($documents)){
@@ -65,8 +65,8 @@ class DocumentController extends ControllerBase
                     $edit_url = $entity->toUrl('canonical', $options);
                     $table['#rows'][$i] = [
                         Link::fromTextAndUrl($entity->label(), $edit_url),
-                        $document->getSourceLanguage(),
-                        $document->getTargetLanguage(),
+                        $language->getName(),
+                        $this->languageManager()->getLanguage($document->getTargetLanguage())->getName(),
                         Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [
@@ -83,8 +83,8 @@ class DocumentController extends ControllerBase
                 }else{
                     $table['#rows'][$i] = [
                         $this->t('Entity Not found'),
-                        $document->getSourceLanguage(),
-                        $document->getTargetLanguage(),
+                        $language->getName(),
+                        $this->languageManager()->getLanguage($document->getTargetLanguage())->getName(),
                         Document::STATUSES[$document->getStatus()],
                         [
                             'data' => [

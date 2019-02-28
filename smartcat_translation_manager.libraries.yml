@@ -3,6 +3,10 @@ smartcat_base:
   css:
     base: 
       css/smartcat_base.css: {}
+  js:
+    js/smartcat-base.js: {}
+  dependencies:
+    - core/jquery
 
 send_to_smartcat:
   version: 1.x

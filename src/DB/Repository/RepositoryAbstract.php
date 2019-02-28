@@ -73,7 +73,7 @@ abstract class RepositoryAbstract implements RepositoryInterface {
    * @param integer $limit
    * @return array
    */
-  public function getBy(array $criterias = [], int $offset = 0, int $limit = 10) {
+  public function getBy(array $criterias = [], int $offset = 0, int $limit = 10, array $order = []) {
     $table_name = $this->getTableName();
     $query = $this->connection->select($table_name, 's')
       ->fields('s');
@@ -85,6 +85,11 @@ abstract class RepositoryAbstract implements RepositoryInterface {
           continue;
         }
         $query->condition($key, $value);
+      }
+    }
+    if(!empty($order)){
+      foreach ($order as $field => $direction) {
+        $query->orderBy($field, $direction);
       }
     }
 
