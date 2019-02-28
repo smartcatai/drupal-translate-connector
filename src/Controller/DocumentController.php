@@ -75,6 +75,7 @@ class DocumentController extends ControllerBase
                 ];
 
                 $language = $this->languageManager()->getLanguage($document->getSourceLanguage());
+                $targetLanguage = $this->languageManager()->getLanguage($document->getTargetLanguage());
                 $options = ['language' => $language];
                 $entity = $this->entityManager
                     ->getStorage($document->getEntityTypeId())
@@ -84,16 +85,16 @@ class DocumentController extends ControllerBase
                     $edit_url = $entity->toUrl('canonical', $options);
                     $table['#rows'][$i] = [
                         Link::fromTextAndUrl($entity->label(), $edit_url),
-                        $language->getName(),
-                        $this->languageManager()->getLanguage($document->getTargetLanguage())->getName(),
+                        $language ? $language->getName(): $document->getSourceLanguage(),
+                        $targetLanguage? $targetLanguage->getName(): $document->getTargetLanguage(),
                         Document::STATUSES[$document->getStatus()],
                         $operations,
                     ];
                 }else{
                     $table['#rows'][$i] = [
                         $this->t('Entity Not found'),
-                        $language->getName(),
-                        $this->languageManager()->getLanguage($document->getTargetLanguage())->getName(),
+                        $language ? $language->getName(): $document->getSourceLanguage(),
+                        $targetLanguage? $targetLanguage->getName(): $document->getTargetLanguage(),
                         Document::STATUSES[$document->getStatus()],
                         $operations,
                     ];
