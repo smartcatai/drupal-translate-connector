@@ -50,7 +50,7 @@ class OverviewController extends ContentTranslationController
                     $operations['data']['#links'] = [];
                     if(!empty($documents)){
                         foreach($documents as $document){
-                            if($query['lang'] !== $document->getTargetLanguage()){
+                            if($query['lang'] !== strtolower($document->getTargetLanguage())){
                                 continue;
                             }
 
