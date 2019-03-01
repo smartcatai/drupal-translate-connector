@@ -61,7 +61,6 @@ class CronHandler
         $this->logger->info('Method updateStatusFor start with status: '. Project::STATUS_INPROGRESS);
         if($this->updateStatusForProject(Project::STATUS_INPROGRESS)){
             $this->logger->info('Method updateStatusFor completed with status: '. Project::STATUS_INPROGRESS);
-        }else{
             $this->updateStatusForInprogressDocument();
         }
         $this->logger->info('Method updateStatusFor start with status: '. Project::STATUS_COMPLETED);
