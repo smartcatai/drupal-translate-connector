@@ -10,6 +10,7 @@ use Drupal\smartcat_translation_manager\DB\Entity\Project;
 use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 use Drupal\smartcat_translation_manager\Helper\FileHelper;
+use Drupal\smartcat_translation_manager\Helper\ApiHelper;
 
 class ProjectService
 {
@@ -167,7 +168,7 @@ class ProjectService
         }
 
         $file = (new FileHelper($entity))->createFileByEntity($translatable);
-        $fileName = FileHelper::sanitizeFileName(\sprintf('%s-%d.html', $entity->label(), $entity->id()));
+        $fileName = ApiHelper::filterChars(\sprintf('%s-%d.html', $entity->label(), $entity->id()));
         return $this->api->project->createDocumentFromFile($file, $fileName);
     }
 
