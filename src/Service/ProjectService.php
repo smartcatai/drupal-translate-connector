@@ -51,6 +51,7 @@ class ProjectService
         $this->api = new Api();
         $this->documentRepository = new DocumentRepository();
         $this->projectRepository = new ProjectRepository();
+        $this->logger = \Drupal::logger('smartcat_translation_manager_project');
     }
 
     /**
@@ -130,10 +131,14 @@ class ProjectService
      */
     protected function addDocuments($documents,$externalProjectId)
     {
-        $documents = $this->api->getProjectManager()->projectAddDocument([
-            'documentModel' => $documents,
-            'projectId' => $externalProjectId,
-        ]);
+        try{
+            $documents = $this->api->getProjectManager()->projectAddDocument([
+                'documentModel' => $documents,
+                'projectId' => $externalProjectId,
+            ]);
+        }catch(\Exception $e){
+            $this->logger->info("{$e->getStatusCode()}, {$e->getMessage()}, {$e->getResponse()->getBody()->getContents()}");
+        }
 
         return $documents;
     }
