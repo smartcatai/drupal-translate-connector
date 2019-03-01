@@ -137,7 +137,7 @@ class ProjectService
                 'projectId' => $externalProjectId,
             ]);
         }catch(\Exception $e){
-            $this->logger->info("{$e->getStatusCode()}, {$e->getMessage()}, {$e->getResponse()->getBody()->getContents()}");
+            $this->logger->info("{$e->getResponse()->getStatusCode()}, {$e->getMessage()}, {$e->getResponse()->getBody()->getContents()}");
         }
 
         return $documents;
