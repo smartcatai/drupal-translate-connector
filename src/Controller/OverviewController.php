@@ -67,13 +67,13 @@ class OverviewController extends ContentTranslationController
                                 ];
                             }
 
-                            $operations['data']['#links']['smartcat'] = [
+                            $operations['data']['#links']['smartcat-doc'] = [
                                 'title' => $this->t('Go to Smartcat'),
-                                'url' => ApiHelper::getProjectUrlBydocument($document),
+                                'url' => ApiHelper::getDocumentUrl($document),
                             ];
                         }
                     }
-                    if(empty($operations['data']['#links']['smartcat'])){
+                    if(empty($operations['data']['#links']['smartcat-doc'])){
                         $url = Url::fromRoute('smartcat_translation_manager.project.add');
                         $url->setOption('query', $query);
                         $operations['data']['#links']['smartcat'] = [
