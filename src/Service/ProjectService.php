@@ -167,7 +167,7 @@ class ProjectService
         }
 
         $file = (new FileHelper($entity))->createFileByEntity($translatable);
-        $fileName = \sprintf('%s-%d.html', $entity->label(), $entity->id());
+        $fileName = FileHelper::sanitizeFileName(\sprintf('%s-%d.html', $entity->label(), $entity->id()));
         return $this->api->project->createDocumentFromFile($file, $fileName);
     }
 

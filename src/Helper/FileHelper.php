@@ -113,4 +113,10 @@ class FileHelper
         $existing_translation = \Drupal::service('entity.repository')->getTranslationFromContext($this->entity, $langcode);
         return ($existing_translation->langcode->value === $langcode) ? TRUE : FALSE;
     }
+
+    public static function sanitizeFileName($dangerous_filename, $platform = 'Unix')
+    {
+        $dangerous_characters = array(" ", '"', "'", "&", "/", "\\", "?", "#");
+		return str_replace($dangerous_characters, '_', $dangerous_filename);
+    }
 }
