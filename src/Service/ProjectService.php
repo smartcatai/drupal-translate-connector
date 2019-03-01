@@ -86,6 +86,9 @@ class ProjectService
 
     public function sendDocuments($project){
         $documents = $this->addDocuments(array_values($this->documents),$project->getExternalProjectId());
+        if(empty($documents)){
+            return false;
+        }
 
         foreach($documents as $scDocument){
             $matches = [];
@@ -138,6 +141,7 @@ class ProjectService
             ]);
         }catch(\Exception $e){
             $this->logger->info("{$e->getResponse()->getStatusCode()}, {$e->getMessage()}, {$e->getResponse()->getBody()->getContents()}");
+            return [];
         }
 
         return $documents;
