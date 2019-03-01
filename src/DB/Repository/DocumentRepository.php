@@ -91,7 +91,7 @@ class DocumentRepository extends RepositoryAbstract {
       'entityTypeId' => $document->getEntityTypeId(),
       'sourceLanguage' => strtolower($document->getSourceLanguage()),
       'targetLanguage' => strtolower($document->getTargetLanguage()),
-      'status' => $document->getStatus(),
+      'status' => strtolower($document->getStatus()),
       'externalProjectId' => $document->getExternalProjectId(),
       'externalDocumentId' => $document->getExternalDocumentId(),
     ];
@@ -140,7 +140,7 @@ class DocumentRepository extends RepositoryAbstract {
         'externalDocumentId' => $document->getExternalDocumentId(),
         'sourceLanguage' => strtolower($document->getSourceLanguage()),
         'targetLanguage' => strtolower($document->getTargetLanguage()),
-        'status' => $document->getStatus(),
+        'status' => strtolower($document->getStatus()),
       ];
 
       if($document->getName() !== NULL){

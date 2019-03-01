@@ -80,7 +80,7 @@ class ProjectRepository extends RepositoryAbstract {
       'entityTypeId' => $project->getEntityTypeId(),
       'sourceLanguage' => $project->getSourceLanguage(),
       'targetLanguages' => serialize($project->getTargetLanguages()),
-      'status' => $project->getStatus(),
+      'status' => strtolower($project->getStatus()),
     ];
 
     if($project->getName() !== NULL){
@@ -128,7 +128,7 @@ class ProjectRepository extends RepositoryAbstract {
         'entityTypeId' => $project->getEntityTypeId(),
         'sourceLanguage' => $project->getSourceLanguage(),
         'targetLanguages' => serialize($project->getTargetLanguages()),
-        'status' => $project->getStatus(),
+        'status' => strtolower($project->getStatus()),
       ];
 
       if($project->getName() !== NULL){

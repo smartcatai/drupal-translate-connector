@@ -132,7 +132,15 @@ class CronHandler
                         continue;
                     }
 
-                    $this->changeStatus($document, $scDocument, $this->documentRepository);
+                    $scStatus = strtolower($scDocument->getStatus());
+                    if(Project::STATUS_CANCELED == strtolower($scProject->getStatus())){
+                        $scStatus = Document::STATUS_CANCELED;
+                    }
+
+                    if($document->getStatus()!==$scStatus){
+                        $document->setStatus($scStatus);
+                        $this->documentRepository->update($document);
+                    }
                 }
             }
         }
