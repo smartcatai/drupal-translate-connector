@@ -93,6 +93,8 @@ class CronHandler
                     $this->logger->info($e->getResponse()->getBody()->getContents());
                     $this->logger->info($project->getName());
                     $this->logger->info($project->getStatus());
+                    $project->setStatus(Project::STATUS_FAILED);
+                    $this->projectRepository->update($project);
                     continue;
                 }
                 $this->changeStatus($project, $scProject);
@@ -113,6 +115,8 @@ class CronHandler
                     $this->logger->info($e->getResponse()->getBody()->getContents());
                     $this->logger->info($project->getName());
                     $this->logger->info($project->getStatus());
+                    $project->setStatus(Project::STATUS_FAILED);
+                    $this->projectRepository->update($project);
                     continue;
                 }
                 $this->changeStatus($project, $scProject);

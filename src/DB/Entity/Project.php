@@ -13,6 +13,7 @@ class Project
   const STATUS_FINISHED = "finished";
   const STATUS_CANCELED = "canceled";
   const STATUS_ARCHIVED = "archived";
+  const STATUS_FAILED = "failed";
 
   /** @var  integer */
   private $id;
