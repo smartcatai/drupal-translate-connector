@@ -125,7 +125,7 @@ class DocumentController extends ControllerBase
         }
         $prev = \Drupal::request()->query->get('destination',false);
         if($prev){
-            \Drupal::messenger()->addMessage(t('Translation for selected item is updating.',[],['context'=>'smartcat_translation_manager']));
+            \Drupal::messenger()->addMessage(t('Your request for translation updates was successfully submitted.',[],['context'=>'smartcat_translation_manager']));
             return  new RedirectResponse($prev);
         }
         return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.document')->toString());
