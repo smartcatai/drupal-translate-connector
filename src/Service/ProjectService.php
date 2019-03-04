@@ -11,6 +11,7 @@ use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 use Drupal\smartcat_translation_manager\Helper\FileHelper;
 use Drupal\smartcat_translation_manager\Helper\ApiHelper;
+use Drupal\smartcat_translation_manager\Helper\LanguageCodeConverter;
 
 class ProjectService
 {
@@ -99,8 +100,8 @@ class ProjectService
                     ->setName($scDocument->getName())
                     ->setEntityId($matches[1])
                     ->setEntityTypeId($project->getEntityTypeId())
-                    ->setSourceLanguage($scDocument->getSourceLanguage())
-                    ->setTargetLanguage($scDocument->getTargetLanguage())
+                    ->setSourceLanguage(LanguageCodeConverter::convertSmartcatToDrupal($scDocument->getSourceLanguage()))
+                    ->setTargetLanguage(LanguageCodeConverter::convertSmartcatToDrupal($scDocument->getTargetLanguage()))
                     ->setStatus($scDocument->getStatus())
                     ->setExternalProjectId($project->getExternalProjectId())
                     ->setExternalDocumentId($scDocument->getId())

@@ -24,7 +24,7 @@ class Project
   /** @var  string */
   private $sourceLanguage;
 
-  /** @var  string */
+  /** @var  array */
   private $targetLanguages;
 
   /** @var  string */
@@ -108,14 +108,14 @@ class Project
     return $this;
   }
   /**
-   * @return string
+   * @return array
    */
   public function getTargetLanguages() {
     return $this->targetLanguages;
   }
 
   /**
-   * @param string $targetLanguages
+   * @param array $targetLanguages
    *
    * @return Project
    */

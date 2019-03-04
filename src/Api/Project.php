@@ -5,11 +5,10 @@ namespace Drupal\smartcat_translation_manager\Api;
 use SmartCat\Client\Model\BilingualFileImportSettingsModel;
 use SmartCat\Client\Model\CreateDocumentPropertyWithFilesModel;
 use SmartCat\Client\Model\CreateProjectModel;
-use SmartCat\Client\Model\CreateProjectWithFilesModel;
 use SmartCat\Client\Model\ProjectChangesModel;
-use SmartCat\Client\SmartCat;
 use Drupal\smartcat_translation_manager\DB\Entity\Project as ProjectEntity;
 use Drupal\smartcat_translation_manager\Helper\ApiHelper;
+use Drupal\smartcat_translation_manager\Helper\LanguageCodeConverter;
 
 class Project extends ApiBaseAbstract
 {
@@ -45,8 +44,8 @@ class Project extends ApiBaseAbstract
         return Array(
             'name' => ApiHelper::filterChars($project->getName()),
             'desc' => 'Content from drupal module',
-            'source_lang' => $project->getSourceLanguage(),
-            'target_langs' => $project->getTargetLanguages(),
+            'source_lang' => LanguageCodeConverter::convertDrupalToSmartcat($project->getSourceLanguage()),
+            'target_langs' => array_map([LanguageCodeConverter::class,'convertDrupalToSmartcat'],$project->getTargetLanguages()),
             'stages' => array_filter(
                 \Drupal::state()->get('smartcat_api_workflow_stages', ['Translation']),
                 function($val){return $val !== 0;}
