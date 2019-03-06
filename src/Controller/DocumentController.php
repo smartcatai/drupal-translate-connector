@@ -122,10 +122,10 @@ class DocumentController extends ControllerBase
             $document->setStatus(Document::STATUS_INPROGRESS);
             $document->setExternalExportId(NULL);
             $this->documentRepository->update($document);
+            \Drupal::messenger()->addMessage(t('Your request for translation updates was successfully submitted.',[],['context'=>'smartcat_translation_manager']));
         }
         $prev = \Drupal::request()->query->get('destination',false);
         if($prev){
-            \Drupal::messenger()->addMessage(t('Your request for translation updates was successfully submitted.',[],['context'=>'smartcat_translation_manager']));
             return  new RedirectResponse($prev);
         }
         return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.document')->toString());
