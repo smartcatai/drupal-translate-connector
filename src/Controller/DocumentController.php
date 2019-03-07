@@ -105,6 +105,7 @@ class DocumentController extends ControllerBase
             '#type' => 'page',
             'header' => ['#markup'=>'<h1>Dashboard</h1>'],
             'content' => [
+                ['#type' => 'status_messages',],
                 ['#markup'=>'<br>'],
                 $table,
                 ['#markup'=>'<br>'],
