@@ -48,32 +48,36 @@ class OverviewController extends ContentTranslationController
                     $query['lang'] = $lang;
 
                     $operations['data']['#links'] = [];
+                    $foundDoc = null; 
                     if(!empty($documents)){
                         foreach($documents as $document){
                             if($query['lang'] !== strtolower($document->getTargetLanguage())){
                                 continue;
                             }
-
-                            $translationStatusName = Document::STATUSES[$document->getStatus()];
-                            $translationStatus['data']['#markup'] = $this->t($translationStatusName);
-
-                            if($document->getStatus() === Document::STATUS_DOWNLOADED){
-                                $operations['data']['#links']['smartcat_refresh_doc'] = [
-                                    'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', 
-                                        ['id'=>$document->getId()],
-                                        ['query'=>['destination'=>\Drupal::request()->getRequestUri()]]
-                                    ),
-                                    'title'=>$this->t('Check updates'),
-                                ];
+                            if($foundDoc !== null && $document->getStatus() === Document::STATUS_DOWNLOADED ){
+                                continue;
                             }
+                            $foundDoc = $document;
+                        }
+                        $translationStatusName = Document::STATUSES[$foundDoc->getStatus()];
+                        $translationStatus['data']['#markup'] = $this->t($translationStatusName);
 
-                            $operations['data']['#links']['smartcat-doc'] = [
-                                'title' => $this->t('Go to Smartcat'),
-                                'url' => ApiHelper::getDocumentUrl($document),
+                        if($foundDoc->getStatus() === Document::STATUS_DOWNLOADED){
+                            $operations['data']['#links']['smartcat_refresh_doc'] = [
+                                'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', 
+                                    ['id'=>$foundDoc->getId()],
+                                    ['query'=>['destination'=>\Drupal::request()->getRequestUri()]]
+                                ),
+                                'title'=>$this->t('Check updates'),
                             ];
                         }
+
+                        $operations['data']['#links']['smartcat-doc'] = [
+                            'title' => $this->t('Go to Smartcat'),
+                            'url' => ApiHelper::getDocumentUrl($foundDoc),
+                        ];
                     }
-                    if(empty($operations['data']['#links']['smartcat-doc'])){
+                    if(empty($operations['data']['#links']['smartcat-doc']) || (!empty($foundDoc) && $foundDoc->getStatus() === Document::STATUS_DOWNLOADED)){
                         $url = Url::fromRoute('smartcat_translation_manager.project.add');
                         $url->setOption('query', $query);
                         $operations['data']['#links']['smartcat'] = [
