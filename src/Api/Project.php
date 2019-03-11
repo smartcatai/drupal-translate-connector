@@ -31,17 +31,15 @@ class Project extends ApiBaseAbstract
         return $newScProject
             ->setName($params['name'])
             ->setDescription($params['desc'])
-            ->setDeadline($params['deadline'])
             ->setSourceLanguage($params['source_lang'])
             ->setTargetLanguages($params['target_langs'])
             ->setWorkflowStages($params['stages'])
-            ->setExternalTag($params['external_tag'])
-            ->setIsForTesting($params['test']);
+            ->setExternalTag($params['external_tag']);
     }
 
     protected function prepareProjectParams(ProjectEntity $project)
     {
-        return Array(
+        return [
             'name' => ApiHelper::filterChars($project->getName()),
             'desc' => 'Content from drupal module',
             'source_lang' => LanguageCodeConverter::convertDrupalToSmartcat($project->getSourceLanguage()),
@@ -50,10 +48,8 @@ class Project extends ApiBaseAbstract
                 \Drupal::state()->get('smartcat_api_workflow_stages', ['Translation']),
                 function($val){return $val !== 0;}
             ),
-            'test' => false,
-            'deadline' => (new \DateTime('now'))->modify(' +1 day'), 
             'external_tag' => 'source:Drupal',
-        );
+        ];
     }
 
     public function getFileImportSettings()
