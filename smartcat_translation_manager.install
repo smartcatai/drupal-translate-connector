@@ -5,7 +5,9 @@ function smartcat_translation_manager_install() {
 }
 
 function smartcat_translation_manager_uninstall() {
-
+    $state = \Drupal::state();
+    $state->set('smartcat_api_login', '');
+    $state->set('smartcat_api_password', '');
 }
 
 function smartcat_translation_manager_enable() {

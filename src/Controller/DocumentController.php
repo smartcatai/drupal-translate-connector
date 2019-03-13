@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\smartcat_translation_manager\Controller;
- 
+
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;

@@ -2,13 +2,11 @@
 
 namespace Drupal\smartcat_translation_manager\Controller;
 
-use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\content_translation\Controller\ContentTranslationController;
+use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\smartcat_translation_manager\DB\Entity\Document;
-use Drupal\smartcat_translation_manager\DB\Entity\Project;
 use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
-use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
 use Drupal\smartcat_translation_manager\Helper\ApiHelper;
 
 class OverviewController extends ContentTranslationController
@@ -16,6 +14,12 @@ class OverviewController extends ContentTranslationController
     public function overview(\Drupal\Core\Routing\RouteMatchInterface $route_match, $entity_type_id = NULL)
     {
 
+        $sendButtonKey = 'smartcat';
+        try{
+            (new Api())->getAccount();
+        }catch(\Exception $e){
+            $sendButtonKey = 'smartcat-disabled';
+        }
         $documentRepository = new DocumentRepository();
         $build = parent::overview($route_match, $entity_type_id);
         $entity = $route_match->getParameter($entity_type_id);
@@ -82,7 +86,7 @@ class OverviewController extends ContentTranslationController
                     if(empty($operations['data']['#links']['smartcat-doc']) || (!empty($foundDoc) && $foundDoc->getStatus() === Document::STATUS_DOWNLOADED)){
                         $url = Url::fromRoute('smartcat_translation_manager.project.add');
                         $url->setOption('query', $query);
-                        $operations['data']['#links']['smartcat'] = [
+                        $operations['data']['#links'][$sendButtonKey] = [
                             'title' => $this->t('Send to Smartcat'),
                             'url' => $url,
                         ];

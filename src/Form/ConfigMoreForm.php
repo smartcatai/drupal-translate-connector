@@ -11,10 +11,7 @@ namespace Drupal\smartcat_translation_manager\Form;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Http\Client\Common\Exception\ClientErrorException;
-use SmartCat\Client\SmartCat;
-use Drupal\smartcat_translation_manager\DB\Entity\Profile;
-use Drupal\smartcat_translation_manager\DB\Repository\ProfileRepository;
+use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\smartcat_translation_manager\Service\ProjectService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -100,15 +97,6 @@ class ConfigMoreForm extends ConfirmFormBase
 
   public function buildForm(array $form, FormStateInterface $form_state, $entity_type_id = NULl) {
     $form = [];
-
-    $api = new \Drupal\smartcat_translation_manager\Api\Api();
-    $account_info = $api->getAccount();
-
-    //сохраняем account_name
-    if (!$account_info) {
-      \Drupal::messenger()->addMessage(t('Error with connection to Smartcat.',[],['context'=>'smartcat_translation_manager']));
-      return parent::buildForm($form, $form_state);
-    }
 
     $form['entity_type_id'] = array(
       '#type' => 'hidden',
@@ -223,6 +211,13 @@ class ConfigMoreForm extends ConfirmFormBase
   }
 
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    try{
+      $account = (new Api())->getAccount();
+    }catch(\Exception $e){
+        \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials.</a>',[
+            ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
+        ],['context'=>'smartcat_translation_manager']));
+    }
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
@@ -262,7 +257,7 @@ class ConfigMoreForm extends ConfirmFormBase
     }
     else {
       if($prev = \Drupal::request()->query->get('destination',false)){
-        return Url::fromUri($prev);
+        return Url::fromUri("internal:$prev");
       }
       return new Url('<front>');
     }

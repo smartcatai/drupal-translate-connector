@@ -3,4 +3,8 @@
         window.open($(this).attr('href'));
         return false;
     });
+
+    $('li.smartcat-disabled a').click(function(e){
+        return false;
+    });
 })(jQuery)

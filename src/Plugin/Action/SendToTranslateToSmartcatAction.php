@@ -2,12 +2,10 @@
 
 namespace Drupal\smartcat_translation_manager\Plugin\Action;
 
-use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Action\ActionBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\smartcat_translation_manager\Handler\TranslateWithSmartcatHandler;
+use Drupal\Core\Url;
+use Drupal\smartcat_translation_manager\Api\Api;
 
 /**
  * Action description.
@@ -56,6 +54,14 @@ class SendToTranslateToSmartcatAction extends ActionBase
    * {@inheritdoc}
    */
   public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
+    try{
+      (new Api())->getAccount();
+    }catch(\Exception $e){
+      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials.</a>',[
+        ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
+      ],['context'=>'smartcat_translation_manager']));
+      return FALSE;
+    }
     if ($object->getEntityType() === 'node') {
       $access = $object->access('translate', $account, TRUE)
         ->andIf($object->status->access('update', $account, TRUE))
