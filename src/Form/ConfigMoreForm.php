@@ -97,6 +97,7 @@ class ConfigMoreForm extends ConfirmFormBase
 
   public function buildForm(array $form, FormStateInterface $form_state, $entity_type_id = NULl) {
     $form = [];
+    $api = new Api();
 
     $form['entity_type_id'] = array(
       '#type' => 'hidden',
@@ -108,7 +109,6 @@ class ConfigMoreForm extends ConfirmFormBase
     $this->selection = $this->tempStore->get(\Drupal::service('current_user')->id() . ':' . $this->entityTypeId);
 
     if (empty($this->entityTypeId) || empty($this->selection)) {
-      //var_dump($this->entityTypeId,$this->selection); die;
       return new RedirectResponse($this->getCancelUrl()
         ->setAbsolute()
         ->toString());
