@@ -238,7 +238,7 @@ class ConfigMoreForm extends ConfirmFormBase
     $this->selection = $this->tempStore->get(\Drupal::service('current_user')->id() . ':' . $this->entityTypeId);
 
     $entities = $this->entityTypeManager->getStorage($this->entityTypeId)->loadMultiple(array_keys($this->selection));
-    //var_dump(array_values($formValues['langs'])); die;
+
     foreach ($this->selection as $id => $selected_langcodes) {
       $entity = $entities[$id];
       $this->projectService->addEntityToTranslete($entity, array_filter($formValues['langs'],function($val){return $val !== 0;}));
@@ -247,7 +247,9 @@ class ConfigMoreForm extends ConfirmFormBase
     $this->projectService->sendProjectWithDocuments();
 
     $this->tempStore->delete(\Drupal::service('current_user')->id());
-    \Drupal::messenger()->addMessage(t('Selected items have been successfully submitted for translation.',[],['context'=>'smartcat_translation_manager']));
+    \Drupal::messenger()->addMessage(t('Selected items have been successfully submitted for translation. Go to <a href=":url">Smartcat Dashboard</a>',[
+      ':url' => Url::fromRoute('smartcat_translation_manager.document')->toString(),
+    ],['context'=>'smartcat_translation_manager']));
     return TRUE;
   }
 

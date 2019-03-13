@@ -59,23 +59,25 @@ class OverviewController extends ContentTranslationController
                             }
                             $foundDoc = $document;
                         }
-                        $translationStatusName = Document::STATUSES[$foundDoc->getStatus()];
-                        $translationStatus['data']['#markup'] = $this->t($translationStatusName);
+                        if($foundDoc !== null){
+                            $translationStatusName = Document::STATUSES[$foundDoc->getStatus()];
+                            $translationStatus['data']['#markup'] = $this->t($translationStatusName);
 
-                        if($foundDoc->getStatus() === Document::STATUS_DOWNLOADED){
-                            $operations['data']['#links']['smartcat_refresh_doc'] = [
-                                'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', 
-                                    ['id'=>$foundDoc->getId()],
-                                    ['query'=>['destination'=>\Drupal::request()->getRequestUri()]]
-                                ),
-                                'title'=>$this->t('Check updates'),
+                            if($foundDoc->getStatus() === Document::STATUS_DOWNLOADED){
+                                $operations['data']['#links']['smartcat_refresh_doc'] = [
+                                    'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', 
+                                        ['id'=>$foundDoc->getId()],
+                                        ['query'=>['destination'=>\Drupal::request()->getRequestUri()]]
+                                    ),
+                                    'title'=>$this->t('Check updates'),
+                                ];
+                            }
+
+                            $operations['data']['#links']['smartcat-doc'] = [
+                                'title' => $this->t('Go to Smartcat'),
+                                'url' => ApiHelper::getDocumentUrl($foundDoc),
                             ];
                         }
-
-                        $operations['data']['#links']['smartcat-doc'] = [
-                            'title' => $this->t('Go to Smartcat'),
-                            'url' => ApiHelper::getDocumentUrl($foundDoc),
-                        ];
                     }
                     if(empty($operations['data']['#links']['smartcat-doc']) || (!empty($foundDoc) && $foundDoc->getStatus() === Document::STATUS_DOWNLOADED)){
                         $url = Url::fromRoute('smartcat_translation_manager.project.add');
