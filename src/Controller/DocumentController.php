@@ -5,6 +5,7 @@ namespace Drupal\smartcat_translation_manager\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\smartcat_translation_manager\DB\Entity\Document;
 use Drupal\smartcat_translation_manager\DB\Repository\DocumentRepository;
 use Drupal\smartcat_translation_manager\Helper\ApiHelper;
@@ -40,6 +41,13 @@ class DocumentController extends ControllerBase
             ]
         ];
         $criteria = [];
+        try{
+            $account = (new Api())->getAccount();
+        }catch(\Exception $e){
+            \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials.</a>',[
+                ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
+            ],['context'=>'smartcat_translation_manager']));
+        }
         $document_id = \Drupal::request()->query->get('document_id');
         if($document_id){
             $criteria['id'] = $document_id;
