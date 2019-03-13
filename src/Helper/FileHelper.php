@@ -88,6 +88,8 @@ class FileHelper
                     'value' => $value,
                     'format' => $entity_translation->get($field)->format,
                 ];
+            }else{
+                $value = $this->specialcharsDecode($value);
             }
 
             if($field === 'body_summary'){
@@ -107,6 +109,13 @@ class FileHelper
         }
 
         return $entity_translation;
+    }
+
+    public function specialcharsDecode($str)
+    {
+        $str = html_entity_decode($str);
+        $str = str_replace('&#39;', "'", $str);
+        return $str;
     }
 
     public function hasTranslation($langcode) {
