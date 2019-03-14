@@ -41,9 +41,11 @@ class DocumentController extends ControllerBase
             ]
         ];
         $criteria = [];
+        $sendButtonKey = 'smartcat';
         try{
             $account = (new Api())->getAccount();
         }catch(\Exception $e){
+            $sendButtonKey = 'smartcat-disabled';
             \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
                 ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
             ],['context'=>'smartcat_translation_manager']));
@@ -70,18 +72,6 @@ class DocumentController extends ControllerBase
                     ],
                 ];
 
-                if($document->getStatus() === Document::STATUS_DOWNLOADED){
-                    $operations['data']['#links']['smartcat_refresh_doc'] = [
-                        'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', ['id'=>$document->getId()]),
-                        'title'=>$this->t('Check updates'),
-                    ];
-                }
-
-                $operations['data']['#links']['smartcat_doc'] = [
-                    'url' => ApiHelper::getDocumentUrl($document),
-                    'title'=>$this->t('Go to Smartcat'),
-                ];
-
                 $language = $this->languageManager()->getLanguage(strtolower($document->getSourceLanguage()));
                 $targetLanguage = $this->languageManager()->getLanguage(strtolower($document->getTargetLanguage()));
                 $options = ['language' => $language];
@@ -90,6 +80,32 @@ class DocumentController extends ControllerBase
                     ->load($document->getEntityId());
 
                 if($entity){
+
+                    if($document->getStatus() === Document::STATUS_DOWNLOADED){
+                        $newestDocs = $this->documentRepository->getBy(['entityId'=>$document->getEntityId(), 'id'=>[$document->getId(),'>']]);
+                        if(count($newestDocs) === 0){
+                            $operations['data']['#links']['smartcat_refresh_doc'] = [
+                                'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', ['id'=>$document->getId()]),
+                                'title'=>$this->t('Check updates'),
+                            ];
+                        }
+                    }
+
+                    $operations['data']['#links']['smartcat_doc'] = [
+                        'url' => ApiHelper::getDocumentUrl($document),
+                        'title'=>$this->t('Go to Smartcat'),
+                    ];
+
+                    if($document->getStatus() === Document::STATUS_DOWNLOADED){
+                        $query = ['entity_id' => $entity->id(), 'type_id' => $entity->getEntityTypeId(), 'lang' => $document->getTargetLanguage()];
+                        $url = Url::fromRoute('smartcat_translation_manager.project.add');
+                        $url->setOption('query', $query);
+                        $operations['data']['#links'][$sendButtonKey] = [
+                            'title' => $this->t('Send to Smartcat'),
+                            'url' => $url,
+                        ];
+                    }
+
                     $edit_url = $entity->toUrl('canonical', $options);
                     $table['#rows'][$i] = [
                         Link::fromTextAndUrl($entity->label(), $edit_url),

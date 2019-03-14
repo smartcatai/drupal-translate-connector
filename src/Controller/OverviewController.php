@@ -19,9 +19,6 @@ class OverviewController extends ContentTranslationController
             (new Api())->getAccount();
         }catch(\Exception $e){
             $sendButtonKey = 'smartcat-disabled';
-            // \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
-            //     ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
-            // ],['context'=>'smartcat_translation_manager']));
         }
         $documentRepository = new DocumentRepository();
         $build = parent::overview($route_match, $entity_type_id);
@@ -31,7 +28,7 @@ class OverviewController extends ContentTranslationController
         /**
          * @var DocumentRepository
          */
-        $documents = $documentRepository->getBy(['entityId'=> $entity->id(), ]);
+        $documents = $documentRepository->getBy(['entityId'=> $entity->id(), ], 0, 100, ['id'=>'DESC']);
         $lastColumn = array_pop($build['content_translation_overview']['#header']);
         array_push($build['content_translation_overview']['#header'], $this->t('Translation process'));
         array_push($build['content_translation_overview']['#header'], $lastColumn);
