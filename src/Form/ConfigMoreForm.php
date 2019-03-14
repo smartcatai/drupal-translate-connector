@@ -214,7 +214,7 @@ class ConfigMoreForm extends ConfirmFormBase
     try{
       $account = (new Api())->getAccount();
     }catch(\Exception $e){
-        \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials.</a>',[
+        \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
             ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
         ],['context'=>'smartcat_translation_manager']));
     }
@@ -242,7 +242,7 @@ class ConfigMoreForm extends ConfirmFormBase
     $this->projectService->sendProjectWithDocuments();
 
     $this->tempStore->delete(\Drupal::service('current_user')->id());
-    \Drupal::messenger()->addMessage(t('Selected items have been successfully submitted for translation. Go to <a href=":url">Smartcat Dashboard</a>',[
+    \Drupal::messenger()->addMessage(t('Selected items have been successfully submitted for translation. Go to <a href=":url">Smartcat Dashboard</a>.',[
       ':url' => Url::fromRoute('smartcat_translation_manager.document')->toString(),
     ],['context'=>'smartcat_translation_manager']));
     return TRUE;

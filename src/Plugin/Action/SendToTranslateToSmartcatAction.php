@@ -57,7 +57,7 @@ class SendToTranslateToSmartcatAction extends ActionBase
     try{
       (new Api())->getAccount();
     }catch(\Exception $e){
-      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials.</a>',[
+      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
         ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
       ],['context'=>'smartcat_translation_manager']));
       return FALSE;
