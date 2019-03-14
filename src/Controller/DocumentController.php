@@ -88,6 +88,14 @@ class DocumentController extends ControllerBase
                                 'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', ['id'=>$document->getId()]),
                                 'title'=>$this->t('Check updates'),
                             ];
+
+                            $query = ['entity_id' => $entity->id(), 'type_id' => $entity->getEntityTypeId(), 'lang' => $document->getTargetLanguage()];
+                            $url = Url::fromRoute('smartcat_translation_manager.project.add');
+                            $url->setOption('query', $query);
+                            $operations['data']['#links'][$sendButtonKey] = [
+                                'title' => $this->t('Send to Smartcat'),
+                                'url' => $url,
+                            ];
                         }
                     }
 
@@ -95,16 +103,6 @@ class DocumentController extends ControllerBase
                         'url' => ApiHelper::getDocumentUrl($document),
                         'title'=>$this->t('Go to Smartcat'),
                     ];
-
-                    if($document->getStatus() === Document::STATUS_DOWNLOADED){
-                        $query = ['entity_id' => $entity->id(), 'type_id' => $entity->getEntityTypeId(), 'lang' => $document->getTargetLanguage()];
-                        $url = Url::fromRoute('smartcat_translation_manager.project.add');
-                        $url->setOption('query', $query);
-                        $operations['data']['#links'][$sendButtonKey] = [
-                            'title' => $this->t('Send to Smartcat'),
-                            'url' => $url,
-                        ];
-                    }
 
                     $edit_url = $entity->toUrl('canonical', $options);
                     $table['#rows'][$i] = [
