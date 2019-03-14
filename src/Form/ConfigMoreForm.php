@@ -99,6 +99,7 @@ class ConfigMoreForm extends ConfirmFormBase
     $form = [];
     $api = new Api();
 
+
     $form['entity_type_id'] = array(
       '#type' => 'hidden',
       '#value' => $entity_type_id,
@@ -107,6 +108,17 @@ class ConfigMoreForm extends ConfirmFormBase
     $this->entityTypeId = $entity_type_id;
     $this->entityType = $this->entityTypeManager->getDefinition($this->entityTypeId);
     $this->selection = $this->tempStore->get(\Drupal::service('current_user')->id() . ':' . $this->entityTypeId);
+
+    try{
+      $api->getAccount();
+    }catch(\Exception $e){
+      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
+        ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
+      ],['context'=>'smartcat_translation_manager']));
+      return new RedirectResponse($this->getCancelUrl()
+        ->setAbsolute()
+        ->toString());
+    }
 
     if (empty($this->entityTypeId) || empty($this->selection)) {
       return new RedirectResponse($this->getCancelUrl()
