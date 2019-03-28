@@ -127,4 +127,28 @@ abstract class RepositoryAbstract implements RepositoryInterface {
     return $query->countQuery()->execute()->fetchField();
   }
 
+  public function bulkUpdate($data, $criterias){
+    $table_name = $this->getTableName();
+    $query = $this->connection->update($table_name)
+      ->fields($data);
+    
+    if(empty($criterias)){
+      return false;
+    }
+
+    foreach ($criterias as $key => $value) {
+      if(is_array($value)){
+        $query->condition($key, $value[0], $value[1]);
+        continue;
+      }
+      $query->condition($key, $value);
+    }
+
+    try {
+      return $query->execute();
+    } catch (\Exception $e) {
+      return false;
+    }
+  }
+
 }

@@ -49,6 +49,9 @@ class CronHandler
 
     public function run()
     {
+        if(!$this->checkConnectionApi()){
+            return;
+        }
         $this->logger->info('Start cron');
         $this->logger->info('Method buildStatistic start');
         if($this->buildStatistic()){
@@ -80,6 +83,15 @@ class CronHandler
         return;
     }
 
+    public function checkConnectionApi(){
+        try{
+            $account = $this->api->getAccount();
+        }catch(\Exception $e){
+            return false;
+        }
+        return true;
+    }
+
     public function buildStatistic()
     {
         $projects = $this->projectRepository->getBy(['status'=>Project::STATUS_NEW],0,100);
@@ -94,6 +106,10 @@ class CronHandler
                     $this->logger->info($project->getStatus());
                     $project->setStatus(Project::STATUS_FAILED);
                     $this->projectRepository->update($project);
+                    $this->documentRepository->bulkUpdate(
+                        ['status'=>Document::STATUS_FAILED],
+                        ['externalProjectId'=>$project->getExternalProjectId()]
+                    );
                     continue;
                 }
                 $this->changeStatus($project, $scProject);
@@ -116,6 +132,10 @@ class CronHandler
                     $this->logger->info($project->getStatus());
                     $project->setStatus(Project::STATUS_FAILED);
                     $this->projectRepository->update($project);
+                    $this->documentRepository->bulkUpdate(
+                        ['status'=>Document::STATUS_FAILED],
+                        ['externalProjectId'=>$project->getExternalProjectId()]
+                    );
                     continue;
                 }
                 $this->changeStatus($project, $scProject);
