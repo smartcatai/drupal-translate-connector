@@ -1,6 +1,6 @@
 name: 'Smartcat translation manager'
 type: 'module'
-description: 'Smartcat translation manager offers the easiest way to translate your Drupal entyties and posts into any language in a few clicks.'
+description: 'Smartcat translation manager offers the easiest way to translate your Drupal entities and posts into any language in a few clicks.'
 core: '8.x'
 package: Multilingual
 php: '7.0'
