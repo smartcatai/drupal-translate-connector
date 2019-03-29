@@ -61,8 +61,11 @@ class OverviewController extends ContentTranslationController
                             if($query['lang'] !== strtolower($document->getTargetLanguage())){
                                 continue;
                             }
-                            if($foundDoc !== null && $document->getStatus() === Document::STATUS_DOWNLOADED ){
+                            if($document->getStatus() === Document::STATUS_DOWNLOADED ){
                                 continue;
+                            }
+                            if($foundDoc !== null){
+                                break;
                             }
                             $foundDoc = $document;
                         }
@@ -86,7 +89,10 @@ class OverviewController extends ContentTranslationController
                             ];
                         }
                     }
-                    if(empty($operations['data']['#links']['smartcat-doc']) || (!empty($foundDoc) && $foundDoc->getStatus() === Document::STATUS_DOWNLOADED)){
+                    if(
+                        empty($operations['data']['#links']['smartcat-doc']) ||
+                        (!empty($foundDoc) && in_array($foundDoc->getStatus(), [Document::STATUS_DOWNLOADED, Document::STATUS_FAILED])
+                    )){
                         $url = Url::fromRoute('smartcat_translation_manager.project.add');
                         $url->setOption('query', $query);
                         $operations['data']['#links'][$sendButtonKey] = [
