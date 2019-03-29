@@ -1,6 +1,6 @@
 {
-  "name": "smartcat/drupal-smartcat-translation-manager",
-  "description": "Drupal integration to smartCAT",
+  "name": "drupal/smartcat-translation-manager",
+  "description": "Drupal integration to Smartcat",
   "minimum-stability": "stable",
   "license": "GPLv3",
   "type": "drupal-module",
