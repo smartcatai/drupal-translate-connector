@@ -58,16 +58,10 @@ class OverviewController extends ContentTranslationController
                     $foundDoc = null; 
                     if(!empty($documents)){
                         foreach($documents as $document){
-                            if($query['lang'] !== strtolower($document->getTargetLanguage())){
-                                continue;
-                            }
-                            if($document->getStatus() === Document::STATUS_DOWNLOADED ){
-                                continue;
-                            }
-                            if($foundDoc !== null){
+                            if($query['lang'] === strtolower($document->getTargetLanguage())){
+                                $foundDoc = $document;
                                 break;
                             }
-                            $foundDoc = $document;
                         }
                         if($foundDoc !== null){
                             $translationStatusName = Document::STATUSES[$foundDoc->getStatus()];
