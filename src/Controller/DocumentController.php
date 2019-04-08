@@ -82,7 +82,12 @@ class DocumentController extends ControllerBase
                 if($entity){
 
                     if($document->getStatus() === Document::STATUS_DOWNLOADED){
-                        $newestDocs = $this->documentRepository->getBy(['entityId'=>$document->getEntityId(), 'id'=>[$document->getId(),'>']]);
+                        $newestDocs = $this->documentRepository
+                          ->getBy([
+                            'entityId'=>$document->getEntityId(),
+                            'id'=>[$document->getId(),'>'],
+                            'targetLanguage'=>$document->getTargetLanguage(),
+                          ]);
                         if(count($newestDocs) === 0){
                             $operations['data']['#links']['smartcat_refresh_doc'] = [
                                 'url' => Url::fromRoute('smartcat_translation_manager.document.refresh', ['id'=>$document->getId()]),
