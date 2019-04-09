@@ -4,7 +4,7 @@ description: 'Smartcat translation manager offers the easiest way to translate y
 core: '8.x'
 package: Multilingual
 php: '7.0'
-version: '8.x-0.1'
+version: '8.x-1.0'
 
 dependencies:
   - drupal:content_translation
