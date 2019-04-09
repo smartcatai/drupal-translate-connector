@@ -1,23 +1,28 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Diversant_
- * Date: 16.06.2017
- * Time: 19:20
- */
 
 namespace Drupal\smartcat_translation_manager\DB\Repository;
 
+/**
+ * Abstract table repository.
+ */
 abstract class RepositoryAbstract implements RepositoryInterface {
 
   const TABLE_PREFIX = 'smartcat_translation_manager_';
 
   protected $connection;
 
+  /**
+   * Init dependencies.
+   */
   public function __construct() {
     $this->connection = \Drupal::database();
   }
 
+  /**
+   * Count rows in table.
+   *
+   * @return int $count
+   */
   public function getCount() {
     $table_name = $this->getTableName();
     $count = $this->connection->query("SELECT COUNT(*) FROM $table_name");
@@ -27,19 +32,34 @@ abstract class RepositoryAbstract implements RepositoryInterface {
 
   private $persists = [];
 
+  /**
+   *
+   */
   public function persist($o) {
     $this->persists[] = $o;
   }
 
-  protected abstract function doFlush(array $persists);
+  /**
+   *
+   */
+  abstract protected function doFlush(array $persists);
 
+  /**
+   *
+   */
   public function flush() {
     $this->doFlush($this->persists);
     $this->persists = [];
   }
 
-  protected abstract function toEntity($row);
+  /**
+   *
+   */
+  abstract protected function toEntity($row);
 
+  /**
+   *
+   */
   protected function prepareResult($rows) {
     $result = [];
     foreach ($rows as $row) {
@@ -69,8 +89,8 @@ abstract class RepositoryAbstract implements RepositoryInterface {
 
   /**
    * @param array $criterias
-   * @param integer $offset
-   * @param integer $limit
+   * @param int $offset
+   * @param int $limit
    * @return array
    */
   public function getBy(array $criterias = [], int $offset = 0, int $limit = 10, array $order = []) {
@@ -78,16 +98,16 @@ abstract class RepositoryAbstract implements RepositoryInterface {
     $query = $this->connection->select($table_name, 's')
       ->fields('s');
 
-    if(!empty($criterias)){
+    if (!empty($criterias)) {
       foreach ($criterias as $key => $value) {
-        if(is_array($value)){
+        if (is_array($value)) {
           $query->condition($key, $value[0], $value[1]);
           continue;
         }
         $query->condition($key, $value);
       }
     }
-    if(!empty($order)){
+    if (!empty($order)) {
       foreach ($order as $field => $direction) {
         $query->orderBy($field, $direction);
       }
@@ -97,7 +117,7 @@ abstract class RepositoryAbstract implements RepositoryInterface {
 
     $result = $query->execute();
     $entities = [];
-    foreach($result as $record){
+    foreach ($result as $record) {
       $entities[] = $this->toEntity($record);
     }
     return $entities;
@@ -105,8 +125,8 @@ abstract class RepositoryAbstract implements RepositoryInterface {
 
   /**
    * @param array $criterias
-   * @param integer $offset
-   * @param integer $limit
+   * @param int $offset
+   * @param int $limit
    * @return array
    */
   public function count(array $criterias = []) {
@@ -114,9 +134,9 @@ abstract class RepositoryAbstract implements RepositoryInterface {
     $query = $this->connection->select($table_name, 's')
       ->fields('s');
 
-    if(!empty($criterias)){
+    if (!empty($criterias)) {
       foreach ($criterias as $key => $value) {
-        if(is_array($value)){
+        if (is_array($value)) {
           $query->condition($key, $value[0], $value[1]);
           continue;
         }
@@ -127,17 +147,20 @@ abstract class RepositoryAbstract implements RepositoryInterface {
     return $query->countQuery()->execute()->fetchField();
   }
 
-  public function bulkUpdate($data, $criterias){
+  /**
+   *
+   */
+  public function bulkUpdate($data, $criterias) {
     $table_name = $this->getTableName();
     $query = $this->connection->update($table_name)
       ->fields($data);
-    
-    if(empty($criterias)){
-      return false;
+
+    if (empty($criterias)) {
+      return FALSE;
     }
 
     foreach ($criterias as $key => $value) {
-      if(is_array($value)){
+      if (is_array($value)) {
         $query->condition($key, $value[0], $value[1]);
         continue;
       }
@@ -146,8 +169,9 @@ abstract class RepositoryAbstract implements RepositoryInterface {
 
     try {
       return $query->execute();
-    } catch (\Exception $e) {
-      return false;
+    }
+    catch (\Exception $e) {
+      return FALSE;
     }
   }
 

@@ -1,7 +1,12 @@
 <?php
 
+/**
+ * @file for initial module
+ */
+
+use Drupal\smartcat_translation_manager\CronHandler;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\smartcat_translation_manager\Event\EntityEvent;
-use Drupal\smartcat_translation_manager\Handler\TranslateWithSmartcatHandler;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -10,53 +15,45 @@ define('SMARTCAT_PLUGIN_NAME', 'smartcat_translation_manager');
 
 define(
   'SMARTCAT_PLUGIN_DIR',
-  realpath( pathinfo( __FILE__, PATHINFO_DIRNAME ) ) . DIRECTORY_SEPARATOR
+  realpath(pathinfo(__FILE__, PATHINFO_DIRNAME)) . DIRECTORY_SEPARATOR
 );
 
-function smartcat_translation_manager_entity_insert(\Drupal\Core\Entity\EntityInterface $entity) {
+/**
+ * Implements hook_entity_insert
+ */
+function smartcat_translation_manager_entity_insert(EntityInterface $entity) {
   \Drupal::service('event_dispatcher')->dispatch(EntityEvent::ENTITY_INSERT, new EntityEvent($entity));
 }
 
-function smartcat_translation_manager_entity_update(\Drupal\Core\Entity\EntityInterface $entity) {
+/**
+ * Implements hook_entity_update
+ */
+function smartcat_translation_manager_entity_update(EntityInterface $entity) {
   \Drupal::service('event_dispatcher')->dispatch(EntityEvent::ENTITY_UPDATE, new EntityEvent($entity));
 }
 
-function smartcat_translation_manager_entity_delete(\Drupal\Core\Entity\EntityInterface $entity) {
+/**
+ * Implements hook_entity_delete
+ */
+function smartcat_translation_manager_entity_delete(EntityInterface $entity) {
   \Drupal::service('event_dispatcher')->dispatch(EntityEvent::ENTITY_DELETE, new EntityEvent($entity));
 }
 
-function smartcat_translation_manager_entity_translation_insert(\Drupal\Core\Entity\EntityInterface $translation) {
-  $variables = [
-    '@language' => $translation
-      ->language()
-      ->getName(),
-    '@label' => $translation
-      ->getUntranslated()
-      ->label(),
-  ];
-  \Drupal::logger('content')
-    ->notice('The @language translation of @label has just been stored.', $variables);
-}
-
 /**
- * Implements hook_entity_type_alter().
+ * Implements hook_cron
  */
-function smartcat_translation_manager_entity_type_alter(array &$entity_types) {
-  //if(isset($entity_types['node'])){
-    // $entity_types['node']->setHandlerClass('form', [TranslateWithSmartcatHandler::HANDLER_NAME=>TranslateWithSmartcatHandler::class]);
-  //}
-}
-
 function smartcat_translation_manager_cron() {
-  $cronHandler = Drupal\smartcat_translation_manager\CronHandler::create();
+  $cronHandler = CronHandler::create();
 
-  if($cronHandler !== null){
+  if ($cronHandler !== NULL) {
     $cronHandler->run();
   }
 }
 
+/**
+ * Implements hook_page_attachments_alter
+ */
 function smartcat_translation_manager_page_attachments_alter(array &$page) {
-  // Attach the flot asset on every page.
   $page['#attached']['library'][] = 'smartcat_translation_manager/smartcat_base';
 
 }

@@ -17,11 +17,13 @@ use Drupal\smartcat_translation_manager\Api\Api;
  *   confirm_form_route_name = "smartcat_translation_manager.settings_more",
  * )
  */
-class SendToTranslateToSmartcatAction extends ActionBase
-{
+class SendToTranslateToSmartcatAction extends ActionBase {
   protected $sections;
-  public function __construct(array $configuration, $plugin_id, $plugin_definition)
-  {
+
+  /**
+   *
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->tempStore = \Drupal::service('tempstore.private')->get('entity_translate_multiple_confirm');
     $this->currentUser = \Drupal::service('current_user');
@@ -29,7 +31,7 @@ class SendToTranslateToSmartcatAction extends ActionBase
     $this->logger = \Drupal::logger('smartcat_translation_manager_action');
   }
 
-    /**
+  /**
    * {@inheritdoc}
    */
   public function executeMultiple(array $entities) {
@@ -54,12 +56,13 @@ class SendToTranslateToSmartcatAction extends ActionBase
    * {@inheritdoc}
    */
   public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
-    try{
+    try {
       (new Api())->getAccount();
-    }catch(\Exception $e){
-      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
+    }
+    catch (\Exception $e) {
+      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.', [
         ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
-      ],['context'=>'smartcat_translation_manager']));
+      ], ['context' => 'smartcat_translation_manager']));
       return FALSE;
     }
     if ($object->getEntityType() === 'node') {
@@ -73,4 +76,5 @@ class SendToTranslateToSmartcatAction extends ActionBase
     // access methods and properties.
     return TRUE;
   }
+
 }

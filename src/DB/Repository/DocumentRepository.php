@@ -1,25 +1,26 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Diversant_
- * Date: 16.06.2017
- * Time: 18:48
- */
 
 namespace Drupal\smartcat_translation_manager\DB\Repository;
 
 use Drupal\smartcat_translation_manager\DB\Entity\Document;
 
-
-/** Репозиторий таблицы обмена */
+/**
+ * Table document repository.
+ */
 class DocumentRepository extends RepositoryAbstract {
 
   const TABLE_NAME = 'documents';
 
+  /**
+   * Method getting full table name.
+   */
   public function getTableName() {
     return self::TABLE_PREFIX . self::TABLE_NAME;
   }
 
+  /**
+   * Method getting schema for entity.
+   */
   public function getSchema() {
     $table_name = $this->getTableName();
     $schema = [
@@ -45,8 +46,8 @@ class DocumentRepository extends RepositoryAbstract {
             'type' => 'varchar',
             'length' => 100,
             'not null' => TRUE,
-          ]
-          ,'sourceLanguage' => [
+          ],
+          'sourceLanguage' => [
             'type' => 'varchar',
             'length' => 100,
             'not null' => TRUE,
@@ -83,6 +84,15 @@ class DocumentRepository extends RepositoryAbstract {
     return $schema;
   }
 
+  /**
+   * Method insert document to database.
+   *
+   * @param \Drupal\smartcat_translation_manager\DB\Entity\Document $document
+   *
+   * @return int|boolean $insert_id
+   *
+   * @throws \Exception
+   */
   public function add(Document $document) {
     $table_name = $this->getTableName();
 
@@ -96,11 +106,11 @@ class DocumentRepository extends RepositoryAbstract {
       'externalDocumentId' => $document->getExternalDocumentId(),
     ];
 
-    if($document->getName() !== NULL){
+    if ($document->getName() !== NULL) {
       $data['name'] = $document->getName();
     }
 
-    if($document->getExternalExportId() !== NULL){
+    if ($document->getExternalExportId() !== NULL) {
       $data['externalExportId'] = $document->getExternalExportId();
     }
 
@@ -115,20 +125,33 @@ class DocumentRepository extends RepositoryAbstract {
         ->fields($data)
         ->execute();
       $document->setId($insert_id);
-    } catch (\Exception $e) {
-      throw new \Exception('Table '.$table_name .': ' . $e->getMessage());
+    }
+    catch (\Exception $e) {
+      throw new \Exception('Table ' . $table_name . ': ' . $e->getMessage());
     }
 
     return $insert_id;
   }
 
-  public function delete($documentId)
-  {
+  /**
+   * @param int $documentId
+   * @return bool
+   */
+  public function delete($documentId) {
     return $this->connection->delete($this->getTableName())
       ->condition('id', $documentId)
       ->execute();
   }
 
+  /**
+   * Update data for document.
+   *
+   * @param \Drupal\smartcat_translation_manager\DB\Entity\Document $document
+   *
+   * @return bool
+   *
+   * @throws \Exception
+   */
   public function update(Document $document) {
     $table_name = $this->getTableName();
 
@@ -143,7 +166,7 @@ class DocumentRepository extends RepositoryAbstract {
         'status' => strtolower($document->getStatus()),
       ];
 
-      if($document->getName() !== NULL){
+      if ($document->getName() !== NULL) {
         $data['name'] = $document->getName();
       }
 
@@ -154,7 +177,8 @@ class DocumentRepository extends RepositoryAbstract {
           ->fields($data)
           ->condition('id', $document->getId())
           ->execute();
-      } catch (\Exception $e) {
+      }
+      catch (\Exception $e) {
         var_dump($e->getMessage());
         die;
       }
@@ -162,6 +186,10 @@ class DocumentRepository extends RepositoryAbstract {
     return FALSE;
   }
 
+  /**
+   * @param Documetn[] $persists
+   * @return void
+   */
   protected function doFlush(array $persists) {
     /* @var Project[] $persists */
     foreach ($persists as $document) {
@@ -178,6 +206,10 @@ class DocumentRepository extends RepositoryAbstract {
     }
   }
 
+  /**
+   * @param object $row
+   * @return \Drupal\smartcat_translation_manager\DB\Entity\Document $result
+   */
   protected function toEntity($row) {
     $result = new Document();
 
@@ -223,4 +255,5 @@ class DocumentRepository extends RepositoryAbstract {
 
     return $result;
   }
+
 }

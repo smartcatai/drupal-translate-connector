@@ -1,25 +1,26 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Diversant_
- * Date: 16.06.2017
- * Time: 18:48
- */
 
 namespace Drupal\smartcat_translation_manager\DB\Repository;
 
 use Drupal\smartcat_translation_manager\DB\Entity\Project;
 
-
-/** Репозиторий таблицы обмена */
+/**
+ * Table project repository.
+ */
 class ProjectRepository extends RepositoryAbstract {
 
   const TABLE_NAME = 'projects';
 
+  /**
+   * Method getting full table name.
+   */
   public function getTableName() {
     return self::TABLE_PREFIX . self::TABLE_NAME;
   }
 
+  /**
+   * Method getting schema for entity.
+   */
   public function getSchema() {
     $table_name = $this->getTableName();
     $schema = [
@@ -41,7 +42,7 @@ class ProjectRepository extends RepositoryAbstract {
             'length' => 255,
             'not null' => TRUE,
           ]
-          ,'sourceLanguage' => [
+          , 'sourceLanguage' => [
             'type' => 'varchar',
             'length' => 100,
             'not null' => TRUE,
@@ -73,6 +74,15 @@ class ProjectRepository extends RepositoryAbstract {
     return $schema;
   }
 
+  /**
+   * Method insert project to database.
+   *
+   * @param \Drupal\smartcat_translation_manager\DB\Entity\Project $project
+   *
+   * @return int|boolean $insert_id
+   *
+   * @throws \Exception
+   */
   public function add(Project $project) {
     $table_name = $this->getTableName();
 
@@ -83,15 +93,15 @@ class ProjectRepository extends RepositoryAbstract {
       'status' => strtolower($project->getStatus()),
     ];
 
-    if($project->getName() !== NULL){
+    if ($project->getName() !== NULL) {
       $data['name'] = $project->getName();
     }
 
-    if($project->getExternalProjectId() !== NULL){
+    if ($project->getExternalProjectId() !== NULL) {
       $data['externalProjectId'] = $project->getExternalProjectId();
     }
 
-    if($project->getExternalExportId() !== NULL){
+    if ($project->getExternalExportId() !== NULL) {
       $data['externalExportId'] = $project->getExternalExportId();
     }
 
@@ -106,20 +116,36 @@ class ProjectRepository extends RepositoryAbstract {
         ->fields($data)
         ->execute();
       $project->setId($insert_id);
-    } catch (\Exception $e) {
-      throw new \Exception('Table '.$table_name .': ' . $e->getMessage());
+    }
+    catch (\Exception $e) {
+      throw new \Exception('Table ' . $table_name . ': ' . $e->getMessage());
     }
 
     return $insert_id;
   }
 
-  public function delete($projectId)
-  {
+  /**
+   * Undocumented function.
+   *
+   * @param int $projectId
+   *
+   * @return bool
+   */
+  public function delete($projectId) {
     return $this->connection->delete($this->getTableName())
       ->condition('id', $projectId)
       ->execute();
   }
 
+  /**
+   * Update data for project.
+   *
+   * @param \Drupal\smartcat_translation_manager\DB\Entity\Project $project
+   *
+   * @return bool
+   *
+   * @throws \Exception
+   */
   public function update(Project $project) {
     $table_name = $this->getTableName();
 
@@ -131,15 +157,15 @@ class ProjectRepository extends RepositoryAbstract {
         'status' => strtolower($project->getStatus()),
       ];
 
-      if($project->getName() !== NULL){
+      if ($project->getName() !== NULL) {
         $data['name'] = $project->getName();
       }
 
-      if($project->getExternalProjectId() !== NULL){
+      if ($project->getExternalProjectId() !== NULL) {
         $data['externalProjectId'] = $project->getExternalProjectId();
       }
 
-      if($project->getExternalExportId() !== NULL){
+      if ($project->getExternalExportId() !== NULL) {
         $data['externalExportId'] = $project->getExternalExportId();
       }
 
@@ -148,13 +174,18 @@ class ProjectRepository extends RepositoryAbstract {
           ->fields($data)
           ->condition('id', $project->getId())
           ->execute();
-      } catch (\Exception $e) {
+      }
+      catch (\Exception $e) {
         var_dump($e->getMessage());
       }
     }
     return FALSE;
   }
 
+  /**
+   * @param Documetn[] $persists
+   * @return void
+   */
   protected function doFlush(array $persists) {
     /* @var Project[] $persists */
     foreach ($persists as $project) {
@@ -171,6 +202,10 @@ class ProjectRepository extends RepositoryAbstract {
     }
   }
 
+  /**
+   * @param object $row
+   * @return \Drupal\smartcat_translation_manager\DB\Entity\Project $result
+   */
   protected function toEntity($row) {
     $result = new Project();
 
@@ -208,4 +243,5 @@ class ProjectRepository extends RepositoryAbstract {
 
     return $result;
   }
+
 }

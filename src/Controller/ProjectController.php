@@ -2,152 +2,86 @@
 
 namespace Drupal\smartcat_translation_manager\Controller;
 
-use Drupal\Component\Render\FormattableMarkup;  
+use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\smartcat_translation_manager\DB\Entity\Project;
 use Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository;
-use Drupal\smartcat_translation_manager\Helper\ApiHelper;
-use Drupal\smartcat_translation_manager\Helper\FileHelper;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Cache\Cache;
-class ProjectController extends ControllerBase
-{
-    /**
-     * @var \Drupal\smartcat_translation_manager\Api\Api
-     */
-    protected $api;
-    protected $projectRepository;
-    protected $tempStore;
 
-    public function __construct()
-    {
-        $this->api = new \Drupal\smartcat_translation_manager\Api\Api();
-        $this->projectRepository = new ProjectRepository();
-        $this->tempStore = \Drupal::service('tempstore.private')->get('entity_translate_multiple_confirm');
+/**
+ * Controller for work with project.
+ */
+class ProjectController extends ControllerBase {
+  /**
+   * @var \Drupal\smartcat_translation_manager\Api\Api
+   */
+  protected $api;
+  /**
+   * @var \Drupal\smartcat_translation_manager\DB\Repository\ProjectRepository
+   */
+  protected $projectRepository;
+  protected $tempStore;
+
+  /**
+   * Init dependencies.
+   */
+  public function __construct() {
+    $this->api = new Api();
+    $this->projectRepository = new ProjectRepository();
+    $this->tempStore = \Drupal::service('tempstore.private')->get('entity_translate_multiple_confirm');
+  }
+
+  /**
+   * Delete translation project.
+   *
+   * @param int $id
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   */
+  public function delete($id) {
+    $this->projectRepository->delete($id);
+    return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.project')->toString());
+  }
+
+  /**
+   * Method add translation project.
+   */
+  public function add() {
+    $entityManager = \Drupal::entityTypeManager();
+
+    $type_id = \Drupal::request()->query->get('type_id');
+    $entity_id = \Drupal::request()->query->get('entity_id');
+    $lang = \Drupal::request()->query->get('lang');
+    $lang = !is_array($lang) ? [$lang] : $lang;
+
+    \Drupal::state()->set('smartcat_api_languages', $lang);
+
+    $entity = $entityManager
+      ->getStorage($type_id)
+      ->load($entity_id);
+
+    if (!$entity) {
+      throw new NotFoundHttpException("Entity $type_id $entity_id not found");
     }
 
-    public function content() {
-        $table = [
-            '#type' => 'table',
-            '#title' => 'Projects',
-            '#header' =>[
-                'Project name',
-             //   'Content',
-                'Translate to',
-                'Status',
-                'Operations',
-            ],
-            '#rows' => [
-            ]
-        ];
-        $criteria = [];
-        $project_id = \Drupal::request()->query->get('project_id');
-        if($project_id){
-            $criteria['id'] = $project_id;
-        }
-        $projects = $this->projectRepository->getBy($criteria);
-        $entityManager = \Drupal::entityTypeManager();
+    $selection = [];
 
-        if(!empty($projects)){
-            foreach($projects as $i=>$project){
-                // $entity = $entityManager
-                //     ->getStorage($project->getEntityTypeId())
-                //     ->load($project->getEntityId());
+    $langcode = $entity->language()->getId();
+    $selection[$entity->id()][$langcode] = $langcode;
 
-                //if($entity){
-                    $table['#rows'][$i] = [
-                        ApiHelper::getProjectName($project),
-                        //$entity->label(),
-                        implode('|',$project->getTargetLanguages()),
-                        $project->getStatus(),
-                        [
-                            'data' => [
-                                '#type' => 'form',
-                                '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
-                                'submit' => [
-                                    '#type'=>'submit',
-                                    '#value'=>'Delete',
-                                ],
-                            ],
-                        ],
-                    ];
-                // }else{
-                //     $table['#rows'][$i] = [
-                //         $project->getName(),
-                //         //'Not exists',
-                //         implode('|',$project->getTargetLanguages()),
-                //         $project->getStatus(),
-                //         [
-                //             'data' => [
-                //                 '#type' => 'form',
-                //                 '#action' => Url::fromRoute('smartcat_translation_manager.project.delete',['id'=>$project->getId()])->toString(),
-                //                 'submit' => [
-                //                     '#type'=>'submit',
-                //                     '#value'=>'Delete',
-                //                 ],
-                //             ],
-                //         ],
-                //     ];
-                // }
-            }
-        }
+    $this->tempStore->set(\Drupal::service('current_user')->id() . ':' . $type_id, $selection);
+    $previousUrl = \Drupal::request()->server->get('HTTP_REFERER');
+    $base_url = Request::createFromGlobals()->getSchemeAndHttpHost();
+    $destination = substr($previousUrl, strlen($base_url));
 
-        return [
-            '#type' => 'page',
-            'header' => ['#markup'=>'<h1>Projects list</h1>'],
-            'content' => [
-                ['#markup'=>'<br>'],
-                $table,
-            ],
-        ];
-    }
+    return new RedirectResponse(
+        Url::fromRoute('smartcat_translation_manager.settings_more',
+            ['entity_type_id' => $type_id],
+            ['query' => ['destination' => $destination]]
+        )->toString()
+    );
+  }
 
-    public function delete($id)
-    {
-        $this->projectRepository->delete($id);
-        return new RedirectResponse(Url::fromRoute('smartcat_translation_manager.project')->toString());
-    }
-
-    public function add()
-    {
-        $entityManager = \Drupal::entityTypeManager();
-
-        $type_id = \Drupal::request()->query->get('type_id');
-        $entity_id = \Drupal::request()->query->get('entity_id');
-        $lang = \Drupal::request()->query->get('lang');
-        $lang = !is_array($lang) ? [$lang] : $lang;
-
-        \Drupal::state()->set('smartcat_api_languages', $lang);
-
-        $entity = $entityManager
-            ->getStorage($type_id)
-            ->load($entity_id);
-
-        if(!$entity){
-            throw new NotFoundHttpException("Entity $type_id $entity_id not found");
-        }
-
-        $selection = [];
-    
-        $langcode = $entity->language()->getId();
-        $selection[$entity->id()][$langcode] = $langcode;
-
-        $this->tempStore->set(\Drupal::service('current_user')->id() . ':' . $type_id, $selection);
-        $previousUrl = \Drupal::request()->server->get('HTTP_REFERER');
-        $base_url = Request::createFromGlobals()->getSchemeAndHttpHost();
-        $destination = substr($previousUrl, strlen($base_url));
-
-        return new RedirectResponse(
-            Url::fromRoute('smartcat_translation_manager.settings_more', 
-                ['entity_type_id'=>$type_id ],
-                ['query'=>['destination'=>$destination]]
-            )->toString()
-        );
-    }
 }

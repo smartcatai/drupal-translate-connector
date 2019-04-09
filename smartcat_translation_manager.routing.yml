@@ -15,14 +15,6 @@ smartcat_translation_manager.settings_more:
   requirements:
     _permission: 'administer'
 
-smartcat_translation_manager.project:
-  path: '/admin/smartcat/project' 
-  defaults: 
-    _controller: 'Drupal\smartcat_translation_manager\Controller\ProjectController::content' 
-    _title: 'Projects'
-  requirements: 
-    _permission: 'administer'
-
 smartcat_translation_manager.project.add:
   path: '/admin/smartcat/project/add' 
   defaults: 

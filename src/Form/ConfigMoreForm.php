@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Diversant_
- * Date: 24.10.2017
- * Time: 16:43
- */
 
 namespace Drupal\smartcat_translation_manager\Form;
 
@@ -15,9 +9,11 @@ use Drupal\smartcat_translation_manager\Api\Api;
 use Drupal\smartcat_translation_manager\Service\ProjectService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class ConfigMoreForm extends ConfirmFormBase
-{
-  const DEFAULT_VENDOR = [0=>'Translate internally'];
+/**
+ *
+ */
+class ConfigMoreForm extends ConfirmFormBase {
+  const DEFAULT_VENDOR = [0 => 'Translate internally'];
   /**
    * The current user.
    *
@@ -70,17 +66,19 @@ class ConfigMoreForm extends ConfirmFormBase
   /**
    * The entity type definition.
    *
-   * @var ProjectService
+   * @var \Drupal\smartcat_translation_manager\Service\ProjectService
    */
   protected $projectService;
 
-  public function __construct() { //ConfigFactoryInterface $config_factory
-    //parent::__construct($config_factory);
-
+  /**
+   *
+   */
+  public function __construct() {
     $this->entityTypeManager = \Drupal::entityTypeManager();
     $this->tempStore = \Drupal::service('tempstore.private')->get('entity_translate_multiple_confirm');
     $this->projectService = \Drupal::service('smartcat_translation_manager.service.project');
   }
+
   /**
    * {@inheritdoc}
    */
@@ -95,26 +93,29 @@ class ConfigMoreForm extends ConfirmFormBase
     return $this->t('Are you sure you want to submit selected items for translation?');
   }
 
-  public function buildForm(array $form, FormStateInterface $form_state, $entity_type_id = NULl) {
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, $entity_type_id = NULL) {
     $form = [];
     $api = new Api();
 
-
-    $form['entity_type_id'] = array(
+    $form['entity_type_id'] = [
       '#type' => 'hidden',
       '#value' => $entity_type_id,
-    );
+    ];
 
     $this->entityTypeId = $entity_type_id;
     $this->entityType = $this->entityTypeManager->getDefinition($this->entityTypeId);
     $this->selection = $this->tempStore->get(\Drupal::service('current_user')->id() . ':' . $this->entityTypeId);
 
-    try{
+    try {
       $api->getAccount();
-    }catch(\Exception $e){
-      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
+    }
+    catch (\Exception $e) {
+      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.', [
         ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
-      ],['context'=>'smartcat_translation_manager']));
+      ], ['context' => 'smartcat_translation_manager']));
       return new RedirectResponse($this->getCancelUrl()
         ->setAbsolute()
         ->toString());
@@ -129,7 +130,7 @@ class ConfigMoreForm extends ConfirmFormBase
     $items = [];
     $entities = $this->entityTypeManager->getStorage($entity_type_id)->loadMultiple(array_keys($this->selection));
     $sourceLangs = [];
-    //var_dump(count($entities));
+    // var_dump(count($entities));
     foreach ($this->selection as $id => $selected_langcodes) {
       $entity = $entities[$id];
       foreach ($selected_langcodes as $langcode) {
@@ -176,15 +177,15 @@ class ConfigMoreForm extends ConfirmFormBase
       '#title' => t('Items for translation', [], ['context' => 'smartcat_translation_manager']),
       '#theme' => 'item_list',
       '#items' => $items,
-      '#attributes'=>['class' => 'smartcat_list_item'],
+      '#attributes' => ['class' => 'smartcat_list_item'],
     ];
 
     $langs = [];
-    foreach(\Drupal::languageManager()->getLanguages() as $language){
-      if(in_array($language->getId(),$sourceLangs) ){
+    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+      if (in_array($language->getId(), $sourceLangs)) {
         continue;
       }
-      if( !in_array($language->getId(),$langs)){
+      if (!in_array($language->getId(), $langs)) {
         $langs[$language->getId()] = $language->getName();
       }
     }
@@ -222,16 +223,23 @@ class ConfigMoreForm extends ConfirmFormBase
     return parent::buildForm($form, $form_state);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    try{
+    try {
       $account = (new Api())->getAccount();
-    }catch(\Exception $e){
-        \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.',[
-            ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
-        ],['context'=>'smartcat_translation_manager']));
+    }
+    catch (\Exception $e) {
+      \Drupal::messenger()->addError(t('Invalid Smartcat account ID or API key. Please check <a href=":url">your credentials</a>.', [
+        ':url' => Url::fromRoute('smartcat_translation_manager.settings')->toString(),
+      ], ['context' => 'smartcat_translation_manager']));
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $state = \Drupal::state();
     $formValues = $form_state->getValues();
@@ -248,15 +256,17 @@ class ConfigMoreForm extends ConfirmFormBase
 
     foreach ($this->selection as $id => $selected_langcodes) {
       $entity = $entities[$id];
-      $this->projectService->addEntityToTranslete($entity, array_filter($formValues['langs'],function($val){return $val !== 0;}));
+      $this->projectService->addEntityToTranslete($entity, array_filter($formValues['langs'], function ($val) {
+        return $val !== 0;
+      }));
     }
 
     $this->projectService->sendProjectWithDocuments();
 
     $this->tempStore->delete(\Drupal::service('current_user')->id());
-    \Drupal::messenger()->addMessage(t('Selected items have been successfully submitted for translation. Go to <a href=":url">Smartcat Dashboard</a>.',[
+    \Drupal::messenger()->addMessage(t('Selected items have been successfully submitted for translation. Go to <a href=":url">Smartcat Dashboard</a>.', [
       ':url' => Url::fromRoute('smartcat_translation_manager.document')->toString(),
-    ],['context'=>'smartcat_translation_manager']));
+    ], ['context' => 'smartcat_translation_manager']));
     return TRUE;
   }
 
@@ -268,14 +278,17 @@ class ConfigMoreForm extends ConfirmFormBase
       return new Url('entity.' . $this->entityTypeId . '.collection');
     }
     else {
-      if($prev = \Drupal::request()->query->get('destination',false)){
+      if ($prev = \Drupal::request()->query->get('destination', FALSE)) {
         return Url::fromUri("internal:$prev");
       }
       return new Url('<front>');
     }
   }
 
-  public function getEditableConfigNames(){
+  /**
+   * {@inheritdoc}
+   */
+  public function getEditableConfigNames() {
 
   }
 

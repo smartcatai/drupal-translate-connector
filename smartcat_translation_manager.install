@@ -1,23 +1,45 @@
 <?php
+
+/**
+ * @file module installation
+ */
+
+use Drupal\smartcat_translation_manager\Helper\SchemaHelper;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
+/**
+ *
+ */
 function smartcat_translation_manager_install() {
 }
 
+/**
+ * clean state data after uninstall
+ */
 function smartcat_translation_manager_uninstall() {
-    $state = \Drupal::state();
-    $state->set('smartcat_api_login', '');
-    $state->set('smartcat_api_password', '');
-    $state->set('smartcat_account_name', '');
+  $state = \Drupal::state();
+  $state->set('smartcat_api_login', '');
+  $state->set('smartcat_api_password', '');
+  $state->set('smartcat_account_name', '');
 }
 
+/**
+ *
+ */
 function smartcat_translation_manager_enable() {
 }
 
+/**
+ *
+ */
 function smartcat_translation_manager_disable() {
 }
 
+/**
+ * return database schemas
+ * @return array
+ */
 function smartcat_translation_manager_schema() {
-    return \Drupal\smartcat_translation_manager\Helper\SchemaHelper::getSchemas();
+  return SchemaHelper::getSchemas();
 }
-

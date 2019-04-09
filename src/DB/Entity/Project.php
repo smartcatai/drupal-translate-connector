@@ -2,9 +2,10 @@
 
 namespace Drupal\smartcat_translation_manager\DB\Entity;
 
-
-class Project
-{
+/**
+ * Entity for project.
+ */
+class Project {
   const STATUS_NEW = "new";
   const STATUS_CREATED = "created";
   const STATUS_INPROGRESS = "inprogress";
@@ -15,25 +16,39 @@ class Project
   const STATUS_ARCHIVED = "archived";
   const STATUS_FAILED = "failed";
 
-  /** @var  integer */
+  /**
+   * @var  int
+   */
   private $id;
 
-  /** @var  string */
+  /**
+   * @var  string
+   */
   private $name;
 
-  /** @var  string */
+  /**
+   * @var  string
+   */
   private $sourceLanguage;
 
-  /** @var  array */
+  /**
+   * @var  array
+   */
   private $targetLanguages;
 
-  /** @var  string */
+  /**
+   * @var  string
+   */
   private $status;
 
-  /** @var  string */
+  /**
+   * @var  string
+   */
   private $externalProjectId = NULL;
 
-  /** @var  string */
+  /**
+   * @var  string
+   */
   private $externalExportId = NULL;
 
   /**
@@ -107,6 +122,7 @@ class Project
 
     return $this;
   }
+
   /**
    * @return array
    */
